@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+install = "*"
+django-debug-toolbar = "*"
 django = "*"
 psycopg2-binary = "*"
 django-configurations = "*"
@@ -12,7 +14,6 @@ djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
 
 [dev-packages]
-django-debug-toolbar = "*"
 
 [requires]
 python_version = "3.9"
