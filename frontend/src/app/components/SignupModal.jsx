@@ -19,16 +19,16 @@ const SignupModal = () => {
   return (
     <div
       className="modal fade"
-      id="loginModal"
+      id="signupModal"
       tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="signupModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header pb-4">
-            <h5 className="modal-title " id="exampleModalLabel">
-              Login
+            <h5 className="modal-title " id="signupModalLabel">
+              Signup
             </h5>
 
             <button
