@@ -1,8 +1,9 @@
 import React from "react";
+import LoginModal from "./LoginModel";
 
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
       <a className="navbar-brand" href="#">
         Your Logo
       </a>
@@ -17,8 +18,11 @@ export default function Navbar() {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="navbar-collapse collapse" id="navbarNav">
-        <ul className="navbar-nav mr-auto">
+      <div
+        className="navbar-collapse justify-content-between collapse"
+        id="navbarNav"
+      >
+        <ul className="navbar-nav">
           <li className="nav-item">
             <a className="nav-link" href="#">
               Home
@@ -29,9 +33,19 @@ export default function Navbar() {
               Link
             </a>
           </li>
-          {/* Add more list items for additional links */}
         </ul>
-        {/* You can place user-related elements here, like profile dropdown */}
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a
+              className="nav-link"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              Login
+            </a>
+            <LoginModal />
+          </li>
+        </ul>
       </div>
     </nav>
   );

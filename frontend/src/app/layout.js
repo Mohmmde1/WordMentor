@@ -21,7 +21,6 @@ export default function RootLayout({ children }) {
         <Navbar />
         {children}
 
-        <LoginModal />
         <BootstrapClient />
       </body>
     </html>
