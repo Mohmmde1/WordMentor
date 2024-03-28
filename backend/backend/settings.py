@@ -54,6 +54,7 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'corsheaders',
+        'wordmentor_auth'
     ])
 
     MIDDLEWARE = values.ListValue(default=[
@@ -181,8 +182,18 @@ class Dev(Configuration):
         'SHOW_TOOLBAR_CALLBACK': lambda request: False if False else True,
     }
 
-    # Add this line here
     CORS_ORIGIN_ALLOW_ALL = values.BooleanValue(True)
+
+    AUTH_USER_MODEL = "wordmentor_auth.User"
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_ACTIVATION_DAYS = 7
+
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_AUTHENTICATION_METHOD = "email"
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
 
 
 class Prod(Dev):
