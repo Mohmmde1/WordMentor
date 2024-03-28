@@ -1,6 +1,5 @@
 import React from "react";
-import LoginModal from "./LoginModel";
-import SignupModal from "./SignupModal";
+import AuthSection from "@/app/components/navbar/AuthSection";
 
 export default function Navbar() {
   return (
@@ -35,29 +34,7 @@ export default function Navbar() {
             </a>
           </li>
         </ul>
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-bs-toggle="modal"
-              data-bs-target="#loginModal"
-            >
-              Login
-            </a>
-            <LoginModal />
-          </li>
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-bs-toggle="modal"
-              data-bs-target="#signupModal"
-            >
-              Signup
-            </a>
-
-            <SignupModal />
-          </li>
-        </ul>
+        <AuthSection />
       </div>
     </nav>
   );
