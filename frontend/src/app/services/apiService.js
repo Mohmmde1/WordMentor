@@ -1,11 +1,9 @@
-// import { getAccessToken } from "../lib/actions";
-
 const apiService = {
   postWithoutToken: async function (url, data) {
     console.log("post", url, data);
 
     return new Promise((resolve, reject) => {
-      fetch(url, {
+      fetch(`${process.env.NEXT_PUBLIC_API_HOST}/${url}`, {
         method: "POST",
         body: data,
         headers: {

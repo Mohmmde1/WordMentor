@@ -13,7 +13,7 @@ function AuthButton({ buttonText }) {
 }
 
 const AuthModal = ({ id, title, action, buttonText }) => {
-  // const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+  const [errorMessage, dispatch] = useFormState(action, undefined);
 
   return (
     <div
@@ -38,7 +38,7 @@ const AuthModal = ({ id, title, action, buttonText }) => {
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form action={dispatch}>
               <div className="form-group  pb-2">
                 <label htmlFor="inputEmail" className="pb-2">
                   Email address

@@ -1,12 +1,12 @@
-import AuthModal from "@/app/components/auth/AuthModel";
-import { authenticate } from "@/app/lib/actions";
+import AuthModal from "@/app/components/auth/AuthModal";
+import { login, signup } from "@/app/lib/actions";
 
 const SignupModal = () => {
   return (
     <AuthModal
       id="signupModal"
       title="Sign Up"
-      action={authenticate}
+      action={signup}
       buttonText="Sign Up"
     />
   );
@@ -17,7 +17,7 @@ const LoginModal = () => {
     <AuthModal
       id="loginModal"
       title="Log In"
-      action={authenticate}
+      action={login}
       buttonText="Log In"
     />
   );

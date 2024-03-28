@@ -3,16 +3,16 @@
 import { cookies } from "next/headers";
 import apiService from "../services/apiService";
 
-export async function authenticate(_currentState, formData) {
+export async function signup(_currentState, formData) {}
+export async function login(_currentState, formData) {
   try {
-    console.log(formData);
     let data = {
-      email: formData.get("loginEmailInput"),
-      password: formData.get("loginInputPassword"),
+      email: formData.get("inputEmail"),
+      password: formData.get("inputPassword"),
     };
 
     const response = await apiService.postWithoutToken(
-      "/api/v1/auth/",
+      "/api/v1/token/",
       JSON.stringify(data),
     );
 
