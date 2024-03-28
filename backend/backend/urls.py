@@ -31,8 +31,5 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
 ]
 urlpatterns += [
-    path(api + 'token-auth/', views.obtain_auth_token),
-    path(api + 'token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path(api + 'token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path(api + 'api-auth/', include('rest_framework.urls')),
+    path(api + 'auth/', include("wordmentor_auth.urls")),
 ]

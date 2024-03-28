@@ -54,6 +54,12 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'corsheaders',
+        'dj_rest_auth',
+        'django.contrib.sites',
+        'allauth',
+        'allauth.account',
+        'allauth.socialaccount',
+        'dj_rest_auth.registration',
         'wordmentor_auth'
     ])
 
@@ -67,6 +73,7 @@ class Dev(Configuration):
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'allauth.account.middleware.AccountMiddleware'
 
     ])
 
@@ -87,16 +94,20 @@ class Dev(Configuration):
             },
         },
     ])
+
     REST_FRAMEWORK = values.DictValue(default={
         'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework.authentication.SessionAuthentication',
-            'rest_framework.authentication.TokenAuthentication',
             'rest_framework_simplejwt.authentication.JWTAuthentication',
         ],
         'DEFAULT_PERMISSION_CLASSES': [
                 'rest_framework.permissions.IsAuthenticated',
             ]
     })
+
+    REST_AUTH = {
+        "USE_JWT": True,
+        "JWT_AUTH_HTTPONLY": False
+    }
 
     LOGGING = values.DictValue(default={
         "version": 1,
@@ -194,6 +205,7 @@ class Dev(Configuration):
     ACCOUNT_AUTHENTICATION_METHOD = "email"
     MEDIA_ROOT = BASE_DIR / "media"
     MEDIA_URL = "/media/"
+    SITE_ID = 1
 
 
 class Prod(Dev):
