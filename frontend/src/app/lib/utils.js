@@ -38,3 +38,10 @@ export async function getRefreshToken() {
   const refreshToken = cookies().get("session_refresh_token")?.value;
   return refreshToken;
 }
+
+// Function to delete all session cookies
+export function deleteSessionCookies() {
+  cookies().delete("session_userid");
+  cookies().delete("session_access_token");
+  cookies().delete("session_refresh_token");
+}

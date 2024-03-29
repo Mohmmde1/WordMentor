@@ -1,7 +1,7 @@
 import React from "react";
 import AuthSection from "@/app/components/navbar/AuthSection";
 
-export default function Navbar() {
+const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
       <a className="navbar-brand" href="#">
@@ -38,4 +38,5 @@ export default function Navbar() {
       </div>
     </nav>
   );
-}
+};
+export default Navbar;

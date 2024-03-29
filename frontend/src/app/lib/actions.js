@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 
 import apiService from "@/app/services/apiService";
 
-import setSessionCookies from "@/app/lib/utils";
+import setSessionCookies, { deleteSessionCookies } from "@/app/lib/utils";
+
 export async function signup(_currentState, formData) {
   try {
     let data = {
@@ -27,6 +28,7 @@ export async function signup(_currentState, formData) {
   }
   redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
 }
+
 export async function login(_currentState, formData) {
   try {
     let data = {
@@ -44,6 +46,19 @@ export async function login(_currentState, formData) {
     } else {
       throw Error("Sign in Failed. Response: " + JSON.stringify(response));
     }
+  } catch (error) {
+    // Handle errors
+    console.error("Error occurred during signing ing:", error);
+    throw error; // Re-throw the error to be caught by the caller
+  }
+  redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
+}
+
+export async function logout(_currentState, formData) {
+  try {
+    deleteSessionCookies();
+    const response = await apiService.postWithoutToken("/api/v1/auth/logout/");
+    console.log(JSON.stringify(response));
   } catch (error) {
     // Handle errors
     console.error("Error occurred during signing ing:", error);
