@@ -1,7 +1,6 @@
 import { LoginModal, SignupModal } from "@/app/components/auth/AuthModals";
 
 import { getUserId } from "@/app/lib/utils";
-import LogoutButton from "@/app/components/navbar/LogoutButton";
 
 export default function AuthSection() {
   const userId = getUserId();
@@ -11,7 +10,9 @@ export default function AuthSection() {
       {userId ? (
         <>
           <li className="nav-item">
-            <LogoutButton />
+            <a className="nav-link" href="/logout">
+              Logout
+            </a>
           </li>
         </>
       ) : (
