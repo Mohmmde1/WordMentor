@@ -1,8 +1,8 @@
 "use server";
 
-import { cookies } from "next/headers";
-import apiService from "../services/apiService";
+import apiService from "@/app/services/apiService";
 
+import setSessionCookies from "@/app/lib/utils";
 export async function signup(_currentState, formData) {}
 export async function login(_currentState, formData) {
   try {
@@ -12,19 +12,14 @@ export async function login(_currentState, formData) {
     };
 
     const response = await apiService.postWithoutToken(
-      "/api/v1/token/",
+      "/api/v1/auth/login/",
       JSON.stringify(data),
     );
 
     if (response.access) {
-      // handleLogin(response.user.pk, response.access, response.refresh);
-
-      // loginModal.close();
-
-      // router.push('/')
-      console.log(response.access);
+      setSessionCookies(response.user, response.access, response.refresh);
     } else {
-      // setErrors(response.non_field_errors);
+      throw Error("The Response has no access token!");
     }
   } catch (error) {
     // Handle errors
