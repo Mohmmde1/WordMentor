@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
       <a className="navbar-brand" href="#">
-        Your Logo
+        WordMentor
       </a>
       <button
         className="navbar-toggler"

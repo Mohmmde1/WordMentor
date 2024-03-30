@@ -20,13 +20,13 @@ const AuthModal = ({ id, title, action, buttonText }) => {
       className="modal fade"
       id={id}
       tabIndex="-1"
-      aria-labelledby="authModalLabel"
+      aria-labelledby={`${id}Label`}
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header pb-4">
-            <h5 className="modal-title" id="authModalLabel">
+            <h5 className="modal-title" id={`${id}Label`}>
               {title}
             </h5>
 
@@ -38,31 +38,31 @@ const AuthModal = ({ id, title, action, buttonText }) => {
             ></button>
           </div>
           <div className="modal-body">
-            <form action={dispatch}>
+            <form id={`${id}Form`} action={dispatch}>
               <div className="form-group  pb-2">
-                <label htmlFor="inputEmail" className="pb-2">
+                <label htmlFor={`${id}Email`} className="pb-2">
                   Email address
                 </label>
                 <input
                   type="email"
                   className="form-control"
-                  id="inputEmail"
+                  id={`${id}Email`}
                   name="inputEmail"
-                  aria-describedby="emailHelp"
+                  aria-describedby={`${id}EmailHelp`}
                   placeholder="Enter email"
                 />
-                <small id="emailHelp" className="form-text text-muted">
+                <small id={`${id}EmailHelp`} className="form-text text-muted">
                   We'll never share your email with anyone else.
                 </small>
               </div>
               <div className="form-group pb-4">
-                <label htmlFor="inputPassword" className="pb-2">
+                <label htmlFor={`${id}Password`} className="pb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   className="form-control"
-                  id="inputPassword"
+                  id={`${id}Password`}
                   name="inputPassword"
                   placeholder="Password"
                 />
