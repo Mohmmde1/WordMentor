@@ -14,8 +14,9 @@ django-cors-headers = "*"
 django-allauth = "*"
 dj-rest-auth = "*"
 django-soft-delete = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.12"
