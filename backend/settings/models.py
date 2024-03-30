@@ -8,7 +8,7 @@ class Profile(BaseModel):
     relationship with the User model provided by the wordmentor_auth app.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     def __str__(self):
         return f"Profile for {self.user.email}"
