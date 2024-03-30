@@ -60,7 +60,8 @@ class Dev(Configuration):
         'allauth.account',
         'allauth.socialaccount',
         'dj_rest_auth.registration',
-        'wordmentor_auth'
+        'wordmentor_auth',
+        'settings'
     ])
 
     MIDDLEWARE = values.ListValue(default=[
