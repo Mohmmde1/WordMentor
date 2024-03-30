@@ -1,8 +1,7 @@
 import React from "react";
-import LoginModal from "./LoginModel";
-import SignupModal from "./SignupModal";
+import AuthSection from "@/app/components/navbar/AuthSection";
 
-export default function Navbar() {
+const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
       <a className="navbar-brand" href="#">
@@ -35,30 +34,9 @@ export default function Navbar() {
             </a>
           </li>
         </ul>
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-bs-toggle="modal"
-              data-bs-target="#loginModal"
-            >
-              Login
-            </a>
-            <LoginModal />
-          </li>
-          <li className="nav-item">
-            <a
-              className="nav-link"
-              data-bs-toggle="modal"
-              data-bs-target="#signupModal"
-            >
-              Signup
-            </a>
-
-            <SignupModal />
-          </li>
-        </ul>
+        <AuthSection />
       </div>
     </nav>
   );
-}
+};
+export default Navbar;

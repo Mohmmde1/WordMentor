@@ -1,34 +1,33 @@
 "use client";
 
-import { authenticate } from "@/app/lib/actions";
 import { useFormState, useFormStatus } from "react-dom";
 
-function LoginButton() {
+function AuthButton({ buttonText }) {
   const { pending } = useFormStatus();
 
   return (
     <button aria-disabled={pending} type="submit" className="btn btn-primary">
-      Login
+      {buttonText}
     </button>
   );
 }
 
-const LoginModal = () => {
-  // const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+const AuthModal = ({ id, title, action, buttonText }) => {
+  const [errorMessage, dispatch] = useFormState(action, undefined);
 
   return (
     <div
       className="modal fade"
-      id="loginModal"
+      id={id}
       tabIndex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="authModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header pb-4">
-            <h5 className="modal-title " id="exampleModalLabel">
-              Login
+            <h5 className="modal-title" id="authModalLabel">
+              {title}
             </h5>
 
             <button
@@ -39,15 +38,16 @@ const LoginModal = () => {
             ></button>
           </div>
           <div className="modal-body">
-            <form>
+            <form action={dispatch}>
               <div className="form-group  pb-2">
-                <label for="exampleInputEmail1" className="pb-2">
+                <label htmlFor="inputEmail" className="pb-2">
                   Email address
                 </label>
                 <input
                   type="email"
                   className="form-control"
-                  id="exampleInputEmail1"
+                  id="inputEmail"
+                  name="inputEmail"
                   aria-describedby="emailHelp"
                   placeholder="Enter email"
                 />
@@ -56,18 +56,19 @@ const LoginModal = () => {
                 </small>
               </div>
               <div className="form-group pb-4">
-                <label for="exampleInputPassword1" className="pb-2">
+                <label htmlFor="inputPassword" className="pb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   className="form-control"
-                  id="exampleInputPassword1"
+                  id="inputPassword"
+                  name="inputPassword"
                   placeholder="Password"
                 />
               </div>
 
-              <LoginButton />
+              <AuthButton buttonText={buttonText} />
             </form>
           </div>
         </div>
@@ -76,4 +77,4 @@ const LoginModal = () => {
   );
 };
 
-export default LoginModal;
+export default AuthModal;

@@ -38,7 +38,7 @@ class Dev(Configuration):
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = values.BooleanValue(True)
 
-    ALLOWED_HOSTS = values.ListValue(["backend"])
+    ALLOWED_HOSTS = values.ListValue(["backend", "localhost"])
 
 
     # Application definition
@@ -54,6 +54,13 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'corsheaders',
+        'dj_rest_auth',
+        'django.contrib.sites',
+        'allauth',
+        'allauth.account',
+        'allauth.socialaccount',
+        'dj_rest_auth.registration',
+        'wordmentor_auth'
     ])
 
     MIDDLEWARE = values.ListValue(default=[
@@ -66,6 +73,7 @@ class Dev(Configuration):
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'allauth.account.middleware.AccountMiddleware'
 
     ])
 
@@ -86,16 +94,20 @@ class Dev(Configuration):
             },
         },
     ])
+
     REST_FRAMEWORK = values.DictValue(default={
         'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework.authentication.SessionAuthentication',
-            'rest_framework.authentication.TokenAuthentication',
             'rest_framework_simplejwt.authentication.JWTAuthentication',
         ],
         'DEFAULT_PERMISSION_CLASSES': [
                 'rest_framework.permissions.IsAuthenticated',
             ]
     })
+
+    REST_AUTH = {
+        "USE_JWT": True,
+        "JWT_AUTH_HTTPONLY": False
+    }
 
     LOGGING = values.DictValue(default={
         "version": 1,
@@ -181,8 +193,19 @@ class Dev(Configuration):
         'SHOW_TOOLBAR_CALLBACK': lambda request: False if False else True,
     }
 
-    # Add this line here
     CORS_ORIGIN_ALLOW_ALL = values.BooleanValue(True)
+
+    AUTH_USER_MODEL = "wordmentor_auth.User"
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_ACTIVATION_DAYS = 7
+
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_AUTHENTICATION_METHOD = "email"
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
+    SITE_ID = 1
 
 
 class Prod(Dev):
