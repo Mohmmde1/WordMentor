@@ -1,33 +1,25 @@
 "use client";
+import { login } from "@/app/lib/actions";
+import React from "react";
+import { useFormState } from "react-dom";
+import AuthButton from "@/app/components/auth/AuthButton";
 
-import { useFormState, useFormStatus } from "react-dom";
-
-function AuthButton({ buttonText }) {
-  const { pending } = useFormStatus();
-
-  return (
-    <button aria-disabled={pending} type="submit" className="btn btn-primary">
-      {buttonText}
-    </button>
-  );
-}
-
-const AuthModal = ({ id, title, action, buttonText }) => {
-  const [errorMessage, dispatch] = useFormState(action, undefined);
+const LoginModal = () => {
+  const [errorMessage, dispatch] = useFormState(login, undefined);
 
   return (
     <div
       className="modal fade"
-      id={id}
+      id="loginModal"
       tabIndex="-1"
-      aria-labelledby={`${id}Label`}
+      aria-labelledby="loginModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header pb-4">
-            <h5 className="modal-title" id={`${id}Label`}>
-              {title}
+            <h5 className="modal-title" id="loginModalLabel">
+              Login
             </h5>
 
             <button
@@ -38,37 +30,40 @@ const AuthModal = ({ id, title, action, buttonText }) => {
             ></button>
           </div>
           <div className="modal-body">
-            <form id={`${id}Form`} action={dispatch}>
+            <form id="loginModalForm" action={dispatch}>
               <div className="form-group  pb-2">
-                <label htmlFor={`${id}Email`} className="pb-2">
+                <label htmlFor="loginModalEmail" className="pb-2">
                   Email address
                 </label>
                 <input
                   type="email"
                   className="form-control"
-                  id={`${id}Email`}
+                  id="loginModalEmail"
                   name="inputEmail"
-                  aria-describedby={`${id}EmailHelp`}
+                  aria-describedby="loginModalEmailHelp"
                   placeholder="Enter email"
                 />
-                <small id={`${id}EmailHelp`} className="form-text text-muted">
+                <small
+                  id="loginModalEmailHelp"
+                  className="form-text text-muted"
+                >
                   We'll never share your email with anyone else.
                 </small>
               </div>
               <div className="form-group pb-4">
-                <label htmlFor={`${id}Password`} className="pb-2">
+                <label htmlFor="loginModalPassword" className="pb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   className="form-control"
-                  id={`${id}Password`}
+                  id="loginModalPassword"
                   name="inputPassword"
                   placeholder="Password"
                 />
               </div>
 
-              <AuthButton buttonText={buttonText} />
+              <AuthButton buttonText={"Login"} />
             </form>
           </div>
         </div>
@@ -76,5 +71,4 @@ const AuthModal = ({ id, title, action, buttonText }) => {
     </div>
   );
 };
-
-export default AuthModal;
+export default LoginModal;

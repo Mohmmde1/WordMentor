@@ -7,10 +7,13 @@ import setSessionCookies, { deleteSessionCookies } from "@/app/lib/utils";
 
 export async function signup(_currentState, formData) {
   try {
-    let data = {
+    const data = {
       email: formData.get("inputEmail"),
-      password1: formData.get("inputPassword"),
-      password2: formData.get("inputPassword"),
+      password1: formData.get("inputPassword1"),
+      password2: formData.get("inputPassword2"),
+      first_name: formData.get("inputFirstName"),
+      last_name: formData.get("inputLastName"),
+      username: formData.get("inputUsername"),
     };
     const response = await apiService.postWithoutToken(
       "/api/v1/auth/registration/",

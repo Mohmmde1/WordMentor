@@ -1,5 +1,6 @@
-import { LoginModal, SignupModal } from "@/app/components/auth/AuthModals";
 import { getUserId } from "@/app/lib/utils";
+import SignupModal from "../auth/SignupModal";
+import LoginModal from "../auth/LoginModal";
 
 export default function AuthSection() {
   const userId = getUserId();
