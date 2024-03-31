@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from dj_rest_auth.registration.views import VerifyEmailView
 
 api = 'api/v1/'
 
@@ -34,6 +34,7 @@ urlpatterns = [
 ]
 urlpatterns += [
     path(api + 'auth/', include("wordmentor_auth.urls")),
+    path(api + 'auth/account-confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent')
 ]
 
 if settings.DEBUG:

@@ -19,6 +19,7 @@ export async function signup(_currentState, formData) {
       "/api/v1/auth/registration/",
       JSON.stringify(data),
     );
+    console.log(response);
     if (response.access) {
       setSessionCookies(response.user, response.access, response.refresh);
     } else {

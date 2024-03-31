@@ -38,6 +38,7 @@ function SignupModal() {
                       First Name
                     </label>
                     <input
+                      required
                       type="text"
                       className="form-control"
                       id="inputFirstName"
@@ -52,6 +53,7 @@ function SignupModal() {
                       Last Name
                     </label>
                     <input
+                      required
                       type="text"
                       className="form-control"
                       id="inputLastName"
@@ -66,6 +68,7 @@ function SignupModal() {
                   Username
                 </label>
                 <input
+                  required
                   type="text"
                   className="form-control"
                   id="inputUsername"
@@ -78,6 +81,7 @@ function SignupModal() {
                   Email
                 </label>
                 <input
+                  required
                   type="email"
                   className="form-control"
                   id="inputEmail"
@@ -90,6 +94,7 @@ function SignupModal() {
                   Password
                 </label>
                 <input
+                  required
                   type="password"
                   className="form-control"
                   id="inputPassword1"
@@ -102,6 +107,7 @@ function SignupModal() {
                   Confirm Password
                 </label>
                 <input
+                  required
                   type="password"
                   className="form-control"
                   id="inputPassword2"

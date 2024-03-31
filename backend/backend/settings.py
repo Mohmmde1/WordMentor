@@ -54,13 +54,14 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'corsheaders',
+        'wordmentor_auth',
         'dj_rest_auth',
         'django.contrib.sites',
         'allauth',
         'allauth.account',
         'allauth.socialaccount',
         'dj_rest_auth.registration',
-        'wordmentor_auth',
+
         'settings'
     ])
 
@@ -96,6 +97,8 @@ class Dev(Configuration):
         },
     ])
 
+
+
     REST_FRAMEWORK = values.DictValue(default={
         'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -105,10 +108,6 @@ class Dev(Configuration):
             ]
     })
 
-    REST_AUTH = {
-        "USE_JWT": True,
-        "JWT_AUTH_HTTPONLY": False
-    }
 
     LOGGING = values.DictValue(default={
         "version": 1,
@@ -204,9 +203,22 @@ class Dev(Configuration):
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_USERNAME_REQUIRED = True
     ACCOUNT_AUTHENTICATION_METHOD = "email"
+    ACCOUNT_UNIQUE_EMAIL = True
     MEDIA_ROOT = BASE_DIR / "media"
+    ACCOUNT_EMAIL_VERIFICATION = 'none'
     MEDIA_URL = "/media/"
     SITE_ID = 1
+    REST_AUTH = {
+            'REGISTER_SERIALIZER': 'wordmentor_auth.serializers.CustomRegisterSerializer',
+            "USE_JWT": True,
+            "JWT_AUTH_HTTPONLY": False
+    }
+    AUTHENTICATION_BACKENDS = [
+        # allauth specific authentication methods, such as login by e-mail
+        'allauth.account.auth_backends.AuthenticationBackend',
+        # Needed to login by username in Django admin, regardless of allauth
+        'django.contrib.auth.backends.ModelBackend',
+    ]
 
 
 class Prod(Dev):

@@ -19,8 +19,8 @@ class Profile(BaseModel):
         """
         if not self.slug:
             # Generate slug based on user's email or any other field
-            self.slug = slugify(self.user.email)
+            self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Profile for {self.user.email}"
+        return f"Profile for {self.user.username}"
