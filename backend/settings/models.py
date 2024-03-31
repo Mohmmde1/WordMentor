@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.text import slugify
+
 from wordmentor_auth.models import User
 from core.models import BaseModel
 
@@ -9,6 +11,16 @@ class Profile(BaseModel):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Override the save method to generate and update the slug field.
+        """
+        if not self.slug:
+            # Generate slug based on user's email or any other field
+            self.slug = slugify(self.user.email)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Profile for {self.user.email}"
