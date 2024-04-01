@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { getUserId } from "@/app/lib/utils";
+import { getUserId } from "@/lib/utils";
 
 export async function GET(request) {
   const data = { userId: getUserId() };

@@ -5,9 +5,9 @@ import "./globals.css";
 
 import { Toaster } from "sonner";
 
-import Navbar from "@/app/components/navbar/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 
-import BootstrapClient from "./components/BootstrapClient";
+import BootstrapClient from "@/components/BootstrapClient";
 
 const inter = Inter({ subsets: ["latin"] });
 

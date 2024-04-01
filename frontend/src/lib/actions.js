@@ -1,9 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 
-import apiService from "@/app/services/apiService";
+import apiService from "@/services/apiService";
 
-import setSessionCookies, { deleteSessionCookies } from "@/app/lib/utils";
+import setSessionCookies, { deleteSessionCookies } from "@/lib/utils";
 
 export async function signup(_currentState, formData) {
   try {

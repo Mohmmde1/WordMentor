@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { deleteSessionCookies } from "@/app/lib/utils";
+import { deleteSessionCookies } from "@/lib/utils";
 
 export async function GET(request) {
   deleteSessionCookies();

@@ -1,5 +1,5 @@
 import React from "react";
-import AuthSection from "@/app/components/navbar/AuthSection";
+import AuthSection from "@/components/navbar/AuthSection";
 
 const Navbar = () => {
   return (

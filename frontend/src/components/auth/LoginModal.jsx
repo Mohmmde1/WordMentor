@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { login } from "@/app/lib/actions";
+import { login } from "@/lib/actions";
 import { useFormState } from "react-dom";
-import AuthButton from "@/app/components/auth/AuthButton";
+import AuthButton from "@/components/auth/AuthButton";
 
 const LoginModal = ({ show, onClose, onAuthenticateSuccess }) => {
   const [formState, formAction] = useFormState(login, {

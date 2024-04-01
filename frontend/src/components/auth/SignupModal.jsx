@@ -1,10 +1,10 @@
 "use client";
 import { useEffect } from "react";
 
-import { signup } from "@/app/lib/actions";
+import { signup } from "@/lib/actions";
 import React from "react";
 import { useFormState } from "react-dom";
-import AuthButton from "@/app/components/auth/AuthButton";
+import AuthButton from "@/components/auth/AuthButton";
 
 function SignupModal({ show, onClose, onAuthenticateSuccess }) {
   const [formState, formAction] = useFormState(signup, {

@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-import SignupModal from "../auth/SignupModal";
-import LoginModal from "../auth/LoginModal";
+import SignupModal from "@/components/auth/SignupModal";
+import LoginModal from "@/components/auth/LoginModal";
 
 export default function AuthSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
