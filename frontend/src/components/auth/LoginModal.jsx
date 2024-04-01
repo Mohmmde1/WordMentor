@@ -17,6 +17,9 @@ const LoginModal = ({ show, onClose, onAuthenticateSuccess }) => {
     if (formState.message === "success") {
       onClose();
       onAuthenticateSuccess(true, "User has successfully logged in");
+    } else if (formState.message === "fail") {
+      onClose();
+      onAuthenticateSuccess(false, formState.errors);
     }
   }, [formState]);
 
@@ -51,6 +54,7 @@ const LoginModal = ({ show, onClose, onAuthenticateSuccess }) => {
                     Email address
                   </label>
                   <input
+                    required
                     type="email"
                     className="form-control"
                     id="loginModalEmail"
@@ -70,6 +74,7 @@ const LoginModal = ({ show, onClose, onAuthenticateSuccess }) => {
                     Password
                   </label>
                   <input
+                    required
                     type="password"
                     className="form-control"
                     id="loginModalPassword"

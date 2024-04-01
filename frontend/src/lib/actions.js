@@ -27,14 +27,16 @@ export async function signup(_currentState, formData) {
         errors: undefined,
       };
     } else {
-      throw new Error("Signup failed. Response: " + JSON.stringify(response));
+      return {
+        message: "fail",
+        errors: JSON.stringify(response),
+      };
     }
   } catch (error) {
     // Handle errors
     console.error("Error occurred during signing up:", error);
     throw error; // Re-throw the error to be caught by the caller
   }
-  redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
 }
 
 export async function login(_currentState, formData) {
@@ -56,16 +58,18 @@ export async function login(_currentState, formData) {
         errors: undefined,
       };
     } else {
-      throw Error("Sign in Failed. Response: " + JSON.stringify(response));
+      return {
+        message: "fail",
+        errors: JSON.stringify(response),
+      };
     }
   } catch (error) {
     // Handle errors
     console.error("Error occurred during signing ing:", error);
-    throw error; // Re-throw the error to be caught by the caller
-  }
-  redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
-}
 
+    throw error;
+  }
+}
 export async function logout(_currentState, formData) {
   try {
     deleteSessionCookies();

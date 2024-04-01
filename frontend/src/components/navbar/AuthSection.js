@@ -31,9 +31,10 @@ export default function AuthSection() {
   // Callback function to update userId after successful login
   const handleAuthenticateSuccess = (loggedIn, message) => {
     setLoggedIn(loggedIn);
-    setShowLoginModal(false); // Close the login modal
-    setShowSignupModal(false); // Close the signup modal
-    toast.success(message);
+    setShowLoginModal(false);
+    setShowSignupModal(false);
+    if (loggedIn) toast.success(message);
+    else if (message) toast.error(message);
   };
 
   return (
