@@ -47,6 +47,10 @@ export async function login(_currentState, formData) {
 
     if (response.access) {
       setSessionCookies(response.user, response.access, response.refresh);
+      return {
+        message: "success",
+        errors: undefined,
+      };
     } else {
       throw Error("Sign in Failed. Response: " + JSON.stringify(response));
     }
