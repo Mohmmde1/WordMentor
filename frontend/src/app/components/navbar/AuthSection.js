@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
+
 import SignupModal from "../auth/SignupModal";
 import LoginModal from "../auth/LoginModal";
 
@@ -21,6 +23,7 @@ export default function AuthSection() {
   const handleLoginSuccess = (loggedIn) => {
     setLoggedIn(loggedIn);
     setShowLoginModal(false); // Close the login modal
+    toast.success("User has been logged in");
   };
 
   return (
