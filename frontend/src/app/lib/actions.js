@@ -22,6 +22,10 @@ export async function signup(_currentState, formData) {
     console.log(response);
     if (response.access) {
       setSessionCookies(response.user, response.access, response.refresh);
+      return {
+        message: "success",
+        errors: undefined,
+      };
     } else {
       throw new Error("Signup failed. Response: " + JSON.stringify(response));
     }

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { login } from "@/app/lib/actions";
 import { useFormState } from "react-dom";
 import AuthButton from "@/app/components/auth/AuthButton";
 
-const LoginModal = ({ show, onClose, onLoginSuccess }) => {
+const LoginModal = ({ show, onClose, onAuthenticateSuccess }) => {
   const [formState, formAction] = useFormState(login, {
     message: "",
     errors: undefined,
@@ -16,7 +16,7 @@ const LoginModal = ({ show, onClose, onLoginSuccess }) => {
   useEffect(() => {
     if (formState.message === "success") {
       onClose();
-      onLoginSuccess(true);
+      onAuthenticateSuccess(true, "User has successfully logged in");
     }
   }, [formState]);
 

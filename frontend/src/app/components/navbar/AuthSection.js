@@ -7,6 +7,7 @@ import LoginModal from "../auth/LoginModal";
 
 export default function AuthSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false); // Initialize with null or default value
 
   useEffect(() => {}, [loggedIn]);
@@ -19,11 +20,20 @@ export default function AuthSection() {
     setShowLoginModal(false);
   };
 
+  const openSignupModal = () => {
+    setShowSignupModal(true);
+  };
+
+  const closeSignupModal = () => {
+    setShowSignupModal(false);
+  };
+
   // Callback function to update userId after successful login
-  const handleLoginSuccess = (loggedIn) => {
+  const handleAuthenticateSuccess = (loggedIn, message) => {
     setLoggedIn(loggedIn);
     setShowLoginModal(false); // Close the login modal
-    toast.success("User has been logged in");
+    setShowSignupModal(false); // Close the signup modal
+    toast.success(message);
   };
 
   return (
@@ -44,21 +54,21 @@ export default function AuthSection() {
             </a>
           </li>
           <li className="nav-item">
-            <a
-              className="nav-link"
-              data-bs-toggle="modal"
-              data-bs-target="#signupModal"
-            >
+            <a className="nav-link" onClick={openSignupModal}>
               Signup
             </a>
-            <SignupModal />
+            <SignupModal
+              show={showSignupModal}
+              onClose={closeSignupModal}
+              onAuthenticateSuccess={handleAuthenticateSuccess}
+            />
           </li>
         </>
       )}
       <LoginModal
         show={showLoginModal}
         onClose={closeLoginModal}
-        onLoginSuccess={handleLoginSuccess}
+        onAuthenticateSuccess={handleAuthenticateSuccess}
       />
     </ul>
   );
