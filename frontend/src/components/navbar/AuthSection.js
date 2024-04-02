@@ -10,7 +10,21 @@ export default function AuthSection() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false); // Initialize with null or default value
 
-  useEffect(() => {}, [loggedIn]);
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await fetch("/api/user", {
+          method: "GET",
+        });
+        const data = await response.json();
+        console.log(data);
+        if (data.userId) setLoggedIn(true);
+      } catch (error) {
+        console.error("Error checking user:", error);
+      }
+    };
+    checkUser();
+  }, [loggedIn]);
 
   const openLoginModal = () => {
     setShowLoginModal(true);
