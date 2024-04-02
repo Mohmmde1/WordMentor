@@ -13,7 +13,7 @@ const InfoCard = () => {
   };
 
   return (
-    <div className="card mb-4">
+    <div className="card mb-4 text-white" style={{ backgroundColor: "#424242" }}>
       <div className="card-body">
         <div className="row mb-3">
           <div className="col-sm-3">
