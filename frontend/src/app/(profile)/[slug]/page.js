@@ -7,7 +7,7 @@ import InfoCard from "@/components/profile/info";
 export default function Page({ params }) {
   return (
     <div className={`${styles["profile-page"]}`}>
-      <div className="offset-sm-1 container ">
+      <div className="offset-sm-2 container ">
         <div className="row">
           <div className="col-lg-3 offset-sm-3">
             <ProfileCard styles={styles} />

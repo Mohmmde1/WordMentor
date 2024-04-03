@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-
+import { Toaster } from "sonner";
 import SignupModal from "@/components/auth/SignupModal";
 import LoginModal from "@/components/auth/LoginModal";
 
@@ -52,39 +52,42 @@ export default function AuthSection() {
   };
 
   return (
-    <ul className="navbar-nav">
-      {loggedIn ? (
-        <>
-          <li className="nav-item">
-            <a className="nav-link" href="/api/logout">
-              Logout
-            </a>
-          </li>
-        </>
-      ) : (
-        <>
-          <li className="nav-item">
-            <a className="nav-link" onClick={openLoginModal}>
-              Login
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" onClick={openSignupModal}>
-              Signup
-            </a>
-            <SignupModal
-              show={showSignupModal}
-              onClose={closeSignupModal}
-              onAuthenticateSuccess={handleAuthenticateSuccess}
-            />
-          </li>
-        </>
-      )}
-      <LoginModal
-        show={showLoginModal}
-        onClose={closeLoginModal}
-        onAuthenticateSuccess={handleAuthenticateSuccess}
-      />
-    </ul>
+    <>
+      <Toaster richColors closeButton position="top-right" />
+      <ul className="navbar-nav">
+        {loggedIn ? (
+          <>
+            <li className="nav-item">
+              <a className="nav-link" href="/api/logout">
+                Logout
+              </a>
+            </li>
+          </>
+        ) : (
+          <>
+            <li className="nav-item">
+              <a className="nav-link" onClick={openLoginModal}>
+                Login
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" onClick={openSignupModal}>
+                Signup
+              </a>
+              <SignupModal
+                show={showSignupModal}
+                onClose={closeSignupModal}
+                onAuthenticateSuccess={handleAuthenticateSuccess}
+              />
+            </li>
+          </>
+        )}
+        <LoginModal
+          show={showLoginModal}
+          onClose={closeLoginModal}
+          onAuthenticateSuccess={handleAuthenticateSuccess}
+        />
+      </ul>
+    </>
   );
 }
