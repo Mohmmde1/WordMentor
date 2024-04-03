@@ -17,7 +17,7 @@ const ProfileCard = ({ styles }) => {
         <div className="d-flex justify-content-center mb-2">
           <button
 
-            className={`btn btn-outline-primary ms-1 ${styles["update-button"]}`}
+            className={`btn btn-outline-primary ms-1 button`}
           >
             Upload
           </button>

@@ -73,7 +73,7 @@ const InfoCard = ({ styles }) => {
         </div>
         <div className="row m-3 pt-4">
           <div className="col-sm-9 offset-sm-6">
-            <button type="button" className={`btn btn-primary ${styles['update-button']} `} onClick={handleUpdate}>Update</button>
+            <button type="button" className={`btn btn-primary button `} onClick={handleUpdate}>Update</button>
           </div>
         </div>
       </div>
