@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 from pathlib import Path
+from datetime import timedelta
 
 from configurations import Configuration, values
 from configurations import values
 import logging
 import socket
+
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
@@ -208,6 +210,15 @@ class Dev(Configuration):
     ACCOUNT_EMAIL_VERIFICATION = 'none'
     MEDIA_URL = "/media/"
     SITE_ID = 1
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+        "ROTATE_REFRESH_TOKEN": False,
+        "BLACKLIST_AFTER_ROTATION": False,
+        "UPDATE_LAST_LOGIN": True,
+        "SIGNING_KEY": "acomplexkey",
+        "ALOGRIGTHM": "HS512",
+    }
     REST_AUTH = {
             'REGISTER_SERIALIZER': 'wordmentor_auth.serializers.CustomRegisterSerializer',
             "USE_JWT": True,
