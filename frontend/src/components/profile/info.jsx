@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 
-const InfoCard = () => {
+const InfoCard = ({ styles }) => {
   const [firstName, setFirstName] = useState("Johnatan");
   const [lastName, setLastName] = useState("Smith");
   const [username, setUsername] = useState("john_smith");
@@ -13,9 +13,9 @@ const InfoCard = () => {
   };
 
   return (
-    <div className="card mb-4 text-white" style={{ backgroundColor: "#424242" }}>
+    <div className={`card mb-4 text-white ${styles['info-card']}`} >
       <div className="card-body">
-        <div className="row mb-3">
+        <div className="row m-3">
           <div className="col-sm-3">
             <label htmlFor="firstName" className="mb-0">First Name</label>
           </div>
@@ -29,7 +29,7 @@ const InfoCard = () => {
             />
           </div>
         </div>
-        <div className="row mb-3">
+        <div className="row m-3">
           <div className="col-sm-3">
             <label htmlFor="lastName" className="mb-0">Last Name</label>
           </div>
@@ -43,7 +43,7 @@ const InfoCard = () => {
             />
           </div>
         </div>
-        <div className="row mb-3">
+        <div className="row m-3">
           <div className="col-sm-3">
             <label htmlFor="username" className="mb-0">Username</label>
           </div>
@@ -57,7 +57,7 @@ const InfoCard = () => {
             />
           </div>
         </div>
-        <div className="row mb-3">
+        <div className="row m-3">
           <div className="col-sm-3">
             <label htmlFor="email" className="mb-0">Email</label>
           </div>
@@ -71,9 +71,9 @@ const InfoCard = () => {
             />
           </div>
         </div>
-        <div className="row mb-3">
-          <div className="col-sm-9 offset-sm-3">
-            <button type="button" className="btn btn-primary float-end" onClick={handleUpdate}>Update</button>
+        <div className="row m-3 pt-4">
+          <div className="col-sm-9 offset-sm-6">
+            <button type="button" className={`btn btn-primary ${styles['update-button']} `} onClick={handleUpdate}>Update</button>
           </div>
         </div>
       </div>

@@ -6,16 +6,16 @@ import InfoCard from "@/components/profile/info";
 
 export default function Page({ params }) {
   return (
-    <div style={{ backgroundColor: "#eee" }}>
-      <div className="offset-sm-1 container py-3">
+    <div className={`${styles["profile-page"]}`}>
+      <div className="offset-sm-1 container ">
         <div className="row">
-          <div className="col-lg-2 offset-sm-4">
+          <div className="col-lg-3 offset-sm-3">
             <ProfileCard styles={styles} />
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-8 offset-sm-1">
-            <InfoCard />
+          <div className="col-lg-8 ">
+            <InfoCard styles={styles} />
           </div>
         </div>
       </div>
