@@ -16,7 +16,7 @@ export async function signup(_currentState, formData) {
       username: formData.get("inputUsername"),
     };
     const response = await apiService.postWithoutToken(
-      "/api/v1/auth/registration/",
+      "auth/registration/",
       JSON.stringify(data),
     );
     console.log(response);
@@ -47,7 +47,7 @@ export async function login(_currentState, formData) {
     };
 
     const response = await apiService.postWithoutToken(
-      "/api/v1/auth/login/",
+      "auth/login/",
       JSON.stringify(data),
     );
 
