@@ -28,6 +28,7 @@ urlpatterns = [
 ]
 urlpatterns += [
     path(api + 'auth/', include("wordmentor_auth.urls")),
+    path(api + "profile/", include("settings.urls"))
 ]
 
 if settings.DEBUG:
