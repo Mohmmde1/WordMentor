@@ -9,7 +9,6 @@ const apiService = {
         method: "GET",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       })
@@ -24,6 +23,31 @@ const apiService = {
         });
     });
   },
+
+  postUpdate: async function (url, data, method) {
+    console.log(method, url, data);
+    const accessToken = getAccessToken();
+    return new Promise((resolve, reject) => {
+      fetch(`${process.env.NEXT_PUBLIC_API_HOST}/${url}`, {
+        method: method,
+        body: data,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("Reponse: ", json);
+          resolve(json);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
   postWithoutToken: async function (url, data) {
     console.log("post", url, data);
 

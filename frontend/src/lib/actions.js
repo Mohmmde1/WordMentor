@@ -96,3 +96,36 @@ export async function fetchProfile() {
     throw error;
   }
 }
+
+export async function updateProfile(_currentState, formData) {
+  try {
+    const data = {
+      email: formData.get("inputEmail"),
+      first_name: formData.get("inputFirstName"),
+      last_name: formData.get("inputLastName"),
+      username: formData.get("inputUsername"),
+    };
+    const response = await apiService.postUpdate(
+      `auth/user/`,
+      JSON.stringify(data),
+      "PUT",
+    );
+    console.log(response);
+    // if (response.access) {
+    //   setSessionCookies(response.user, response.access, response.refresh);
+    //   return {
+    //     message: "success",
+    //     errors: undefined,
+    //   };
+    // } else {
+    //   return {
+    //     message: "fail",
+    //     errors: JSON.stringify(response),
+    //   };
+    // }
+  } catch (error) {
+    // Handle errors
+    console.error("Error occurred during signing up:", error);
+    throw error; // Re-throw the error to be caught by the caller
+  }
+}
