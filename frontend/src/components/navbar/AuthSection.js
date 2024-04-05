@@ -17,7 +17,6 @@ export default function AuthSection() {
           method: "GET",
         });
         const data = await response.json();
-        console.log(data);
         if (data.userId) setLoggedIn(true);
       } catch (error) {
         console.error("Error checking user:", error);

@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 
 import apiService from "@/services/apiService";
 
-import setSessionCookies, { deleteSessionCookies } from "@/lib/utils";
+import setSessionCookies, {
+  deleteSessionCookies,
+  getUserId,
+} from "@/lib/utils";
 
 export async function signup(_currentState, formData) {
   try {
@@ -81,4 +84,15 @@ export async function logout(_currentState, formData) {
     throw error; // Re-throw the error to be caught by the caller
   }
   redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
+}
+
+export async function fetchProfile() {
+  try {
+    const userId = getUserId();
+    const response = await apiService.get(`profile/${userId}`);
+    return response;
+  } catch (error) {
+    console.error("Error occured during fetching profile: ", error);
+    throw error;
+  }
 }
