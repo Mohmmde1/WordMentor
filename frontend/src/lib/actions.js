@@ -111,18 +111,17 @@ export async function updateProfile(_currentState, formData) {
       "PUT",
     );
     console.log(response);
-    // if (response.access) {
-    //   setSessionCookies(response.user, response.access, response.refresh);
-    //   return {
-    //     message: "success",
-    //     errors: undefined,
-    //   };
-    // } else {
-    //   return {
-    //     message: "fail",
-    //     errors: JSON.stringify(response),
-    //   };
-    // }
+    if (response.pk) {
+      return {
+        message: "success",
+        errors: undefined,
+      };
+    } else {
+      return {
+        message: "fail",
+        errors: JSON.stringify(response),
+      };
+    }
   } catch (error) {
     // Handle errors
     console.error("Error occurred during signing up:", error);

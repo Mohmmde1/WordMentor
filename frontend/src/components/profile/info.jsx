@@ -1,5 +1,6 @@
 "use client";
 import { fetchProfile, updateProfile } from "@/lib/actions";
+import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 const InfoCard = ({ styles }) => {
@@ -12,9 +13,12 @@ const InfoCard = ({ styles }) => {
     errors: "",
   });
 
-  const handleUpdate = () => {
-    // Logic to update the information can be added here
-    console.log("Information updated");
+  const handleUpdateMessage = () => {
+    if (formState.message === "success") {
+      toast.success("Profile has been updated successufly!");
+    } else if (formState.message === "fail") {
+      toast.error(formState.errors);
+    }
   };
 
   useEffect(() => {
@@ -27,6 +31,7 @@ const InfoCard = ({ styles }) => {
       setEmail(data.user.email);
     };
     getProfile();
+    handleUpdateMessage();
   }, [formState]);
 
   return (
@@ -103,11 +108,7 @@ const InfoCard = ({ styles }) => {
           </div>
           <div className="row m-3 pt-4">
             <div className="col-sm-9 offset-sm-6">
-              <button
-                type="submit"
-                className={`btn btn-primary button `}
-                onClick={handleUpdate}
-              >
+              <button type="submit" className={`btn btn-primary button `}>
                 Update
               </button>
             </div>
