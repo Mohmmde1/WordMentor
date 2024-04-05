@@ -1,5 +1,4 @@
-
-const ProfileCard = ({ styles }) => {
+const ProfileCard = ({ styles, username }) => {
   return (
     <div
       className={`card mb-4 text-white ${styles["profile-card"]}`}
@@ -12,13 +11,10 @@ const ProfileCard = ({ styles }) => {
           className={`${styles["profile-img"]}`}
           style={{ width: "150px" }}
         />
-        <h5 className={`my-3 ${styles["profile-card-title"]}`}>John Smith</h5>
+        <h5 className={`my-3 ${styles["profile-card-title"]}`}>{username}</h5>
 
         <div className="d-flex justify-content-center mb-2">
-          <button
-
-            className={`btn btn-outline-primary ms-1 button`}
-          >
+          <button className={`btn btn-outline-primary ms-1 button`}>
             Upload
           </button>
         </div>
