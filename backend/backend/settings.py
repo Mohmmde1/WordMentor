@@ -222,7 +222,8 @@ class Dev(Configuration):
     REST_AUTH = {
             'REGISTER_SERIALIZER': 'wordmentor_auth.serializers.CustomRegisterSerializer',
             "USE_JWT": True,
-            "JWT_AUTH_HTTPONLY": False
+            "JWT_AUTH_HTTPONLY": False,
+            "USER_DETAILS_SERIALIZER": "wordmentor_auth.serializers.UserDetailSerializer"
     }
     AUTHENTICATION_BACKENDS = [
         # allauth specific authentication methods, such as login by e-mail

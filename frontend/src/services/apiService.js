@@ -14,8 +14,6 @@ const apiService = {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log("Response:", json);
-
           resolve(json);
         })
         .catch((error) => {
@@ -25,7 +23,6 @@ const apiService = {
   },
 
   postUpdate: async function (url, data, method) {
-    console.log(method, url, data);
     const accessToken = getAccessToken();
     return new Promise((resolve, reject) => {
       fetch(`${process.env.NEXT_PUBLIC_API_HOST}/${url}`, {

@@ -105,13 +105,15 @@ export async function updateProfile(_currentState, formData) {
       last_name: formData.get("inputLastName"),
       username: formData.get("inputUsername"),
     };
+    console.log(`data: ${data.username}`);
     const response = await apiService.postUpdate(
       `auth/user/`,
       JSON.stringify(data),
       "PUT",
     );
     console.log(response);
-    if (response.pk) {
+
+    if (response.id) {
       return {
         message: "success",
         errors: undefined,
