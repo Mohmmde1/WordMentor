@@ -21,6 +21,15 @@ class Profile(BaseModel):
             # Generate slug based on user's email or any other field
             self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
+    @property
+    def get_avatar_url(self):
+        """
+        Property method to get the full URL of the avatar image.
+        """
+        if self.avatar:
+            return self.avatar.url
+        return None
+
 
     def __str__(self):
         return f"Profile for {self.user.username}"

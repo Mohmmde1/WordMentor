@@ -90,6 +90,7 @@ export async function fetchProfile() {
   try {
     const userId = getUserId();
     const response = await apiService.get(`profile/${userId}`);
+
     return response;
   } catch (error) {
     console.error("Error occured during fetching profile: ", error);
@@ -105,13 +106,12 @@ export async function updateProfile(_currentState, formData) {
       last_name: formData.get("inputLastName"),
       username: formData.get("inputUsername"),
     };
-    console.log(`data: ${data.username}`);
+
     const response = await apiService.postUpdate(
       `auth/user/`,
       JSON.stringify(data),
       "PUT",
     );
-    console.log(response);
 
     if (response.id) {
       return {

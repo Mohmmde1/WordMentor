@@ -9,7 +9,7 @@ export default function setSessionCookies(user, access, refresh) {
     path: "/",
   };
 
-  cookies().set("session_userid", user.pk, cookieSettings);
+  cookies().set("session_userid", user.id, cookieSettings);
   cookies().set("session_access_token", access, cookieSettings);
   cookies().set("session_refresh_token", refresh, cookieSettings);
 }
