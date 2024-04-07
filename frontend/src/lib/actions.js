@@ -5,6 +5,7 @@ import setSessionCookies, {
   deleteSessionCookies,
   getUserId,
 } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 export async function signup(_currentState, formData) {
   try {
@@ -74,21 +75,19 @@ export async function login(_currentState, formData) {
 export async function logout() {
   try {
     deleteSessionCookies();
-    return {
-      message: "success",
-      errors: undefined,
-    };
   } catch (error) {
     // Handle errors
     console.error("Error occurred during signing ing:", error);
 
     throw error; // Re-throw the error to be caught by the caller
   }
+  redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
 }
 
 export async function fetchProfile() {
   try {
     const userId = getUserId();
+    if (!userId) throw new Error("User is not logged in!");
     const response = await apiService.get(`profile/${userId}`);
 
     return response;

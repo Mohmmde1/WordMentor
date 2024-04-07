@@ -5,18 +5,22 @@ import { Toaster } from "sonner";
 import SignupModal from "@/components/auth/SignupModal";
 import LoginModal from "@/components/auth/LoginModal";
 
-import { checkUser, logout } from "@/lib/actions";
+import { checkUser, fetchProfile, logout } from "@/lib/actions";
 
 export default function AuthSection() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const isLoggedIn = async () => {
       const userId = await checkUser();
-
+      if (userId) {
+        const response = await fetchProfile();
+        if (response.user.username) setUsername(response.user.username);
+      }
       if (userId) setLoggedIn(true);
     };
     isLoggedIn();
@@ -48,11 +52,10 @@ export default function AuthSection() {
     else if (message) toast.error(message);
   };
   const handleLogout = async () => {
-    const response = await logout();
-    if (response.message === "success") {
-      toast.success("You have logged out successfuly!");
-      setLoggedIn(false);
-    } else toast.error(response.errors);
+    await logout();
+
+    toast.success("You have logged out successfuly!");
+    setLoggedIn(false);
   };
   return (
     <>
@@ -126,7 +129,10 @@ export default function AuthSection() {
                   {loggedIn ? (
                     <>
                       <li>
-                        <a className="dropdown-item" href="/profile/mohammed">
+                        <a
+                          className="dropdown-item"
+                          href={`profile/${username}`}
+                        >
                           Profile
                         </a>
                       </li>
