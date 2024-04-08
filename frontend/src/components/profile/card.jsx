@@ -1,21 +1,20 @@
 "use client";
 
-import { fetchProfile } from "@/lib/actions";
 import { useEffect, useState } from "react";
 
-const ProfileCard = ({ styles }) => {
+const ProfileCard = ({ styles, profile }) => {
   const [avatar, setAvatar] = useState("");
   const [username, setUsername] = useState("");
   useEffect(() => {
     const manageAvatar = async () => {
-      const data = await fetchProfile();
-
-      if (data.avatar_url) setAvatar(data.avatar_url);
-      if (data.user.username) setUsername(data.user.username);
+      if (profile) {
+        setAvatar(profile.avatar_url);
+        setUsername(profile.user.username);
+      }
     };
     manageAvatar();
-  }, []);
-  useEffect(() => {}, [avatar, username]);
+  }, [profile]);
+
   return (
     <div
       className={`card mb-4 text-white ${styles["profile-card"]}`}

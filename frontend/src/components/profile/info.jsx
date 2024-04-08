@@ -1,38 +1,41 @@
 "use client";
-import { fetchProfile, updateProfile } from "@/lib/actions";
+import { updateProfile } from "@/lib/actions";
 import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
-const InfoCard = ({ styles }) => {
-  const [firstName, setFirstName] = useState("first name");
-  const [lastName, setLastName] = useState("last name");
-  const [username, setUsername] = useState("username");
-  const [email, setEmail] = useState("email");
+
+const InfoCard = ({ styles, profile, onUpdate }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [formState, action] = useFormState(updateProfile, {
     message: "",
     errors: "",
   });
 
-  const handleUpdateMessage = () => {
+  const handleUpdate = () => {
     if (formState.message === "success") {
       toast.success("Profile has been updated successufly!");
+      onUpdate();
     } else if (formState.message === "fail") {
       toast.error(formState.errors);
     }
   };
 
   useEffect(() => {
-    const getProfile = async () => {
-      const data = await fetchProfile();
-      setFirstName(data.user.first_name);
-      setLastName(data.user.last_name);
-      setUsername(data.user.username);
-      setEmail(data.user.email);
+    const setProfile = async () => {
+      if (profile) {
+        console.log(profile);
+        setFirstName(profile.user.first_name);
+        setLastName(profile.user.last_name);
+        setUsername(profile.user.username);
+        setEmail(profile.user.email);
+      }
     };
-    getProfile();
-    handleUpdateMessage();
-  }, [formState]);
-
+    setProfile();
+  }, [profile]);
+  useEffect(() => handleUpdate(), [formState]);
   return (
     <div className={`card mb-4 text-white ${styles["info-card"]}`}>
       <div className="card-body">
