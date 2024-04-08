@@ -33,9 +33,19 @@ const ProfileCard = ({ styles, profile }) => {
         <h5 className={`my-3 ${styles["profile-card-title"]}`}>{username}</h5>
 
         <div className="d-flex justify-content-center mb-2">
-          <button className={`btn btn-outline-primary ms-1 button`}>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => handleImageUpload(e.target.files[0])}
+          />
+          <label
+            htmlFor="imageUpload"
+            className="btn btn-outline-primary ms-1 button"
+          >
             Upload
-          </button>
+          </label>
         </div>
       </div>
     </div>
