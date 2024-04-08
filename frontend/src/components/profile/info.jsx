@@ -26,7 +26,6 @@ const InfoCard = ({ styles, profile, onUpdate }) => {
   useEffect(() => {
     const setProfile = async () => {
       if (profile) {
-        console.log(profile);
         setFirstName(profile.user.first_name);
         setLastName(profile.user.last_name);
         setUsername(profile.user.username);

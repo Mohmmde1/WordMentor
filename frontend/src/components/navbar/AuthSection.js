@@ -131,7 +131,7 @@ export default function AuthSection() {
                       <li>
                         <a
                           className="dropdown-item"
-                          href={`profile/${username}`}
+                          href={`/profile/${username}`}
                         >
                           Profile
                         </a>

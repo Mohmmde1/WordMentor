@@ -4,6 +4,7 @@ import apiService from "@/services/apiService";
 import setSessionCookies, {
   deleteSessionCookies,
   getUserId,
+  getAccessToken,
 } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
@@ -137,5 +138,30 @@ export async function checkUser() {
     if (userId) return userId;
   } catch (error) {
     console.error("Error checking user:", error);
+  }
+}
+
+export async function handleImageUpload(_currentState, formState) {
+  const avatar = formState.get("avatar");
+  const formData = new FormData();
+  formData.append("avatar", avatar);
+
+  try {
+    const response = await apiService.postFile(
+      `profile/${getUserId()}/upload-image/`,
+      formData,
+      "POST",
+    );
+    console.log(response);
+    if (response.id) {
+      return { message: "success", errors: "" };
+      // Optionally, do something after successful upload
+    } else {
+      return { message: "fail", errors: "" };
+      // Handle error
+    }
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    // Handle error
   }
 }

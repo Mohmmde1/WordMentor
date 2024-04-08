@@ -26,7 +26,11 @@ export default function Page({ params }) {
       <div className="offset-sm-2 container ">
         <div className="row">
           <div className="col-lg-3 offset-sm-3">
-            <ProfileCard styles={styles} profile={profile} />
+            <ProfileCard
+              styles={styles}
+              profile={profile}
+              onUpdate={onUpdate}
+            />
           </div>
         </div>
         <div className="row">

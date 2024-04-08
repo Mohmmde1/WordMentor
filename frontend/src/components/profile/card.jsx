@@ -1,19 +1,31 @@
 "use client";
-
+import { handleImageUpload } from "@/lib/actions";
 import { useEffect, useState } from "react";
+import { useFormState } from "react-dom";
+import { toast } from "sonner";
 
-const ProfileCard = ({ styles, profile }) => {
+const ProfileCard = ({ styles, profile, onUpdate }) => {
   const [avatar, setAvatar] = useState("");
   const [username, setUsername] = useState("");
+  const [formState, action] = useFormState(handleImageUpload, {
+    message: "",
+    errors: "",
+  });
+
   useEffect(() => {
-    const manageAvatar = async () => {
-      if (profile) {
-        setAvatar(profile.avatar_url);
-        setUsername(profile.user.username);
-      }
-    };
-    manageAvatar();
+    if (profile) {
+      setAvatar(profile.avatar_url);
+      setUsername(profile.user.username);
+    }
   }, [profile]);
+
+  useEffect(() => {
+    console.log(formState);
+    if (formState.message === "success") {
+      toast.success("File uploaded successfully");
+      onUpdate();
+    } else if (formState.message === "fail") toast.error("File upload failed!");
+  }, [formState]);
 
   return (
     <div
@@ -31,21 +43,25 @@ const ProfileCard = ({ styles, profile }) => {
           style={{ width: "150px" }}
         />
         <h5 className={`my-3 ${styles["profile-card-title"]}`}>{username}</h5>
-
         <div className="d-flex justify-content-center mb-2">
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => handleImageUpload(e.target.files[0])}
-          />
-          <label
-            htmlFor="imageUpload"
-            className="btn btn-outline-primary ms-1 button"
-          >
-            Upload
-          </label>
+          <form action={action}>
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/*"
+              name="avatar"
+              style={{ display: "none" }}
+            />
+            <label
+              htmlFor="imageUpload"
+              className="btn btn-outline-primary ms-1 button"
+            >
+              Upload
+            </label>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
         </div>
       </div>
     </div>
