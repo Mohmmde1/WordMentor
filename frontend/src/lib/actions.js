@@ -115,10 +115,7 @@ export async function updateProfile(formData) {
     if (response.id) {
       revalidatePath(`/profile/${data.username}`);
     } else {
-      return {
-        message: "fail",
-        errors: JSON.stringify(response),
-      };
+      throw new Error(`Response: ${response}`);
     }
   } catch (error) {
     // Handle errors
