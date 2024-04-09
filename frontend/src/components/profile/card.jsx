@@ -40,7 +40,7 @@ const ProfileCard = ({ styles, profile, onUpdate }) => {
           }
           alt="avatar"
           className={`${styles["profile-img"]}`}
-          style={{ width: "150px" }}
+          style={{ width: "150px", height: "150px" }}
         />
         <h5 className={`my-3 ${styles["profile-card-title"]}`}>{username}</h5>
         <div className="d-flex justify-content-center mb-2">
@@ -58,7 +58,10 @@ const ProfileCard = ({ styles, profile, onUpdate }) => {
             >
               Upload
             </label>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn btn-outline-primary ms-1 button"
+            >
               Submit
             </button>
           </form>
