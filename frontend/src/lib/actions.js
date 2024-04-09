@@ -135,14 +135,10 @@ export async function checkUser() {
 }
 
 export async function handleImageUpload(formState) {
-  const avatar = formState.get("avatar");
-  const formData = new FormData();
-  formData.append("avatar", avatar);
-
   try {
     const response = await apiService.postFile(
       `profile/${getUserId()}/upload-image/`,
-      formData,
+      formState,
       "POST",
     );
     console.log(response);
@@ -150,11 +146,12 @@ export async function handleImageUpload(formState) {
       revalidatePath(`/`);
       // Optionally, do something after successful upload
     } else {
-      return { message: "fail", errors: "" };
+      throw new Error(`Response: ${response}`);
       // Handle error
     }
   } catch (error) {
     console.error("Error uploading file:", error);
     // Handle error
+    throw error;
   }
 }
