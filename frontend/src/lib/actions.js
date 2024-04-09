@@ -1,6 +1,6 @@
 "use server";
 import apiService from "@/services/apiService";
-import { revalidatePath } from "next/cache";
+
 import setSessionCookies, {
   deleteSessionCookies,
   getUserId,

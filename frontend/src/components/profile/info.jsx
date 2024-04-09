@@ -1,6 +1,6 @@
+import styles from "/public/css/profile.module.css";
 import { updateProfile } from "@/lib/actions";
-
-const InfoCard = ({ styles, profile }) => {
+const InfoCard = ({ profile }) => {
   return (
     <div className={`card mb-4 text-white ${styles["info-card"]}`}>
       <div className="card-body">

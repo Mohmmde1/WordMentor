@@ -31,3 +31,19 @@
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
     border-radius: 2em;
 }
+
+/* profile.module.css */
+
+.skeleton-placeholder {
+    background-color: #e0e0e0; /* Light gray background */
+}
+
+.skeleton-line {
+    height: 20px; /* Height of each line */
+    margin-bottom: 10px; /* Spacing between lines */
+}
+
+.skeleton-button {
+    height: 40px; /* Height of the button */
+    width: 120px; /* Width of the button */
+}

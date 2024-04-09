@@ -19,6 +19,7 @@ export default function AuthSection() {
       const userId = await checkUser();
       if (userId) {
         const response = await fetchProfile();
+        console.log(response);
         if (response.user.username) setUsername(response.user.username);
         if (response.avatar_url) setAvatar(response.avatar_url);
         setLoggedIn(true);

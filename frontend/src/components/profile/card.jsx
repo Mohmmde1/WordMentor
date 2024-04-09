@@ -1,6 +1,6 @@
 import { handleImageUpload } from "@/lib/actions";
-
-const ProfileCard = ({ styles, profile }) => {
+import styles from "/public/css/profile.module.css";
+const ProfileCard = ({ profile }) => {
   return (
     <div
       className={`card mb-4 text-white ${styles["profile-card"]}`}

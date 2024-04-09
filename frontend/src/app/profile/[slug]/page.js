@@ -1,8 +1,11 @@
-import styles from "./page.module.css";
+import styles from "/public/css/profile.module.css";
 import ProfileCard from "@/components/profile/card";
-
+import { Suspense } from "react";
 import InfoCard from "@/components/profile/info";
 import { fetchProfile } from "@/lib/actions";
+import ProfileCardSkeleton, {
+  InfoCardSkeleton,
+} from "@/components/profile/skeletons";
 
 export default async function Page({ params }) {
   const profile = await fetchProfile();
@@ -12,12 +15,16 @@ export default async function Page({ params }) {
       <div className="offset-sm-2 container ">
         <div className="row">
           <div className="col-lg-3 offset-sm-3">
-            <ProfileCard styles={styles} profile={profile} />
+            <Suspense fallback={<ProfileCardSkeleton />}>
+              <ProfileCard profile={profile} />
+            </Suspense>
           </div>
         </div>
         <div className="row">
           <div className="col-lg-8 ">
-            <InfoCard styles={styles} profile={profile} />
+            <Suspense fallback={<InfoCardSkeleton />}>
+              <InfoCard profile={profile} />
+            </Suspense>
           </div>
         </div>
       </div>
