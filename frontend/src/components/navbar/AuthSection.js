@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Toaster } from "sonner";
@@ -98,7 +99,7 @@ export default function AuthSection() {
                   {loggedIn ? (
                     <>
                       <li>
-                        <a
+                        <Link
                           className="dropdown-item"
                           href={`/profile/${username}`}
                         >
@@ -118,7 +119,7 @@ export default function AuthSection() {
                             />
                           </svg>
                           Profile
-                        </a>
+                        </Link>
                       </li>
                       <div
                         className="dropdown-divider"
