@@ -1,10 +1,9 @@
 "use server";
 import apiService from "@/services/apiService";
-
+import { revalidatePath } from "next/cache";
 import setSessionCookies, {
   deleteSessionCookies,
   getUserId,
-  getAccessToken,
 } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
@@ -98,7 +97,7 @@ export async function fetchProfile() {
   }
 }
 
-export async function updateProfile(_currentState, formData) {
+export async function updateProfile(formData) {
   try {
     const data = {
       email: formData.get("inputEmail"),
@@ -114,10 +113,7 @@ export async function updateProfile(_currentState, formData) {
     );
 
     if (response.id) {
-      return {
-        message: "success",
-        errors: undefined,
-      };
+      revalidatePath(`/profile/${data.username}`);
     } else {
       return {
         message: "fail",
@@ -141,7 +137,7 @@ export async function checkUser() {
   }
 }
 
-export async function handleImageUpload(_currentState, formState) {
+export async function handleImageUpload(formState) {
   const avatar = formState.get("avatar");
   const formData = new FormData();
   formData.append("avatar", avatar);
@@ -154,7 +150,7 @@ export async function handleImageUpload(_currentState, formState) {
     );
     console.log(response);
     if (response.id) {
-      return { message: "success", errors: "" };
+      revalidatePath(`/`);
       // Optionally, do something after successful upload
     } else {
       return { message: "fail", errors: "" };
