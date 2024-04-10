@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 
 from pathlib import Path
+from datetime import timedelta
 
 from configurations import Configuration, values
 from configurations import values
 import logging
 import socket
+
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
@@ -54,13 +56,14 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'corsheaders',
+        'wordmentor_auth',
         'dj_rest_auth',
         'django.contrib.sites',
         'allauth',
         'allauth.account',
         'allauth.socialaccount',
         'dj_rest_auth.registration',
-        'wordmentor_auth',
+
         'settings'
     ])
 
@@ -96,6 +99,8 @@ class Dev(Configuration):
         },
     ])
 
+
+
     REST_FRAMEWORK = values.DictValue(default={
         'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -105,10 +110,6 @@ class Dev(Configuration):
             ]
     })
 
-    REST_AUTH = {
-        "USE_JWT": True,
-        "JWT_AUTH_HTTPONLY": False
-    }
 
     LOGGING = values.DictValue(default={
         "version": 1,
@@ -200,13 +201,36 @@ class Dev(Configuration):
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     ACCOUNT_ACTIVATION_DAYS = 7
 
-    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     ACCOUNT_EMAIL_REQUIRED = True
-    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_USERNAME_REQUIRED = True
     ACCOUNT_AUTHENTICATION_METHOD = "email"
+    ACCOUNT_UNIQUE_EMAIL = True
     MEDIA_ROOT = BASE_DIR / "media"
+    ACCOUNT_EMAIL_VERIFICATION = 'none'
     MEDIA_URL = "/media/"
     SITE_ID = 1
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+        "ROTATE_REFRESH_TOKEN": False,
+        "BLACKLIST_AFTER_ROTATION": False,
+        "UPDATE_LAST_LOGIN": True,
+        "SIGNING_KEY": "acomplexkey",
+        "ALOGRIGTHM": "HS512",
+    }
+    REST_AUTH = {
+            'REGISTER_SERIALIZER': 'wordmentor_auth.serializers.CustomRegisterSerializer',
+            "USE_JWT": True,
+            "JWT_AUTH_HTTPONLY": False,
+            "USER_DETAILS_SERIALIZER": "wordmentor_auth.serializers.UserDetailSerializer"
+    }
+    AUTHENTICATION_BACKENDS = [
+        # allauth specific authentication methods, such as login by e-mail
+        'allauth.account.auth_backends.AuthenticationBackend',
+        # Needed to login by username in Django admin, regardless of allauth
+        'django.contrib.auth.backends.ModelBackend',
+    ]
 
 
 class Prod(Dev):
