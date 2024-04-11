@@ -37,6 +37,7 @@ class Dev(Configuration):
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'django-insecure-ba-$pse%or=e6*6t%t=8i=c&wc5o4!dt2*sh%j7gt3+xy-r441'
 
+
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = values.BooleanValue(True)
 
@@ -190,10 +191,14 @@ class Dev(Configuration):
     DEFAULT_AUTO_FIELD = values.Value('django.db.models.BigAutoField')
 
 
+
+
     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1']
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda request: False if False else True,
     }
+
+    X_RAPID_API_KEY = values.SecretValue(environ_name="X_RAPID_API_KEY")
 
     CORS_ORIGIN_ALLOW_ALL = values.BooleanValue(True)
 
@@ -233,6 +238,8 @@ class Dev(Configuration):
     ]
 
 
+
 class Prod(Dev):
     DEBUG = False
     SECRET_KEY = values.SecretValue()
+    X_RAPID_API_KEY = values.SecretValue()
