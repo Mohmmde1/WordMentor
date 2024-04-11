@@ -19,6 +19,10 @@ from configurations import values
 import logging
 import socket
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
@@ -65,7 +69,8 @@ class Dev(Configuration):
         'allauth.socialaccount',
         'dj_rest_auth.registration',
 
-        'settings'
+        'settings',
+        'word'
     ])
 
     MIDDLEWARE = values.ListValue(default=[

@@ -15,6 +15,7 @@ django-allauth = "*"
 dj-rest-auth = "*"
 django-soft-delete = "*"
 pillow = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

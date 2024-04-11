@@ -28,8 +28,10 @@ urlpatterns = [
 ]
 urlpatterns += [
     path(api + 'auth/', include("wordmentor_auth.urls")),
-    path(api + "profile/", include("settings.urls"))
+    path(api + "profile/", include("settings.urls")),
+    path(api + "word/", include("word.urls"))
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

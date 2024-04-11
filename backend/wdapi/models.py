@@ -13,6 +13,8 @@ class BaseTwinwordData:
             raise AttributeError(
                 f"{key} is not in data, please make sure this is a detail response."
             )
+    def __str__(self):
+            return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}"
 
     @property
     def author(self):
@@ -68,6 +70,9 @@ class WdDefinition(BaseTwinwordData):
         self.check_for_detail_data_key("meaning")
         return self.data["meaning"]
 
+    def __str__(self):
+            return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, IPA: {self.ipa}, Meaning: {self.meaning}"
+
 
 class WdDifficulty(BaseTwinwordData):
     """A class to represent word difficulty data coming back from Twinword API."""
@@ -76,3 +81,6 @@ class WdDifficulty(BaseTwinwordData):
     def ten_degree(self):
         self.check_for_detail_data_key("ten_degree")
         return int(self.data["ten_degree"])
+
+    def __str__(self):
+           return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, Ten Degree: {self.ten_degree}"
