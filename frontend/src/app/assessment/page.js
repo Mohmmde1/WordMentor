@@ -41,6 +41,9 @@ export default function Page() {
     "raiment",
     "legerdemain",
     "uxoricide",
+    "tell",
+    "me",
+    "so",
   ];
   return (
     <div className="container">
