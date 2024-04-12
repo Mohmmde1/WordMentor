@@ -4,7 +4,7 @@ from rest_framework import mixins, viewsets, status
 
 from .models import Word
 from .serializers import WordSerializer
-from .wdapi_integration import create_word_object
+from .wdapi_integration import create_word_objects
 
 class WordViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
@@ -30,7 +30,7 @@ class WordViewSet(mixins.RetrieveModelMixin,
             pass  # Word does not exist in the database, fetch from API
 
         # Fetch word details from the API
-        word_data = create_word_object(word_entry)
+        word_data = create_word_objects([word_entry])[0]
         if word_data:
             # Save word details to the database
             serializer = WordSerializer(data=word_data)
