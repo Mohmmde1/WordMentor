@@ -93,3 +93,6 @@ pyrightconfig.json
 
 # media
 media/
+
+#firebase
+wordmentor_firebase.json
