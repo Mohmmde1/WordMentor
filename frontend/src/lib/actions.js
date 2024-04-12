@@ -6,6 +6,7 @@ import setSessionCookies, {
   getUserId,
 } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function signup(_currentState, formData) {
   try {
