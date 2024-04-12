@@ -49,7 +49,7 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
           <form>
             <div className="row">
               {displayedWords.map((word, index) => (
-                <div key={index} className="col-md-4 mb-3">
+                <div key={index} className="col-md-2 mb-3">
                   <div className="form-check">
                     <input
                       className="form-check-input"
