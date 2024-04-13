@@ -4,3 +4,10 @@
     border-radius: 2em;
     color: white;
 }
+
+.word-container {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

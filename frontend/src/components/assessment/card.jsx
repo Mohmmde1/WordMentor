@@ -50,26 +50,23 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
             <div className="row">
               {displayedWords.map((word, index) => (
                 <div key={index} className="col-md-2 mb-3">
-                  <div className="form-check">
+                  <div className={`form-check ${styles["word-container"]}`}>
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      id={word}
-                      checked={checkedWords[word]}
-                      onChange={() => handleCheckboxChange(word)}
+                      id={word.id}
+                      checked={checkedWords[word.id]}
+                      onChange={() => handleCheckboxChange(word.id)}
                     />
-                    <label className="form-check-label" htmlFor={word}>
-                      {word}
+                    <label className="form-check-label" htmlFor={word.id}>
+                      {word.entry}
                     </label>
                   </div>
                 </div>
               ))}
             </div>
             {step === 1 ? (
-              <div
-                className="d-flex justify-content-end p-2
-            "
-              >
+              <div className="d-flex justify-content-end p-2">
                 <button
                   className="btn btn-outline-primary ms-1 button"
                   onClick={handleNextStep}
@@ -79,10 +76,7 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
               </div>
             ) : (
               <>
-                <div
-                  className="d-flex justify-content-between p-2
-                "
-                >
+                <div className="d-flex justify-content-between p-2">
                   <button
                     className="btn btn-secondary mr-2"
                     onClick={handlePreviousStep}
