@@ -70,9 +70,9 @@ class Dev(Configuration):
         'allauth.account',
         'allauth.socialaccount',
         'dj_rest_auth.registration',
-
         'settings',
-        'word'
+        'word',
+        'assessment'
     ])
 
     MIDDLEWARE = values.ListValue(default=[
