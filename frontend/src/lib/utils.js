@@ -1,9 +1,8 @@
-import apiService from "@/services/apiService";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 // Function to set session cookies
-export default function setSessionCookies(user, access, refresh) {
+export default async function setSessionCookies(user, access, refresh) {
   const cookieSettings = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -12,6 +11,7 @@ export default function setSessionCookies(user, access, refresh) {
   };
 
   cookies().set("session_userid", user.id, cookieSettings);
+  cookies().set("session_profileid", user.profile_id, cookieSettings);
   cookies().set("session_access_token", access, cookieSettings);
   cookies().set("session_refresh_token", refresh, cookieSettings);
 }
@@ -19,6 +19,7 @@ export default function setSessionCookies(user, access, refresh) {
 // Function to reset authentication cookies
 export function resetAuthCookies() {
   cookies().set("session_userid", "");
+  cookies().set("session_profileid", "");
   cookies().set("session_access_token", "");
   cookies().set("session_refresh_token", "");
 }
@@ -27,6 +28,12 @@ export function resetAuthCookies() {
 export function getUserId() {
   const userId = cookies().get("session_userid")?.value;
   return userId ? userId : null;
+}
+
+// Function to get profile ID from cookies
+export function getProfileId() {
+  const profileId = cookies().get("session_profileid")?.value;
+  return profileId ? profileId : null;
 }
 
 // Function to get access token from cookies
@@ -51,6 +58,7 @@ export function getRefreshToken() {
 // Function to delete all session cookies
 export function deleteSessionCookies() {
   cookies().delete("session_userid");
+  cookies().delete("session_profileid");
   cookies().delete("session_access_token");
   cookies().delete("session_refresh_token");
 }
@@ -87,22 +95,5 @@ export function verifyAccessToken(token) {
     // Handle verification errors
     console.error("Error verifying access token:", error);
     return false; // Token is invalid
-  }
-}
-
-export async function getProfileId() {
-  try {
-    const userId = getUserId();
-    const profile = await apiService.get(`profile/by-user/${userId}`);
-
-    // Check if the profile exists and has an ID
-    if (profile && profile.id) {
-      return profile.id;
-    } else {
-      throw new Error("Profile ID not found");
-    }
-  } catch (error) {
-    console.error("Error fetching profile ID:", error);
-    throw error; // Propagate the error to the caller
   }
 }

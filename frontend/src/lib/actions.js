@@ -25,7 +25,7 @@ export async function signup(_currentState, formData) {
     );
     console.log(response);
     if (response.access) {
-      setSessionCookies(response.user, response.access, response.refresh);
+      await setSessionCookies(response.user, response.access, response.refresh);
       return {
         message: "success",
         errors: undefined,
@@ -56,7 +56,7 @@ export async function login(_currentState, formData) {
     );
 
     if (response.access) {
-      setSessionCookies(response.user, response.access, response.refresh);
+      await setSessionCookies(response.user, response.access, response.refresh);
       return {
         message: "success",
         errors: undefined,
@@ -88,7 +88,8 @@ export async function logout() {
 
 export async function fetchProfile() {
   try {
-    const profileId = await getProfileId();
+    const profileId = getProfileId();
+    console.log(profileId);
     if (!profileId) throw new Error("User is not logged in!");
     const response = await apiService.get(`profile/${profileId}`);
 
@@ -138,7 +139,7 @@ export async function checkUser() {
 
 export async function handleImageUpload(formState) {
   try {
-    const profileId = await getProfileId();
+    const profileId = getProfileId();
     const response = await apiService.postFile(
       `profile/${profileId}/upload-image/`,
       formState,

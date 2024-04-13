@@ -28,6 +28,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    profile_id = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name"]
+        fields = ["id", "username", "email", "first_name", "last_name", "profile_id"]
+
+    def get_profile_id(self, obj):
+        profile = Profile.objects.get(user=obj)
+        return profile.id if profile else None
