@@ -166,6 +166,23 @@ export async function fetchAssessmentWords() {
 }
 
 export async function submitAssessment(selected, unselected) {
-  console.log(selected);
-  console.log(unselected);
+  try {
+    const profileId = getProfileId();
+    const data = {
+      profile: profileId,
+      selected_words: selected,
+      unselected_words: unselected,
+    };
+    console.log(data);
+    const response = await apiService.postUpdate(
+      "assessment/",
+      JSON.stringify(data),
+      "POST",
+    );
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error submitting assessment:", error);
+    throw error;
+  }
 }
