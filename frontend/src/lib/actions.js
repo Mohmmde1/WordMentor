@@ -164,6 +164,7 @@ export async function fetchAssessmentWords() {
   return words;
 }
 
-export async function submitAssessment(formData) {
-  console.log(formData);
+export async function submitAssessment(selected, unselected) {
+  console.log(selected);
+  console.log(unselected);
 }

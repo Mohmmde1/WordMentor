@@ -5,12 +5,18 @@ import React, { useState } from "react";
 
 const VocabularyAssessment = ({ words }) => {
   const [step, setStep] = useState(1);
-  const [checkedWords, setCheckedWords] = useState({});
-  const handleCheckboxChange = (word) => {
-    setCheckedWords((prevState) => ({
-      ...prevState,
-      [word]: !prevState[word],
-    }));
+  const [selectedWords, setSelectedWords] = useState([]);
+
+  const handleCheckboxChange = (wordId) => {
+    setSelectedWords((prevSelectedWords) => {
+      if (prevSelectedWords.includes(wordId)) {
+        // Deselect the word if it's already selected
+        return prevSelectedWords.filter((id) => id !== wordId);
+      } else {
+        // Select the word if it's not already selected
+        return [...prevSelectedWords, wordId];
+      }
+    });
   };
 
   const handleNextStep = () => {
@@ -23,6 +29,17 @@ const VocabularyAssessment = ({ words }) => {
     if (step === 2) {
       setStep(1);
     }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const allWords = words.map((word) => word.id);
+    const selectedIds = new Set(selectedWords);
+    const unselectedWords = allWords.filter((id) => !selectedIds.has(id));
+
+    // Submit both selected and unselected words
+    submitAssessment(selectedWords, unselectedWords);
   };
 
   // Divide the words into two halves based on step
@@ -41,18 +58,17 @@ const VocabularyAssessment = ({ words }) => {
             Check the box if you know at least one definition for a word. If
             you’re not sure about the exact meaning, leave it blank.
           </p>
-          <form action={submitAssessment}>
+          <form onSubmit={handleSubmit}>
             <div className="row">
-              {displayedWords.map((word, index) => (
-                <div key={index} className="col-md-2 mb-3">
+              {displayedWords.map((word) => (
+                <div key={word.id} className="col-md-2 mb-3">
                   <div className={`form-check ${styles["word-container"]}`}>
                     <input
                       className="form-check-input"
                       type="checkbox"
                       id={word.id}
-                      checked={checkedWords[word.id]}
+                      checked={selectedWords.includes(word.id)}
                       onChange={() => handleCheckboxChange(word.id)}
-                      name={word.id}
                     />
                     <label className="form-check-label" htmlFor={word.id}>
                       {word.entry}
@@ -81,8 +97,8 @@ const VocabularyAssessment = ({ words }) => {
                   </button>
 
                   <button
+                    type="submit"
                     className="btn btn-outline-primary ms-1 button"
-                    onClick={handleNextStep}
                   >
                     Submit
                   </button>
