@@ -18,6 +18,7 @@ pillow = "*"
 python-dotenv = "*"
 
 [dev-packages]
+firebase-admin = "*"
 
 [requires]
 python_version = "3.12"

@@ -58,8 +58,6 @@ services:
       - ./frontend:/app/frontend
     depends_on:
       - backend
-    env_file:
-      - ./frontend/.env
 
 volumes:
   db-data:

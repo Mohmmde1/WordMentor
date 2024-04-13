@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+from firebase_admin.credentials import Base
+
 from configurations import Configuration, values
 from configurations import values
 import logging
@@ -34,6 +36,7 @@ class Dev(Configuration):
 
     DOTENV = os.path.join(BASE_DIR, '.env')
 
+    FIREBASE_PATH = os.path.join(BASE_DIR, 'wordmentor_firebase.json')
 
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
