@@ -23,6 +23,8 @@ export default function AuthSection() {
           if (response.user.username) setUsername(response.user.username);
           if (response.avatar_url) setAvatar(response.avatar_url);
           setLoggedIn(true);
+        } else {
+          throw Error("User has no profile!");
         }
       }
     };
