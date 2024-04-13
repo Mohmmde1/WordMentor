@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
-from firebase_admin.credentials import Base
 
 from configurations import Configuration, values
 from configurations import values
