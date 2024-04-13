@@ -3,6 +3,7 @@ import apiService from "@/services/apiService";
 
 import setSessionCookies, {
   deleteSessionCookies,
+  getProfileId,
   getUserId,
 } from "@/lib/utils";
 import { redirect } from "next/navigation";
@@ -87,9 +88,9 @@ export async function logout() {
 
 export async function fetchProfile() {
   try {
-    const userId = getUserId();
-    if (!userId) throw new Error("User is not logged in!");
-    const response = await apiService.get(`profile/${userId}`);
+    const profileId = await getProfileId();
+    if (!profileId) throw new Error("User is not logged in!");
+    const response = await apiService.get(`profile/${profileId}`);
 
     return response;
   } catch (error) {
@@ -137,8 +138,9 @@ export async function checkUser() {
 
 export async function handleImageUpload(formState) {
   try {
+    const profileId = await getProfileId();
     const response = await apiService.postFile(
-      `profile/${getUserId()}/upload-image/`,
+      `profile/${profileId}/upload-image/`,
       formState,
       "POST",
     );
@@ -160,4 +162,8 @@ export async function handleImageUpload(formState) {
 export async function fetchAssessmentWords() {
   const words = await apiService.get("word/assessment");
   return words;
+}
+
+export async function submitAssessment(formData) {
+  console.log(formData);
 }

@@ -1,11 +1,11 @@
 "use client";
+import { submitAssessment } from "@/lib/actions";
 import styles from "/public/css/assessment.module.css";
 import React, { useState } from "react";
 
-const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
+const VocabularyAssessment = ({ words }) => {
   const [step, setStep] = useState(1);
   const [checkedWords, setCheckedWords] = useState({});
-
   const handleCheckboxChange = (word) => {
     setCheckedWords((prevState) => ({
       ...prevState,
@@ -16,17 +16,12 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
   const handleNextStep = () => {
     if (step === 1) {
       setStep(2);
-    } else {
-      // Assume step 2 validation here before submitting
-      onNextStep();
     }
   };
 
   const handlePreviousStep = () => {
     if (step === 2) {
       setStep(1);
-    } else {
-      onPreviousStep();
     }
   };
 
@@ -46,7 +41,7 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
             Check the box if you know at least one definition for a word. If
             you’re not sure about the exact meaning, leave it blank.
           </p>
-          <form>
+          <form action={submitAssessment}>
             <div className="row">
               {displayedWords.map((word, index) => (
                 <div key={index} className="col-md-2 mb-3">
@@ -57,6 +52,7 @@ const VocabularyAssessment = ({ words, onNextStep, onPreviousStep }) => {
                       id={word.id}
                       checked={checkedWords[word.id]}
                       onChange={() => handleCheckboxChange(word.id)}
+                      name={word.id}
                     />
                     <label className="form-check-label" htmlFor={word.id}>
                       {word.entry}

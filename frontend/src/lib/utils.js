@@ -89,3 +89,20 @@ export function verifyAccessToken(token) {
     return false; // Token is invalid
   }
 }
+
+export async function getProfileId() {
+  try {
+    const userId = getUserId();
+    const profile = await apiService.get(`profile/by-user/${userId}`);
+
+    // Check if the profile exists and has an ID
+    if (profile && profile.id) {
+      return profile.id;
+    } else {
+      throw new Error("Profile ID not found");
+    }
+  } catch (error) {
+    console.error("Error fetching profile ID:", error);
+    throw error; // Propagate the error to the caller
+  }
+}
