@@ -179,8 +179,6 @@ export async function submitAssessment(selected, unselected) {
       JSON.stringify(data),
       "POST",
     );
-    console.log(response);
-    return response;
   } catch (error) {
     console.error("Error submitting assessment:", error);
     throw error;

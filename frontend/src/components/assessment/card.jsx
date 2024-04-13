@@ -2,11 +2,12 @@
 import { submitAssessment } from "@/lib/actions";
 import styles from "/public/css/assessment.module.css";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const VocabularyAssessment = ({ words }) => {
   const [step, setStep] = useState(1);
   const [selectedWords, setSelectedWords] = useState([]);
-
+  const router = useRouter();
   const handleCheckboxChange = (wordId) => {
     setSelectedWords((prevSelectedWords) => {
       if (prevSelectedWords.includes(wordId)) {
@@ -40,6 +41,7 @@ const VocabularyAssessment = ({ words }) => {
 
     // Submit both selected and unselected words
     submitAssessment(selectedWords, unselectedWords);
+    router.push("/");
   };
 
   // Divide the words into two halves based on step
