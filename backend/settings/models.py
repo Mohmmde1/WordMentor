@@ -15,6 +15,7 @@ class Profile(BaseModel):
     slug = models.SlugField(max_length=255, unique=True)
     known_words = models.ManyToManyField(Word, related_name='profiles_known', blank=True)
     unknown_words = models.ManyToManyField(Word, related_name='profiles_unknown', blank=True)
+    has_taken_assessment = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         """
