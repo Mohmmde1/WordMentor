@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, status
-
+from django.core.exceptions import ValidationError
 
 from .models import Word
 from .serializers import WordSerializer
@@ -21,23 +21,26 @@ class WordViewSet(mixins.RetrieveModelMixin,
         if not word_entry:
             return Response({"error": "Word entry is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the word exists in the database
         try:
+            # Attempt to fetch the word from the database
             word = Word.objects.get(entry=word_entry)
             serializer = WordSerializer(word)
             return Response(serializer.data)
-        except Word.DoesNotExist:
-            pass  # Word does not exist in the database, fetch from API
 
-        # Fetch word details from the API
-        word_data = create_word_objects([word_entry])[0]
-        if word_data:
-            # Save word details to the database
-            serializer = WordSerializer(data=word_data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
+        except Word.DoesNotExist:
+            try:
+                # Fetch word details from the API
+                word_data = create_word_objects([word_entry])[0]
+
+                if word_data:
+                    # Save word details to the database
+                    serializer = WordSerializer(data=word_data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
