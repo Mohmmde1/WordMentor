@@ -11,7 +11,16 @@ export default async function setSessionCookies(user, access, refresh) {
   };
 
   cookies().set("session_userid", user.id, cookieSettings);
-  cookies().set("session_profileid", user.profile_id, cookieSettings);
+  cookies().set(
+    "session_profileid",
+    user.profile_info.profile_id,
+    cookieSettings,
+  );
+  cookies().set(
+    "session_has_taken_assessment",
+    user.profile_info.has_taken_assessment,
+    cookieSettings,
+  );
   cookies().set("session_access_token", access, cookieSettings);
   cookies().set("session_refresh_token", refresh, cookieSettings);
 }
@@ -20,6 +29,7 @@ export default async function setSessionCookies(user, access, refresh) {
 export function resetAuthCookies() {
   cookies().set("session_userid", "");
   cookies().set("session_profileid", "");
+  cookies().set("session_has_taken_assessment", "");
   cookies().set("session_access_token", "");
   cookies().set("session_refresh_token", "");
 }
@@ -40,6 +50,12 @@ export function getProfileId() {
 export function getAccessToken() {
   const accessToken = cookies().get("session_access_token")?.value;
   return accessToken;
+}
+
+// Function to get access token from cookies
+export function getAssessmentStatus() {
+  const assessmentStatus = cookies().get("session_has_taken_assessment")?.value;
+  return assessmentStatus;
 }
 
 // Function to get access token from cookies
