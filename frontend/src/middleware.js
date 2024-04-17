@@ -4,10 +4,8 @@ import { getAccessToken, getAssessmentStatus } from "@/lib/utils";
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
   const token = getAccessToken();
-  const assessmentStatus = Boolean(getAssessmentStatus());
-  console.log(typeof assessmentStatus);
+  const assessmentStatus = JSON.parse(getAssessmentStatus());
   console.log(assessmentStatus);
-
   if (
     !token ||
     (request.nextUrl.pathname.startsWith("/assessment") && assessmentStatus)

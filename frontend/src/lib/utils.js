@@ -75,6 +75,7 @@ export function getRefreshToken() {
 export function deleteSessionCookies() {
   cookies().delete("session_userid");
   cookies().delete("session_profileid");
+  cookies().delete("session_has_taken_assessment");
   cookies().delete("session_access_token");
   cookies().delete("session_refresh_token");
 }
