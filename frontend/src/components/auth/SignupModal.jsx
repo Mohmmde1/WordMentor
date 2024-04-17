@@ -5,8 +5,10 @@ import { signup } from "@/lib/actions";
 import React from "react";
 import { useFormState } from "react-dom";
 import AuthButton from "@/components/auth/AuthButton";
+import { useRouter } from "next/navigation";
 
 function SignupModal({ show, onClose, onAuthenticateSuccess }) {
+  const router = useRouter();
   const [formState, formAction] = useFormState(signup, {
     message: "",
     errors: undefined,
@@ -17,6 +19,7 @@ function SignupModal({ show, onClose, onAuthenticateSuccess }) {
   useEffect(() => {
     if (formState.message === "success") {
       onClose();
+      router.push("/assessment");
       onAuthenticateSuccess(true, "User has successfully signed up");
     }
   }, [formState]);

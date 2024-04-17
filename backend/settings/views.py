@@ -25,3 +25,13 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>[^/.]+)')
+    def get_profile_by_user(self, request, user_id):
+        try:
+            # Fetch the profile associated with the given user ID
+            profile = Profile.objects.get(user_id=user_id)
+            serializer = self.get_serializer(profile)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Profile.DoesNotExist:
+            return Response({"error": "Profile not found for the given user ID"}, status=status.HTTP_404_NOT_FOUND)

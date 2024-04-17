@@ -16,9 +16,9 @@ dj-rest-auth = "*"
 django-soft-delete = "*"
 pillow = "*"
 python-dotenv = "*"
+firebase-admin = "*"
 
 [dev-packages]
-firebase-admin = "*"
 
 [requires]
 python_version = "3.12"

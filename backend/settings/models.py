@@ -1,3 +1,4 @@
+from word.models import Word
 from django.db import models
 from django.utils.text import slugify
 
@@ -12,6 +13,9 @@ class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True)
+    known_words = models.ManyToManyField(Word, related_name='profiles_known', blank=True)
+    unknown_words = models.ManyToManyField(Word, related_name='profiles_unknown', blank=True)
+    has_taken_assessment = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         """

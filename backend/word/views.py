@@ -1,9 +1,10 @@
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, status
 from django.core.exceptions import ValidationError
+from rest_framework.decorators import action
 
 from .models import Word
-from .serializers import WordSerializer
+from .serializers import WordListSerializer, WordSerializer
 from .wdapi_integration import create_word_objects
 
 class WordViewSet(mixins.RetrieveModelMixin,
@@ -44,3 +45,12 @@ class WordViewSet(mixins.RetrieveModelMixin,
                     return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=False, methods=['GET'], url_path='assessment')
+    def get_assessment_words(self, request):
+        words = []
+        for i in range(1, 11):
+            words.extend(list(Word.objects.filter(ten_degree=i)[:10]))
+        serializer = WordListSerializer(words, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

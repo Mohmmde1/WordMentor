@@ -28,6 +28,21 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    profile_info = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name"]
+        fields = ["id", "username", "email", "first_name", "last_name", "profile_info"]
+
+    def get_profile_info(self, obj):
+        try:
+            profile = Profile.objects.get(user=obj)
+            return {
+                "profile_id": profile.id,
+                "has_taken_assessment": profile.has_taken_assessment
+            }
+        except Profile.DoesNotExist:
+            return {
+                "profile_id": None,
+                "has_taken_assessment": None
+            }

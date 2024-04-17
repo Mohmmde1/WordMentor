@@ -3,6 +3,7 @@ import apiService from "@/services/apiService";
 
 import setSessionCookies, {
   deleteSessionCookies,
+  getProfileId,
   getUserId,
 } from "@/lib/utils";
 import { redirect } from "next/navigation";
@@ -24,7 +25,7 @@ export async function signup(_currentState, formData) {
     );
     console.log(response);
     if (response.access) {
-      setSessionCookies(response.user, response.access, response.refresh);
+      await setSessionCookies(response.user, response.access, response.refresh);
       return {
         message: "success",
         errors: undefined,
@@ -55,7 +56,7 @@ export async function login(_currentState, formData) {
     );
 
     if (response.access) {
-      setSessionCookies(response.user, response.access, response.refresh);
+      await setSessionCookies(response.user, response.access, response.refresh);
       return {
         message: "success",
         errors: undefined,
@@ -87,9 +88,10 @@ export async function logout() {
 
 export async function fetchProfile() {
   try {
-    const userId = getUserId();
-    if (!userId) throw new Error("User is not logged in!");
-    const response = await apiService.get(`profile/${userId}`);
+    const profileId = getProfileId();
+    console.log(profileId);
+    if (!profileId) throw new Error("User is not logged in!");
+    const response = await apiService.get(`profile/${profileId}`);
 
     return response;
   } catch (error) {
@@ -137,8 +139,9 @@ export async function checkUser() {
 
 export async function handleImageUpload(formState) {
   try {
+    const profileId = getProfileId();
     const response = await apiService.postFile(
-      `profile/${getUserId()}/upload-image/`,
+      `profile/${profileId}/upload-image/`,
       formState,
       "POST",
     );
@@ -157,101 +160,27 @@ export async function handleImageUpload(formState) {
   }
 }
 
-export async function fetchAssessmentWords(){
-  const words = [
-    "think",
-    "go",
-    "look",
-    "him",
-    "here",
-    "after",
-    "ask",
-    "next",
-    "pay",
-    "while",
-    "hope",
-    "close",
-    "tomorrow",
-    "box",
-    "hair",
-    "fish",
-    "corner",
-    "rise",
-    "twice",
-    "bright",
-    "tool",
-    "moon",
-    "soul",
-    "hint",
-    "ferry",
-    "stance",
-    "dairy",
-    "plank",
-    "wag",
-    "throttle",
-    "reproach",
-    "pittance",
-    "ajar",
-    "botch",
-    "prig",
-    "mawkish",
-    "raiment",
-    "legerdemain",
-    "uxoricide",
-    "tell",
-    "me",
-    "so",
-    "we",
-    "people",
-    "good",
-    "very",
-    "make",
-    "live",
-    "man",
-    "give",
-    "our",
-    "could",
-    "under",
-    "name",
-    "very",
-    "such",
-    "work",
-    "long",
-    "know",
-    "over",
-    "year",
-    "look",
-    "day",
-    "same",
-    "give",
-    "good",
-    "want",
-    "tell",
-    "day",
-    "might",
-    "get",
-    "come",
-    "all",
-    "because",
-    "well",
-    "have",
-    "much",
-    "now",
-    "new",
-    "want",
-    "may",
-    "like",
-    "look",
-    "some",
-    "new",
-    "year",
-    "time",
-    "know",
-    "just",
-    "use",
-    "come",
-    "take",
-    "many",
-  ];
+export async function fetchAssessmentWords() {
+  const words = await apiService.get("word/assessment");
   return words;
+}
+
+export async function submitAssessment(selected, unselected) {
+  try {
+    const profileId = getProfileId();
+    const data = {
+      profile: profileId,
+      selected_words: selected,
+      unselected_words: unselected,
+    };
+    console.log(data);
+    const response = await apiService.postUpdate(
+      "assessment/",
+      JSON.stringify(data),
+      "POST",
+    );
+  } catch (error) {
+    console.error("Error submitting assessment:", error);
+    throw error;
+  }
 }

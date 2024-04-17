@@ -29,7 +29,9 @@ urlpatterns = [
 urlpatterns += [
     path(api + 'auth/', include("wordmentor_auth.urls")),
     path(api + "profile/", include("settings.urls")),
-    path(api + "word/", include("word.urls"))
+    path(api + "word/", include("word.urls")),
+    path(api + "assessment/", include("assessment.urls"))
+
 ]
 
 

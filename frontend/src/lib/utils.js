@@ -1,9 +1,8 @@
-import apiService from "@/services/apiService";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 // Function to set session cookies
-export default function setSessionCookies(user, access, refresh) {
+export default async function setSessionCookies(user, access, refresh) {
   const cookieSettings = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -12,6 +11,16 @@ export default function setSessionCookies(user, access, refresh) {
   };
 
   cookies().set("session_userid", user.id, cookieSettings);
+  cookies().set(
+    "session_profileid",
+    user.profile_info.profile_id,
+    cookieSettings,
+  );
+  cookies().set(
+    "session_has_taken_assessment",
+    user.profile_info.has_taken_assessment,
+    cookieSettings,
+  );
   cookies().set("session_access_token", access, cookieSettings);
   cookies().set("session_refresh_token", refresh, cookieSettings);
 }
@@ -19,6 +28,8 @@ export default function setSessionCookies(user, access, refresh) {
 // Function to reset authentication cookies
 export function resetAuthCookies() {
   cookies().set("session_userid", "");
+  cookies().set("session_profileid", "");
+  cookies().set("session_has_taken_assessment", "");
   cookies().set("session_access_token", "");
   cookies().set("session_refresh_token", "");
 }
@@ -29,10 +40,22 @@ export function getUserId() {
   return userId ? userId : null;
 }
 
+// Function to get profile ID from cookies
+export function getProfileId() {
+  const profileId = cookies().get("session_profileid")?.value;
+  return profileId ? profileId : null;
+}
+
 // Function to get access token from cookies
 export function getAccessToken() {
   const accessToken = cookies().get("session_access_token")?.value;
   return accessToken;
+}
+
+// Function to get access token from cookies
+export function getAssessmentStatus() {
+  const assessmentStatus = cookies().get("session_has_taken_assessment")?.value;
+  return assessmentStatus;
 }
 
 // Function to get access token from cookies
@@ -51,6 +74,8 @@ export function getRefreshToken() {
 // Function to delete all session cookies
 export function deleteSessionCookies() {
   cookies().delete("session_userid");
+  cookies().delete("session_profileid");
+  cookies().delete("session_has_taken_assessment");
   cookies().delete("session_access_token");
   cookies().delete("session_refresh_token");
 }
