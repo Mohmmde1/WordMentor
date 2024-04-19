@@ -1,4 +1,4 @@
-import { getAccessToken } from "@/lib/utils";
+import { getAccessToken } from "@/lib/utils/utils";
 
 const apiService = {
   get: async function (url) {
