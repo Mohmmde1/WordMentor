@@ -1,11 +1,9 @@
-'use client'
+"use client";
 import { useState } from "react";
 
-import BookTable  from "@/components/books/table";
+import BookTable from "@/components/books/table";
 import DeleteButton from "@/components/books/deleteButton";
 import UploadForm from "@/components/books/uploadForm";
-
-
 
 // Main Page component
 export default function Page() {
@@ -24,7 +22,7 @@ export default function Page() {
 
     // Retrieve uploaded file
     const file = event.target.files[0];
-    
+
     // Here you can implement logic to handle the uploaded file
     console.log("Uploaded file:", file);
   };
@@ -44,7 +42,7 @@ export default function Page() {
       book.id === id ? { ...book, selected: !book.selected } : book
     );
     setBooks(updatedBooks);
-    if(updatedBooks.some((book) => book.selected)) setShowDeleteButton(true);
+    if (updatedBooks.some((book) => book.selected)) setShowDeleteButton(true);
     else setShowDeleteButton(false);
   };
 
@@ -53,37 +51,36 @@ export default function Page() {
       ...book,
       selected: !selectAll,
     }));
-    
+
     setBooks(updatedBooks);
     setSelectAll(!selectAll);
-    if(!selectAll) setShowDeleteButton(true);
+    if (!selectAll) setShowDeleteButton(true);
     else setShowDeleteButton(false);
   };
 
   return (
-    <div className="tw-container tw-mx-auto tw-mt-8">
-      <div className="tw-bg-white tw-shadow-md tw-rounded tw-px-8 tw-py-6">
+    <div className="tw-container tw-mx-auto tw-mt-8 ">
+      <div className=" tw-shadow-md tw-rounded tw-px-8 tw-py-6 tw-bg-slate-500 tw-text-white">
         <div className="tw-flex tw-justify-between tw-mb-6">
-          <div>
-            <h1 className="tw-text-2xl tw-font-semibold">Books Page</h1>
-            <input
-              type="checkbox"
-              checked={selectAll}
-              onChange={handleSelectAllChange}
-              className='tw-m-2 tw-w-4 tw-h-4 tw-text-blue-600 tw-bg-gray-100 tw-border-gray-300 tw-rounded focus:tw-ring-blue-500 dark:focus:tw-ring-blue-600 dark:tw-ring-offset-gray-800 dark:focus:tw-ring-offset-gray-800 focus:tw-ring-2 dark:tw-bg-gray-700 dark:tw-border-gray-600'
-            />
-            <label htmlFor="select-all" className="tw-text-sm tw-text-gray-500 tw-cursor-pointer">
-              Select All
-            </label>
+          <div className="">
+            <h1 className="tw-text-2xl tw-font-semibold tw-border-8">Books Page</h1>
+            
           </div>
+          
           <UploadForm handleUpload={handleUpload} />
-          <DeleteButton showDeleteButton={showDeleteButton} handleDelete={handleDelete} />
+          
+          <DeleteButton
+            showDeleteButton={showDeleteButton}
+            handleDelete={handleDelete}
+          />
         </div>
         
+
         <BookTable
           books={books}
           handleCheckboxChange={handleCheckboxChange}
           handleLike={handleLike}
+          handleSelectAllChange={handleSelectAllChange}
         />
       </div>
     </div>
