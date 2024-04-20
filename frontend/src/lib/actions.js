@@ -5,7 +5,7 @@ import setSessionCookies, {
   deleteSessionCookies,
   getProfileId,
   getUserId,
-} from "@/lib/utils";
+} from "@/lib/utils/utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

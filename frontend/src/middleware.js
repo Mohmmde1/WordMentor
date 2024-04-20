@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAccessToken, getAssessmentStatus } from "@/lib/utils";
+import { getAccessToken, getAssessmentStatus } from "@/lib/utils/utils";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
