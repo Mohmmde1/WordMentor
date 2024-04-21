@@ -60,7 +60,7 @@ export default function Page() {
 
   return (
     <div className="tw-container tw-mx-auto tw-mt-8 ">
-      <div className=" tw-shadow-md tw-rounded tw-px-8 tw-py-6 tw-bg-slate-500 tw-text-white">
+      <div className=" tw-shadow-md tw-rounded tw-px-8 tw-py-6 tw-bg-white ">
         <div className="tw-flex tw-justify-between tw-mb-6">
           <div className="">
             <h1 className="tw-text-2xl tw-font-semibold tw-border-8">Books Page</h1>
