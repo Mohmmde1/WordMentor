@@ -184,3 +184,16 @@ export async function submitAssessment(selected, unselected) {
     throw error;
   }
 }
+
+export async function saveBook(form){
+  form.append("profile", getProfileId());
+  form.append("title", form.get("file").name);
+  form.append("pages", 0);
+  try {
+    const response = await apiService.postFile("books/", form, "POST");
+    console.log(response);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}

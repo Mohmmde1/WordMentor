@@ -4,6 +4,7 @@ import { useState } from "react";
 import BookTable from "@/components/books/table";
 import DeleteButton from "@/components/books/deleteButton";
 import UploadForm from "@/components/books/uploadForm";
+import { saveBook } from "@/lib/actions";
 
 // Main Page component
 export default function Page() {
@@ -16,15 +17,21 @@ export default function Page() {
   const [selectAll, setSelectAll] = useState(false);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
-  const handleUpload = (event) => {
-    // Prevent default form submission
-    event.preventDefault();
+  const handleUpload = async (event) => {
+   
+    try{
+      // Retrieve uploaded file
+      const file = event.target.files[0];
+      const form = new FormData();
+      form.append("file", file);
+      await saveBook(form);
+      // Here you can implement logic to handle the uploaded file
+      console.log("Uploaded file:", file);
 
-    // Retrieve uploaded file
-    const file = event.target.files[0];
+    }catch (error){
+      console.error("Error uploading file:", error);
+    }
 
-    // Here you can implement logic to handle the uploaded file
-    console.log("Uploaded file:", file);
   };
 
   const handleDelete = () => {
