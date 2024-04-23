@@ -26,7 +26,7 @@ class BookViewSet(mixins.CreateModelMixin,
         try:
             profile = Profile.objects.get(pk=profile_id)
             self.check_object_permissions(request, profile)
-            books = Book.objects.filter(profiles__id=profile_id)
+            books = Book.objects.filter(profile__id=profile_id)
             serializer = BookSerializer(books, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Profile.DoesNotExist:
