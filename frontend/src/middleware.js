@@ -4,7 +4,7 @@ import { getAccessToken, getAssessmentStatus } from "@/lib/utils/utils";
 
 export function middleware(request) {
   const token = getAccessToken();
-  const assessmentStatus = JSON.parse(getAssessmentStatus());
+  const assessmentStatus = getAssessmentStatus();
   if (
     !token ||
     (request.nextUrl.pathname.startsWith("/assessment") && assessmentStatus)

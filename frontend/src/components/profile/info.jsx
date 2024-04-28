@@ -1,6 +1,13 @@
+import Link from "next/link";
+
 import styles from "/public/css/profile.module.css";
 import { updateProfile } from "@/lib/actions";
+import { getAssessmentStatus } from "@/lib/utils/utils";
+
+
+
 const InfoCard = ({ profile }) => {
+
   return (
     <div className={`card mb-4 text-white ${styles["info-card"]}`}>
       <div className="card-body">
@@ -70,6 +77,7 @@ const InfoCard = ({ profile }) => {
             </div>
           </div>
           <div className="row m-3 pt-4">
+{getAssessmentStatus()? "Assessment has been taken": <Link href="/assessment" className="btn btn-primary button">Take Assessment</Link> }
             <div className="col-sm-9 offset-sm-6">
               <button type="submit" className={`btn btn-primary button `}>
                 Update

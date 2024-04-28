@@ -56,10 +56,13 @@ export function getAccessToken() {
 
 // Function to get access token from cookies
 export function getAssessmentStatus() {
-  const assessmentStatus = cookies().get("session_has_taken_assessment")?.value;
-  return assessmentStatus;
+  const assessmentStatus = JSON.parse(cookies().get("session_has_taken_assessment")?.value);
+  return Boolean(assessmentStatus);
 }
 
+export function setAssessmentStatus(status) {
+  cookies().set("session_has_taken_assessment", status);
+}
 // Function to get access token from cookies
 export function setAccessToken(token) {
   const response = NextResponse.next();

@@ -4,7 +4,7 @@ import apiService from "@/services/apiService";
 import setSessionCookies, {
   deleteSessionCookies,
   getProfileId,
-  getUserId,
+  getUserId, setAssessmentStatus
 } from "@/lib/utils/utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -179,6 +179,7 @@ export async function submitAssessment(selected, unselected) {
       JSON.stringify(data),
       "POST",
     );
+    setAssessmentStatus(true);
   } catch (error) {
     console.error("Error submitting assessment:", error);
     throw error;
