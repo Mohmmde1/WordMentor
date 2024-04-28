@@ -5,6 +5,7 @@ const BookTableRow = ({ book, handleCheckboxChange, handleLike }) => (
   <tr className="tw-bg-white dark:tw-bg-gray-800  hover:tw-bg-gray-50 dark:hover:tw-bg-gray-600">
     <td className=" tw-px-4 tw-py-2">{book.name}</td>
     <td className=" tw-px-4 tw-py-2">{book.uploadedAt}</td>
+    <td className=" tw-px-4 tw-py-2">{book.pages}</td>
     <td className=" tw-px-4 tw-py-2">
       <button
         onClick={() => handleLike(book.id)}

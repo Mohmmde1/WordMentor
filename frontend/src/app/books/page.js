@@ -1,37 +1,48 @@
-"use client";
-import { useState } from "react";
+'use client'
+import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation'
 
 import BookTable from "@/components/books/table";
 import DeleteButton from "@/components/books/deleteButton";
 import UploadForm from "@/components/books/uploadForm";
-import { saveBook } from "@/lib/actions";
+import { fetchBooks, saveBook } from "@/lib/actions";
 
 // Main Page component
 export default function Page() {
-  const [books, setBooks] = useState([
-    { id: 1, name: "Book 1", uploadedAt: "2022-04-20", selected: false },
-    { id: 2, name: "Book 2", uploadedAt: "2022-04-21", selected: false },
-    { id: 3, name: "Book 3", uploadedAt: "2022-04-22", selected: false },
-  ]);
+  const [books, setBooks] = useState([]);
 
   const [selectAll, setSelectAll] = useState(false);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchBooks();
+      const data = response.map((book) => ({
+        id: book.id,
+        name: book.title,
+        uploadedAt: book.created_at,
+        pages: book.pages,
+        selected: false,
+      }));
+      setBooks(data);
+    };
+    fetchData();
+  }, []);
 
   const handleUpload = async (event) => {
-   
-    try{
+    try {
       // Retrieve uploaded file
       const file = event.target.files[0];
       const form = new FormData();
       form.append("file", file);
-      await saveBook(form);
-      // Here you can implement logic to handle the uploaded file
+      await saveBook(form).then((response) => {
+        console.log(response);
+      });
       console.log("Uploaded file:", file);
-
-    }catch (error){
+      window.location.reload();
+    } catch (error) {
       console.error("Error uploading file:", error);
     }
-
   };
 
   const handleDelete = () => {
@@ -49,20 +60,20 @@ export default function Page() {
       book.id === id ? { ...book, selected: !book.selected } : book
     );
     setBooks(updatedBooks);
-    if (updatedBooks.some((book) => book.selected)) setShowDeleteButton(true);
-    else setShowDeleteButton(false);
+    setSelectAll(updatedBooks.every((book) => book.selected));
+    setShowDeleteButton(updatedBooks.some((book) => book.selected));
   };
 
   const handleSelectAllChange = () => {
+    const updatedSelectAll = !selectAll;
     const updatedBooks = books.map((book) => ({
       ...book,
-      selected: !selectAll,
+      selected: updatedSelectAll,
     }));
 
     setBooks(updatedBooks);
-    setSelectAll(!selectAll);
-    if (!selectAll) setShowDeleteButton(true);
-    else setShowDeleteButton(false);
+    setSelectAll(updatedSelectAll);
+    setShowDeleteButton(updatedSelectAll);
   };
 
   return (
@@ -70,24 +81,25 @@ export default function Page() {
       <div className=" tw-shadow-md tw-rounded tw-px-8 tw-py-6 tw-bg-white ">
         <div className="tw-flex tw-justify-between tw-mb-6">
           <div className="">
-            <h1 className="tw-text-2xl tw-font-semibold tw-border-8">Books Page</h1>
-            
+            <h1 className="tw-text-2xl tw-font-semibold tw-border-8">
+              Books Page
+            </h1>
           </div>
-          
+
           <UploadForm handleUpload={handleUpload} />
-          
+
           <DeleteButton
             showDeleteButton={showDeleteButton}
             handleDelete={handleDelete}
           />
         </div>
-        
 
         <BookTable
           books={books}
           handleCheckboxChange={handleCheckboxChange}
           handleLike={handleLike}
           handleSelectAllChange={handleSelectAllChange}
+          selectAll={selectAll} // Pass selectAll state to BookTable component
         />
       </div>
     </div>

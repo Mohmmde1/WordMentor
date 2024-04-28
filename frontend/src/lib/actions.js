@@ -192,8 +192,20 @@ export async function saveBook(form){
   try {
     const response = await apiService.postFile("books/", form, "POST");
     console.log(response);
+    return response;
   } catch (error) {
     console.error("Error uploading file:", error);
+    throw error;
+  }
+}
+
+export async function fetchBooks() {
+  const profileId = getProfileId();
+  try {
+    const response = await apiService.get(`books/by-profile/${profileId}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
     throw error;
   }
 }

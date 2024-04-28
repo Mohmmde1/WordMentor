@@ -16,6 +16,7 @@ const BookTable = ({
       <tr>
         <th className="tw-px-4 tw-py-2">Name</th>
         <th className="tw-px-4 tw-py-2">Uploaded At</th>
+        <th className="tw-px-4 tw-py-2">Pages</th>
         <th className="tw-px-4 tw-py-2">
           <span className="tw-sr-only">Action</span>
         </th>
