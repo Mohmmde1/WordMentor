@@ -9,8 +9,6 @@ import ProfileCardSkeleton, {
 
 export default async function Page({ params }) {
   const profile = await fetchProfile();
-  console.log(profile);
-
   return (
     <div className={`${styles["profile-page"]}`}>
       <div className="offset-sm-2 container ">

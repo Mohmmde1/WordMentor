@@ -9,7 +9,7 @@ const ProfileCard = ({ profile }) => {
       <div className="card-body rounded-circle text-center">
         <img
           src={
-            `${process.env.NEXT_PUBLIC_BACKEND_HOST + profile.avatar ? profile.avatar_url : "/media/avatars/avatar.jpeg"}` 
+            `${profile.avatar ? process.env.NEXT_PUBLIC_BACKEND_HOST + profile.avatar : process.env.NEXT_PUBLIC_BACKEND_HOST + "/media/avatars/avatar.jpeg"}`
           }
           alt="avatar"
           className={`${styles["profile-img"]}`}
