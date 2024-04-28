@@ -66,6 +66,22 @@ const apiService = {
         });
     });
   },
+  delete: async function (url){
+    const accessToken = getAccessToken();
+    return new Promise((resolve, reject) => {
+      fetch(`${process.env.NEXT_PUBLIC_API_HOST}/${url}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+  
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
   postWithoutToken: async function (url, data) {
     console.log("post", url, data);
 

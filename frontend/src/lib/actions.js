@@ -209,3 +209,13 @@ export async function fetchBooks() {
     throw error;
   }
 }
+
+export async function deleteBook(bookId) {
+  try {
+    const response = await apiService.delete(`books/${bookId}`);
+    return response;
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    throw error;
+  }
+}

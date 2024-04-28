@@ -1,11 +1,10 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation'
 
 import BookTable from "@/components/books/table";
 import DeleteButton from "@/components/books/deleteButton";
 import UploadForm from "@/components/books/uploadForm";
-import { fetchBooks, saveBook } from "@/lib/actions";
+import { fetchBooks, saveBook, deleteBook } from "@/lib/actions";
 
 // Main Page component
 export default function Page() {
@@ -13,7 +12,7 @@ export default function Page() {
 
   const [selectAll, setSelectAll] = useState(false);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-  const router = useRouter();
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchBooks();
@@ -45,9 +44,15 @@ export default function Page() {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    const selectedBooks = books.filter((book) => book.selected);
     setBooks(books.filter((book) => !book.selected));
+    selectedBooks.forEach( async(book) => {
+      await deleteBook(book.id);
+    });
+  
     setSelectAll(false);
+    setShowDeleteButton(false);
   };
 
   const handleLike = (id) => {
