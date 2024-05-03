@@ -4,7 +4,7 @@ import apiService from "@/services/apiService";
 import setSessionCookies, {
   deleteSessionCookies,
   getProfileId,
-  getUserId,
+  getUserId, setAssessmentStatus
 } from "@/lib/utils/utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -179,8 +179,44 @@ export async function submitAssessment(selected, unselected) {
       JSON.stringify(data),
       "POST",
     );
+    setAssessmentStatus(true);
   } catch (error) {
     console.error("Error submitting assessment:", error);
+    throw error;
+  }
+}
+
+export async function saveBook(form){
+  form.append("profile", getProfileId());
+  form.append("title", form.get("file").name);
+  form.append("pages", 0);
+  try {
+    const response = await apiService.postFile("books/", form, "POST");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}
+
+export async function fetchBooks() {
+  const profileId = getProfileId();
+  try {
+    const response = await apiService.get(`books/by-profile/${profileId}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}
+
+export async function deleteBook(bookId) {
+  try {
+    const response = await apiService.delete(`books/${bookId}`);
+    return response;
+  } catch (error) {
+    console.error("Error deleting book:", error);
     throw error;
   }
 }

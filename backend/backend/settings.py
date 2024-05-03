@@ -72,7 +72,8 @@ class Dev(Configuration):
         'dj_rest_auth.registration',
         'settings',
         'word',
-        'assessment'
+        'assessment',
+        'books'
     ])
 
     MIDDLEWARE = values.ListValue(default=[

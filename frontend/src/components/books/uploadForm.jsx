@@ -1,3 +1,5 @@
+'use client'
+import {saveBook} from "@/lib/actions";
 // UploadForm component
 const UploadForm = ({ handleUpload }) => (
     <form>
@@ -11,6 +13,6 @@ const UploadForm = ({ handleUpload }) => (
         onChange={handleUpload}
       />
     </form>
-  );
+  );  
   
 export default UploadForm;

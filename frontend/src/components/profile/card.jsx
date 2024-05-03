@@ -9,8 +9,7 @@ const ProfileCard = ({ profile }) => {
       <div className="card-body rounded-circle text-center">
         <img
           src={
-            `${process.env.NEXT_PUBLIC_BACKEND_HOST + profile.avatar_url}` ||
-            "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+            `${profile.avatar ? process.env.NEXT_PUBLIC_BACKEND_HOST + profile.avatar : process.env.NEXT_PUBLIC_BACKEND_HOST + "/media/avatars/avatar.jpeg"}`
           }
           alt="avatar"
           className={`${styles["profile-img"]}`}
