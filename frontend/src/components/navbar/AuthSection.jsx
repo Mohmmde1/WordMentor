@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import LoginForm from "@/components/LoginForm";
-import SignupForm from "@/components/SignupForm";
+import LoginForm from "@/components/auth/LoginForm";
+import SignupForm from "@/components/auth/SignupForm";
 
 import {
   NavigationMenuItem,
