@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 
 const SignupForm = () => {
     return (
-        <form className="grid max-w-full grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 rounded px-8 pt-6 pb-8 mb-4">
+        <form className="grid max-w-full grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 rounded px-8 pt-6 pb-8 mb-4">
             <div >
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstname">
                     First Name

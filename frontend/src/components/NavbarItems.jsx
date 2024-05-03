@@ -15,7 +15,7 @@ import { AuthSection } from "@/components/AuthSection";
 
 export function NavigationItems() {
   return (
-    <NavigationMenu className="max-w-full flex justify-between">
+    <NavigationMenu className="max-w-full  flex justify-between">
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
