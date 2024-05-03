@@ -11,7 +11,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { AuthSection } from "@/components/AuthSection";
+import { AuthSection } from "@/components/navbar/AuthSection";
 
 export function NavigationItems() {
   return (

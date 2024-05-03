@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NavigationItems } from "@/components/NavbarItems";
+import { NavigationItems } from "@/components/navbar/NavbarItems";
 import { Icons } from "@/components/Icons";
 
 export function MainNav() {
