@@ -2,9 +2,12 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { login } from "@/lib/actions";
-const LoginForm = () => {
+const LoginForm = ({setIsAuthenticated}) => {
   return (
-    <form className="rounded px-8 pt-6 pb-8 mb-4" action={login}>
+    <form className="rounded px-8 pt-6 pb-8 mb-4" action={async (formData)=> {
+      await login(formData);
+      setIsAuthenticated(true);
+    }}>
       <div className="mb-4">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
