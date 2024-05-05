@@ -56,12 +56,12 @@ export async function login (formData) {
 export async function signup (formData) {
   try {
     const data = {
-      email: formData.get ('email'),
-      password1: formData.get ('password'),
-      password2: formData.get ('password'),
-      first_name: formData.get ('firstname'),
-      last_name: formData.get ('lastname'),
-      username: formData.get ('username'),
+      email: formData.email,
+      password1: formData.password1,
+      password2: formData.password2,
+      first_name: formData.firstname,
+      last_name: formData.lastname,
+      username: formData.username,
     };
     const response = await apiService.postWithoutToken (
       'auth/registration/',
