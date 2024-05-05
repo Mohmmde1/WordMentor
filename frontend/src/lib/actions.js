@@ -84,3 +84,30 @@ export async function handleImageUpload(formState) {
     throw error;
   }
 }
+
+export async function updateProfile(formData) {
+  try {
+    const data = {
+      email: formData.email,
+      first_name: formData.firstname,
+      last_name: formData.lastname,
+      username: formData.username,
+    };
+
+    const response = await apiService.postUpdate(
+      `auth/user/`,
+      JSON.stringify(data),
+      "PUT",
+    );
+
+    if (response.id) {
+      revalidatePath(`/profile/${data.username}`);
+    } else {
+      throw new Error(`Response: ${response}`);
+    }
+  } catch (error) {
+    // Handle errors
+    console.error("Error occurred during signing up:", error);
+    throw error; // Re-throw the error to be caught by the caller
+  }
+}
