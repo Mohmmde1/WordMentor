@@ -1,7 +1,7 @@
 'use server';
 import apiService from '@/services/apiService';
 
-import setSessionCookies, {deleteSessionCookies} from '@/lib/helpers';
+import setSessionCookies, {deleteSessionCookies, getAssessmentStatus} from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
 
@@ -12,6 +12,15 @@ export async function checkUser () {
     if (userId) return userId;
   } catch (error) {
     console.error ('Error checking user:', error);
+  }
+}
+export async function checkAssessmentStatus () {
+  try {
+    const assessmentStatus = getAssessmentStatus ();
+
+    if (assessmentStatus) return assessmentStatus;
+  } catch (error) {
+    console.error ('Error checking assessment status:', error);
   }
 }
 
