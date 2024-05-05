@@ -114,3 +114,29 @@ export async function updateProfile (formData) {
     throw error; // Re-throw the error to be caught by the caller
   }
 }
+
+export async function fetchAssessmentWords() {
+  const words = await apiService.get("word/assessment");
+  return words;
+}
+
+export async function submitAssessment(selected, unselected) {
+  try {
+    const profileId = getProfileId();
+    const data = {
+      profile: profileId,
+      selected_words: selected,
+      unselected_words: unselected,
+    };
+    console.log(data);
+    const response = await apiService.postUpdate(
+      "assessment/",
+      JSON.stringify(data),
+      "POST",
+    );
+    setAssessmentStatus(true);
+  } catch (error) {
+    console.error("Error submitting assessment:", error);
+    throw error;
+  }
+}
