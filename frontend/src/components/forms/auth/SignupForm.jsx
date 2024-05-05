@@ -18,8 +18,8 @@ import {
 import {signup} from '@/lib/actions';
 
 const signupFormSchema = z.object ({
-  firstname: z.string ().min (1),
-  lastname: z.string ().min (1),
+  firstname: z.string ().min(1),
+  lastname: z.string ().min(1),
   email: z.string ().email ({message: 'Invalid email address'}).min (1),
   username: z.string ().min (1),
   password1: z
