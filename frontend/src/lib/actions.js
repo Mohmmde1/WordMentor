@@ -4,7 +4,7 @@ import apiService from '@/services/apiService';
 import setSessionCookies, {
   deleteSessionCookies,
   getAssessmentStatus,
-  setAssessmentStatus
+  setAssessmentStatus,
 } from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
@@ -33,14 +33,9 @@ export async function checkAssessmentStatus () {
 
 export async function login (formData) {
   try {
-    let data = {
-      email: formData.get ('email'),
-      password: formData.get ('password'),
-    };
-
     const response = await apiService.postWithoutToken (
       'auth/login/',
-      JSON.stringify (data)
+      JSON.stringify (formData)
     );
 
     if (response.access) {
