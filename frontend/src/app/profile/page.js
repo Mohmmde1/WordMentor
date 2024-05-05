@@ -1,5 +1,6 @@
 'use client';
 import ProfileAvtar from '@/components/ProfileAvtar';
+import ProfileFormSkeleton from '@/components/skeletons/profile';
 
 import {useState, useEffect} from 'react';
 import {Separator} from '@/components/ui/separator';
@@ -10,13 +11,16 @@ export default function SettingsProfilePage () {
   const [isHovered, setIsHovered] = useState (false);
   const [profile, setProfile] = useState (null);
   const [isUpdated, setIsUpdated] = useState (false);
-  useEffect (() => {
-    const fetch = async () => {
-      const data = await fetchProfile ();
-      setProfile (data);
-    };
-    fetch ();
-  }, [isUpdated]);
+  useEffect (
+    () => {
+      const fetch = async () => {
+        const data = await fetchProfile ();
+        setProfile (data);
+      };
+      fetch ();
+    },
+    [isUpdated]
+  );
   return (
     <div className="space-y-6">
       <div className="flex justify-between space-x-4">
@@ -36,7 +40,11 @@ export default function SettingsProfilePage () {
         />
       </div>
       <Separator />
+
       {profile && <ProfileForm profile={profile} />}
+      {!profile && <ProfileFormSkeleton />}
+
+
     </div>
   );
 }

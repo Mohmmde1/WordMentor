@@ -1,6 +1,4 @@
 "use client"
-import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from "@/components/ui/separator";
 import SidebarNav from "@/components/SidebarNav";
 
@@ -12,7 +10,6 @@ const sidebarNavItems = [
 ];
 
 export default function SettingsLayout({ children }) {
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
