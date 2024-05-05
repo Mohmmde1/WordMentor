@@ -5,7 +5,7 @@ import ProfileFormSkeleton from '@/components/skeletons/profile';
 import {useState, useEffect} from 'react';
 import {Separator} from '@/components/ui/separator';
 import {ProfileForm} from '@/components/forms/profile';
-import {fetchProfile} from '@/lib/actions';
+import {fetchProfile, checkUser} from '@/lib/actions';
 
 export default function SettingsProfilePage () {
   const [isHovered, setIsHovered] = useState (false);
@@ -14,8 +14,11 @@ export default function SettingsProfilePage () {
   useEffect (
     () => {
       const fetch = async () => {
-        const data = await fetchProfile ();
-        setProfile (data);
+        const userId = await checkUser ();
+        if (userId) {
+          const data = await fetchProfile ();
+          setProfile (data);
+        }
       };
       fetch ();
     },
@@ -43,7 +46,6 @@ export default function SettingsProfilePage () {
 
       {profile && <ProfileForm profile={profile} />}
       {!profile && <ProfileFormSkeleton />}
-
 
     </div>
   );

@@ -5,24 +5,28 @@ import setSessionCookies, {deleteSessionCookies, getAssessmentStatus} from '@/li
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
 
-export async function checkUser () {
+export async function checkUser() {
   try {
-    const userId = getUserId ();
-
+    const userId = getUserId();
     if (userId) return userId;
+    else return undefined;
   } catch (error) {
-    console.error ('Error checking user:', error);
+    console.error("Error checking user:", error.message);
+    throw error;
   }
 }
-export async function checkAssessmentStatus () {
-  try {
-    const assessmentStatus = getAssessmentStatus ();
 
+export async function checkAssessmentStatus() {
+  try {
+    const assessmentStatus = getAssessmentStatus();
     if (assessmentStatus) return assessmentStatus;
+    else return undefined;
   } catch (error) {
-    console.error ('Error checking assessment status:', error);
+    console.error("Error checking assessment status:", error.message);
+    throw error;
   }
 }
+
 
 export async function login (formData) {
   try {
