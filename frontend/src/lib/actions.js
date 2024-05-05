@@ -1,91 +1,94 @@
-"use server";
-import apiService from "@/services/apiService";
+'use server';
+import apiService from '@/services/apiService';
 
-import setSessionCookies, { deleteSessionCookies} from "@/lib/helpers";
-import { getUserId, getProfileId } from "@/lib/helpers";
-import { revalidatePath } from "next/cache";
+import setSessionCookies, {deleteSessionCookies} from '@/lib/helpers';
+import {getUserId, getProfileId} from '@/lib/helpers';
+import {revalidatePath} from 'next/cache';
 
-export async function checkUser() {
+export async function checkUser () {
   try {
-    const userId = getUserId();
+    const userId = getUserId ();
 
     if (userId) return userId;
   } catch (error) {
-    console.error("Error checking user:", error);
+    console.error ('Error checking user:', error);
   }
 }
 
-export async function login(formData) {
+export async function login (formData) {
   try {
     let data = {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email: formData.get ('email'),
+      password: formData.get ('password'),
     };
 
-    const response = await apiService.postWithoutToken(
-      "auth/login/",
-      JSON.stringify(data)
+    const response = await apiService.postWithoutToken (
+      'auth/login/',
+      JSON.stringify (data)
     );
 
     if (response.access) {
-      await setSessionCookies(response.user, response.access, response.refresh);
+      await setSessionCookies (
+        response.user,
+        response.access,
+        response.refresh
+      );
     }
   } catch (error) {
     // Handle errors
-    console.error("Error occurred during signing in:", error);
+    console.error ('Error occurred during signing in:', error);
 
     throw error;
   }
 }
 
-export async function logout() {
+export async function logout () {
   try {
-    deleteSessionCookies();
+    deleteSessionCookies ();
   } catch (error) {
     // Handle errors
-    console.error("Error occurred during signing ing:", error);
+    console.error ('Error occurred during signing ing:', error);
 
     throw error; // Re-throw the error to be caught by the caller
   }
 }
 
-
-export async function fetchProfile() {
+export async function fetchProfile () {
   try {
-    const profileId = getProfileId();
-    if (!profileId) throw new Error("User is not logged in!");
-    const response = await apiService.get(`profile/${profileId}`);
+    const profileId = getProfileId ();
+    if (!profileId) throw new Error ('User is not logged in!');
+    const response = await apiService.get (`profile/${profileId}`);
 
     return response;
   } catch (error) {
-    console.error("Error occured during fetching profile: ", error);
+    console.error ('Error occured during fetching profile: ', error);
     throw error;
   }
 }
 
-export async function handleImageUpload(formState) {
+export async function handleImageUpload (formState) {
   try {
-    const profileId = getProfileId();
-    const response = await apiService.postFile(
+    const profileId = getProfileId ();
+    const response = await apiService.postFile (
       `profile/${profileId}/upload-image/`,
       formState,
-      "POST",
+      'POST'
     );
-    console.log(response);
+    console.log (response);
     if (response.id) {
-      revalidatePath(`/`);
+      revalidatePath (`/`);
     } else {
-      throw new Error(`Response: ${response}`);
+      throw new Error (`Response: ${response}`);
       // Handle error
     }
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error ('Error uploading file:', error);
     // Handle error
     throw error;
   }
 }
 
-export async function updateProfile(formData) {
+export async function updateProfile (formData) {
   try {
     const data = {
       email: formData.email,
@@ -94,20 +97,20 @@ export async function updateProfile(formData) {
       username: formData.username,
     };
 
-    const response = await apiService.postUpdate(
+    const response = await apiService.postUpdate (
       `auth/user/`,
-      JSON.stringify(data),
-      "PUT",
+      JSON.stringify (data),
+      'PUT'
     );
 
     if (response.id) {
-      revalidatePath(`/profile/${data.username}`);
+      revalidatePath (`/profile/${data.username}`);
     } else {
-      throw new Error(`Response: ${response}`);
+      throw new Error (`Response: ${response}`);
     }
   } catch (error) {
     // Handle errors
-    console.error("Error occurred during signing up:", error);
+    console.error ('Error occurred during signing up:', error);
     throw error; // Re-throw the error to be caught by the caller
   }
 }

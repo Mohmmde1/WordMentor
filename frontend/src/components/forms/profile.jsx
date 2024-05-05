@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {toast} from 'sonner';
-import { updateProfile } from '@/lib/actions';
+import {updateProfile} from '@/lib/actions';
 
 const profileFormSchema = z.object ({
   firstname: z.string ().min (2, {
@@ -54,11 +54,11 @@ export function ProfileForm({profile}) {
 
   function onSubmit (data) {
     const updateProfileAsync = async () => {
-      await updateProfile(data);
-      toast('Profile updated');
+      await updateProfile (data);
+      toast ('Profile updated');
     };
-  
-    updateProfileAsync();
+
+    updateProfileAsync ();
   }
 
   return (
@@ -131,12 +131,7 @@ export function ProfileForm({profile}) {
           )}
         />
 
-        <Button
-          type="submit"
-          onClick={() => {
-            console.log ('Profile Updated');
-          }}
-        >
+        <Button type="submit">
           Update profile
         </Button>
       </form>

@@ -1,12 +1,11 @@
-import {NextResponse} from 'next/server';
-import {getAccessToken} from '@/lib/helpers';
-
-export function middleware (request) {
-  const token = getAccessToken ();
-  console.log (token);
-  if (!token) return NextResponse.redirect (new URL ('/', request.url));
+import { NextResponse } from 'next/server'
+ 
+// This function can be marked `async` if using `await` inside
+export function middleware(request ) {
+  return NextResponse.redirect(new URL('/home', request.url))
 }
-
+ 
+// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/profile'],
-};
+  matcher: '/about/:path*',
+}

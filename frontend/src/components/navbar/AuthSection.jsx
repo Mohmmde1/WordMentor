@@ -31,8 +31,10 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {checkUser, logout, fetchProfile} from '@/lib/actions';
+import {useRouter} from 'next/navigation';
 
 export function AuthSection () {
+  const router = useRouter ();
   const [isAuthenticated, setIsAuthenticated] = useState (false);
   const [profile, setProfile] = useState (null);
   useEffect (
@@ -43,7 +45,7 @@ export function AuthSection () {
           setIsAuthenticated (true);
         }
         const data = await fetchProfile ();
-        setProfile(data);
+        setProfile (data);
       };
       checkAuth ();
     },
@@ -105,6 +107,7 @@ export function AuthSection () {
                     onClick={async () => {
                       await logout ();
                       setIsAuthenticated (false);
+                      router.push ('/');
                     }}
                   >
 
