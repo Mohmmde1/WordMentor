@@ -2,8 +2,7 @@
 import apiService from "@/services/apiService";
 
 import setSessionCookies, { deleteSessionCookies} from "@/lib/helpers";
-import { getUserId } from "@/lib/helpers";
-import {redirect} from "next/navigation";
+import { getUserId, getProfileId } from "@/lib/helpers";
 
 export async function checkUser() {
   try {
@@ -47,5 +46,18 @@ export async function logout() {
 
     throw error; // Re-throw the error to be caught by the caller
   }
-  redirect(`${process.env.NEXT_PUBLIC_FRONTEND_HOST}/`);
+}
+
+
+export async function fetchProfile() {
+  try {
+    const profileId = getProfileId();
+    if (!profileId) throw new Error("User is not logged in!");
+    const response = await apiService.get(`profile/${profileId}`);
+
+    return response;
+  } catch (error) {
+    console.error("Error occured during fetching profile: ", error);
+    throw error;
+  }
 }

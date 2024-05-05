@@ -30,10 +30,11 @@ import {LogOut, User} from 'lucide-react';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
-import {checkUser, logout} from '@/lib/actions';
+import {checkUser, logout, fetchProfile} from '@/lib/actions';
 
 export function AuthSection () {
   const [isAuthenticated, setIsAuthenticated] = useState (false);
+  const [profile, setProfile] = useState (null);
   useEffect (
     () => {
       const checkAuth = async () => {
@@ -41,6 +42,8 @@ export function AuthSection () {
         if (userId) {
           setIsAuthenticated (true);
         }
+        const data = await fetchProfile ();
+        setProfile(data);
       };
       checkAuth ();
     },
@@ -77,7 +80,10 @@ export function AuthSection () {
           : <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  {profile &&
+                    <AvatarImage
+                      src={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${profile.avatar_url}`}
+                    />}
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
