@@ -31,7 +31,7 @@ const AuthTabs = ({setIsAuthenticated}) => {
             <LoginForm setIsAuthenticated={setIsAuthenticated} />
           </TabsContent>
           <TabsContent value="signup">
-            <SignupForm />
+            <SignupForm setIsAuthenticated={setIsAuthenticated}/>
           </TabsContent>
         </Tabs>
       </DialogContent>

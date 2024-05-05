@@ -56,7 +56,7 @@ const VocabularyAssessment = ({ words }) => {
         // Submit both selected and unselected words
         submitAssessment(selectedWords, unselectedWords);
         toast.success('Assessment submitted successfully!');
-        router.push('/');
+        router.push("/");
     };
 
     // Divide the words into two halves based on step

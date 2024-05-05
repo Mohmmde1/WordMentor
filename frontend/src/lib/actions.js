@@ -1,32 +1,35 @@
 'use server';
 import apiService from '@/services/apiService';
 
-import setSessionCookies, {deleteSessionCookies, getAssessmentStatus} from '@/lib/helpers';
+import setSessionCookies, {
+  deleteSessionCookies,
+  getAssessmentStatus,
+  setAssessmentStatus
+} from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
 
-export async function checkUser() {
+export async function checkUser () {
   try {
-    const userId = getUserId();
+    const userId = getUserId ();
     if (userId) return userId;
     else return undefined;
   } catch (error) {
-    console.error("Error checking user:", error.message);
+    console.error ('Error checking user:', error.message);
     throw error;
   }
 }
 
-export async function checkAssessmentStatus() {
+export async function checkAssessmentStatus () {
   try {
-    const assessmentStatus = getAssessmentStatus();
+    const assessmentStatus = getAssessmentStatus ();
     if (assessmentStatus) return assessmentStatus;
     else return undefined;
   } catch (error) {
-    console.error("Error checking assessment status:", error.message);
+    console.error ('Error checking assessment status:', error.message);
     throw error;
   }
 }
-
 
 export async function login (formData) {
   try {
@@ -52,6 +55,37 @@ export async function login (formData) {
     console.error ('Error occurred during signing in:', error);
 
     throw error;
+  }
+}
+
+export async function signup (formData) {
+  try {
+    const data = {
+      email: formData.get ('email'),
+      password1: formData.get ('password'),
+      password2: formData.get ('password'),
+      first_name: formData.get ('firstname'),
+      last_name: formData.get ('lastname'),
+      username: formData.get ('username'),
+    };
+    const response = await apiService.postWithoutToken (
+      'auth/registration/',
+      JSON.stringify (data)
+    );
+    console.log (response);
+    if (response.access) {
+      await setSessionCookies (
+        response.user,
+        response.access,
+        response.refresh
+      );
+    } else {
+      throw new Error (`Response: ${response}`);
+    }
+  } catch (error) {
+    // Handle errors
+    console.error ('Error occurred during signing up:', error);
+    throw error; // Re-throw the error to be caught by the caller
   }
 }
 
@@ -128,28 +162,28 @@ export async function updateProfile (formData) {
   }
 }
 
-export async function fetchAssessmentWords() {
-  const words = await apiService.get("word/assessment");
+export async function fetchAssessmentWords () {
+  const words = await apiService.get ('word/assessment');
   return words;
 }
 
-export async function submitAssessment(selected, unselected) {
+export async function submitAssessment (selected, unselected) {
   try {
-    const profileId = getProfileId();
+    const profileId = getProfileId ();
     const data = {
       profile: profileId,
       selected_words: selected,
       unselected_words: unselected,
     };
-    console.log(data);
-    const response = await apiService.postUpdate(
-      "assessment/",
-      JSON.stringify(data),
-      "POST",
+    console.log (data);
+    const response = await apiService.postUpdate (
+      'assessment/',
+      JSON.stringify (data),
+      'POST'
     );
-    setAssessmentStatus(true);
+    setAssessmentStatus (true);
   } catch (error) {
-    console.error("Error submitting assessment:", error);
+    console.error ('Error submitting assessment:', error);
     throw error;
   }
 }
