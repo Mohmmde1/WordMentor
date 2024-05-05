@@ -3,6 +3,7 @@ import apiService from "@/services/apiService";
 
 import setSessionCookies, { deleteSessionCookies} from "@/lib/helpers";
 import { getUserId, getProfileId } from "@/lib/helpers";
+import { revalidatePath } from "next/cache";
 
 export async function checkUser() {
   try {
@@ -58,6 +59,28 @@ export async function fetchProfile() {
     return response;
   } catch (error) {
     console.error("Error occured during fetching profile: ", error);
+    throw error;
+  }
+}
+
+export async function handleImageUpload(formState) {
+  try {
+    const profileId = getProfileId();
+    const response = await apiService.postFile(
+      `profile/${profileId}/upload-image/`,
+      formState,
+      "POST",
+    );
+    console.log(response);
+    if (response.id) {
+      revalidatePath(`/`);
+    } else {
+      throw new Error(`Response: ${response}`);
+      // Handle error
+    }
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    // Handle error
     throw error;
   }
 }
