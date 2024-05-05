@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {getAccessToken, getAssessmentStatus} from '@/lib/helpers';
+import {getAccessToken} from '@/lib/helpers';
 
 export function middleware (request) {
   const token = getAccessToken ();
