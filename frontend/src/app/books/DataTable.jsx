@@ -64,7 +64,7 @@ export function DataTable({
 
     return (
         <div>
-            <div className="flex items-center py-4">
+            <div className="flex justify-between py-4">
                 <Input
                     placeholder="Filter title..."
                     value={(table.getColumn("title")?.getFilterValue()) ?? ""}
@@ -73,34 +73,45 @@ export function DataTable({
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter(
-                                (column) => column.getCanHide()
-                            )
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
+                <div className="flex justify-between w-1/5">
+
+                   
+
+
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="ml-auto">
+                                Columns
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {table
+                                .getAllColumns()
+                                .filter(
+                                    (column) => column.getCanHide()
                                 )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                                .map((column) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) =>
+                                                column.toggleVisibility(!!value)
+                                            }
+                                        >
+                                            {column.id}
+                                        </DropdownMenuCheckboxItem>
+                                    )
+                                })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button variant="destructive" className="ml-auto">
+                        Delete Selected
+                    </Button>
+                </div>
+
             </div>
             <div className="rounded-md border">
                 <Table>
