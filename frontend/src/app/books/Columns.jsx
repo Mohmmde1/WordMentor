@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { deleteBook } from '@/lib/actions';
 
 export const columns = [
   {
@@ -91,7 +92,7 @@ export const columns = [
   {
     id: 'actions',
     cell: ({row}) => {
-      const payment = row.original;
+      const book = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -103,13 +104,17 @@ export const columns = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText (payment.id)}
+              onClick={() => navigator.clipboard.writeText (book.id)}
             >
-              Copy payment ID
+              Copy book ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View book</DropdownMenuItem>
+            <DropdownMenuItem>Select pages</DropdownMenuItem>
+            <DropdownMenuItem onClick={async ()=> {
+                await deleteBook(book.id);
+                console.log('Delete book');
+            }}>Delete book</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
