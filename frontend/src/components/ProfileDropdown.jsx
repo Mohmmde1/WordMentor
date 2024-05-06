@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import { LogOut, User, } from 'lucide-react';
+import { LogOut, User, LibraryBig } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { logout } from '@/lib/actions';
 import {
@@ -35,6 +35,14 @@ const ProfileDropdown = ({ profile, setIsAuthenticated }) => {
                 <Link href="/profile">
 
                     <span>Profile</span>
+                </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+
+                <LibraryBig className="mr-2 h-4 w-4" />
+                <Link href="/books">
+
+                    <span>Books</span>
                 </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
