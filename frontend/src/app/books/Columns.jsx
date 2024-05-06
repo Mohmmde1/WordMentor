@@ -1,5 +1,6 @@
 'use client';
 
+
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react';
 
 import {Button} from '@/components/ui/button';
@@ -109,7 +110,11 @@ export const columns = [
               Copy book ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View book</DropdownMenuItem>
+            <DropdownMenuItem>
+              <a href={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${book.file}`} target='_blank'>
+              View book
+              </a>
+            </DropdownMenuItem>
             <DropdownMenuItem>Select pages</DropdownMenuItem>
             <DropdownMenuItem onClick={async ()=> {
                 await deleteBook(book.id);
