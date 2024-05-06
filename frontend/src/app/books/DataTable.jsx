@@ -74,11 +74,6 @@ export function DataTable({
                     className="max-w-sm"
                 />
                 <div className="flex justify-between w-1/5">
-
-                   
-
-
-
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">
@@ -107,9 +102,9 @@ export function DataTable({
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button variant="destructive" className="ml-auto">
+                    {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && <Button variant="destructive" className="ml-auto">
                         Delete Selected
-                    </Button>
+                    </Button>}
                 </div>
 
             </div>
