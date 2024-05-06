@@ -37,35 +37,56 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-  },
-  {
-    accessorKey: 'email',
+    accessorKey: 'title',
     header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+          >
+            Title
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
   },
   {
-    accessorKey: 'amount',
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: 'pages',
+    header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+            className="text-left"
+            
+          >
+            Pages
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     cell: ({row}) => {
-      const amount = parseFloat (row.getValue ('amount'));
-      const formatted = new Intl.NumberFormat ('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format (amount);
+      return (
+        <div className="text-center pr-16">
+          {row.original.pages}
+        </div>
+      );
+    }
+  },
 
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
+  {
+    accessorKey: 'created_at',
+    header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+          >
+            Uploaded At
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
   },
   {
     id: 'actions',

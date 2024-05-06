@@ -182,3 +182,15 @@ export async function submitAssessment (selected, unselected) {
     throw error;
   }
 }
+
+export async function fetchBooks() {
+  const profileId = getProfileId();
+  try {
+    const response = await apiService.get(`books/by-profile/${profileId}`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}
