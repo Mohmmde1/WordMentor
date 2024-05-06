@@ -8,7 +8,7 @@ async function getData() {
     return response;
   }
   
-export default async function DemoPage() {
+export default async function Page() {
   const data = await getData()
 
   return (

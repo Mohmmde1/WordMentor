@@ -35,3 +35,17 @@ class BookViewSet(mixins.CreateModelMixin,
             return Response({"error": "You do not have permission to access this profile"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=False, methods=['delete'])
+    def bulk_delete(self, request):
+        print(request.data)
+        try:
+            # Assuming request.data contains a list of book IDs to delete
+            book_ids = request.data.get('book_ids', [])
+            if not book_ids:
+                return Response({"error": "No book IDs provided for deletion"}, status=status.HTTP_400_BAD_REQUEST)
+            books = Book.objects.filter(id__in=book_ids)
+            books.delete()
+            return Response({"message": "Books deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

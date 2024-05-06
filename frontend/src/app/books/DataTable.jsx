@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Input } from "@/components/ui/input"
+import { deleteBooks } from "@/lib/actions";
 
 export function DataTable({
     columns,
@@ -104,12 +105,13 @@ export function DataTable({
                         </DropdownMenuContent>
                     </DropdownMenu>
                     {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && <Button variant="destructive" className="ml-auto"
-                        onClick={() => {
+                        onClick={async () => {
                             const rows = table.getSelectedRowModel().rows;
                             const removedData = rows.map(row => row.original);
                             const updatedData = tableData.filter(row => !removedData.includes(row));
                             table.setRowSelection({});
                             setTableData(updatedData);
+                            await deleteBooks(removedData.map(row => row.id));
                         }}
                     >
                         Delete Selected

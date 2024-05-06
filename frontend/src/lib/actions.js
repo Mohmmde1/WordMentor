@@ -183,24 +183,35 @@ export async function submitAssessment (selected, unselected) {
   }
 }
 
-export async function fetchBooks() {
-  const profileId = getProfileId();
+export async function fetchBooks () {
+  const profileId = getProfileId ();
   try {
-    const response = await apiService.get(`books/by-profile/${profileId}`);
-    console.log(response);
+    const response = await apiService.get (`books/by-profile/${profileId}`);
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error ('Error fetching books:', error);
     throw error;
   }
 }
 
-export async function deleteBook(bookId) {
+export async function deleteBook (bookId) {
   try {
-    const response = await apiService.delete(`books/${bookId}`);
+    const response = await apiService.delete (`books/${bookId}`);
     return response;
   } catch (error) {
-    console.error("Error deleting book:", error);
+    console.error ('Error deleting book:', error);
+    throw error;
+  }
+}
+
+export async function deleteBooks (books) {
+  try {
+    books.forEach (element => {
+      deleteBook (element);
+    });
+  } catch (error) {
+    console.error ('Error deleting books:', error);
     throw error;
   }
 }
