@@ -36,6 +36,7 @@ export function DataTable({
     columns,
     data,
 }) {
+    const [tableData, setTableData] = useState(data)
     const [sorting, setSorting] = useState([])
     const [columnFilters, setColumnFilters] = useState(
         []
@@ -44,7 +45,7 @@ export function DataTable({
     const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
-        data,
+        data: tableData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -102,7 +103,15 @@ export function DataTable({
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && <Button variant="destructive" className="ml-auto">
+                    {(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) && <Button variant="destructive" className="ml-auto"
+                        onClick={() => {
+                            const rows = table.getSelectedRowModel().rows;
+                            const removedData = rows.map(row => row.original);
+                            const updatedData = tableData.filter(row => !removedData.includes(row));
+                            table.setRowSelection({});
+                            setTableData(updatedData);
+                        }}
+                    >
                         Delete Selected
                     </Button>}
                 </div>
