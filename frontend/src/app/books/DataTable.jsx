@@ -12,7 +12,7 @@ import {
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Upload } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Input } from "@/components/ui/input"
-import { deleteBooks } from "@/lib/actions";
+import { deleteBooks, saveBook } from "@/lib/actions";
 
 export function DataTable({
     columns,
@@ -63,7 +63,21 @@ export function DataTable({
             rowSelection,
         },
     })
-
+    const handleUpload = async (event) => {
+        try {
+          // Retrieve uploaded file
+          const file = event.target.files[0];
+          const form = new FormData();
+          form.append("file", file);
+          await saveBook(form).then((response) => {
+            console.log(response);
+          });
+          console.log("Uploaded file:", file);
+        //   window.location.reload();
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      };
     return (
         <div>
             <div className="flex justify-between py-4">
@@ -75,7 +89,7 @@ export function DataTable({
                     }
                     className="max-w-sm"
                 />
-                <div className="flex justify-between w-1/5">
+                <div className="flex space-x-3 w-2/3">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="ml-auto">
@@ -116,6 +130,19 @@ export function DataTable({
                     >
                         Delete Selected
                     </Button>}
+                        <Button asChild className="ml-auto">
+                    <label htmlFor="file-upload">
+
+                            <Upload className="pr-2" />
+                            Upload
+                    </label>
+                        </Button>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                    onChange={handleUpload}
+                    />
                 </div>
 
             </div>
