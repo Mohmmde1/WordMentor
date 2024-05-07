@@ -19,7 +19,7 @@ export function NavigationItems() {
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink className={navigationMenuTriggerStyle() + " bg-transparent"}>
               <span className="inline-block font-bold"> Home </span>
             </NavigationMenuLink>
           </Link>

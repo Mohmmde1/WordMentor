@@ -39,7 +39,7 @@ export function AuthSection () {
       <NavigationMenuItem>
         {!isAuthenticated
           ? <AuthTabs setIsAuthenticated={setIsAuthenticated} />
-          : <div className="flex justify-between items-center space-x-2">
+          : <div className="flex justify-between items-center space-x-5">
 
               <Badges isAssessed={isAssessed} />
               <ProfileDropdown
