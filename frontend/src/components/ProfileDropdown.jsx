@@ -15,9 +15,9 @@ import {
 
 const ProfileDropdown = ({ profile, setIsAuthenticated }) => {
     const router = useRouter();
-    return <DropdownMenu>
+    return <DropdownMenu >
 
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
 
             <Avatar>
                 {profile &&
@@ -30,23 +30,23 @@ const ProfileDropdown = ({ profile, setIsAuthenticated }) => {
         <DropdownMenuContent className="w-40">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
+            <DropdownMenuItem asChild>
                 <Link href="/profile">
+                <User className="mr-2 h-4 w-4" />
 
                     <span>Profile</span>
                 </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
 
-                <LibraryBig className="mr-2 h-4 w-4" />
                 <Link href="/books">
+                <LibraryBig className="mr-2 h-4 w-4" />
 
                     <span>Books</span>
                 </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
                 <button
                     className="flex"
                     onClick={async () => {
