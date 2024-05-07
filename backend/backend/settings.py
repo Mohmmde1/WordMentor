@@ -73,7 +73,8 @@ class Dev(Configuration):
         'settings',
         'word',
         'assessment',
-        'books'
+        'books',
+        'trainedmodels',
     ])
 
     MIDDLEWARE = values.ListValue(default=[
