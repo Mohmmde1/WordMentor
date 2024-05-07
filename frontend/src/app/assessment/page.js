@@ -1,14 +1,14 @@
-import VocabularyAssessment from "@/components/assessment/card";
-import { fetchAssessmentWords } from "@/lib/actions";
+import VocabularyAssessment from '@/components/Card';
+import {fetchAssessmentWords} from '@/lib/actions';
 
-export default async function Page() {
-  const words = await fetchAssessmentWords();
+const Page = async () => {
+  const words = await fetchAssessmentWords ();
 
   return (
-    <div className="container">
+    <div className="container m-2">
       <div className="container">
-        <div className="text-center">
-          <h2>Welcome to the Vocabulary Assessment!</h2>
+        <div className="text-center m-2">
+          <h2 className="m-2">Welcome to the Vocabulary Assessment!</h2>
 
           <p>
             This assessment will evaluate your familiarity with a wide range of
@@ -17,12 +17,11 @@ export default async function Page() {
           </p>
         </div>
       </div>
-      <div
-        className="container"
-        style={{ width: "70%", height: "70%", margin: "auto" }}
-      >
+      <div className="container h-20">
         <VocabularyAssessment words={words} />
       </div>
     </div>
   );
-}
+};
+
+export default Page;

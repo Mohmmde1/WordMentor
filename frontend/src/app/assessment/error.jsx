@@ -1,6 +1,6 @@
 "use client";
-
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Error({ error, reset }) {
   useEffect(() => {
@@ -8,12 +8,12 @@ export default function Error({ error, reset }) {
   }, [error]);
 
   return (
-    <main className="d-flex justify-content-center">
+    <main className="flex justify-center">
       <div className="text-center">
-        <h2>Something went wrong!</h2>
-        <button className="btn btn-primary mt-4" onClick={() => reset()}>
+        <h2 className="text-2xl font-semibold m-4">Something went wrong!</h2>
+        <Button className="mt-4" onClick={() => reset()}>
           Try again
-        </button>
+        </Button>
       </div>
     </main>
   );

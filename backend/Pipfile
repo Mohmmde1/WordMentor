@@ -17,6 +17,7 @@ django-soft-delete = "*"
 pillow = "*"
 python-dotenv = "*"
 firebase-admin = "*"
+pypdf2 = "*"
 
 [dev-packages]
 
