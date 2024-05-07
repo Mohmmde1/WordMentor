@@ -29,8 +29,9 @@ class BookViewSet(mixins.CreateModelMixin,
                 return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
             # Extract number of pages from the PDF file
             reader = PdfReader(file)
-            print(len(reader.pages))
             num_pages = len(reader.pages)
+            if num_pages <= 0:
+                return Response({"error": "No pages found in the uploaded PDF file"}, status=status.HTTP_400_BAD_REQUEST)
             # Add number of pages to request data
             request.data['pages'] = num_pages
             # Call the parent create method to save the book
