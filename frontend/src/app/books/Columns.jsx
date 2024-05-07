@@ -157,7 +157,7 @@ export const columns = [
                 <DialogDescription>
                   Select the pages you want to parse
                 </DialogDescription>
-                   <Selection />
+                   <Selection noPages={book.pages}/>
               </DialogContent>
         </Dialog>
       );
