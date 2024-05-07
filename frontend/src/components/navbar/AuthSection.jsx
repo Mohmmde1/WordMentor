@@ -6,9 +6,9 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
 
-import Badges from '@/components/Badges';
-import ProfileDropdown from '@/components/ProfileDropdown';
-import AuthTabs from '@/components/AuthTabs';
+import Badges from '@/components/navbar/Badges';
+import ProfileDropdown from '@/components/navbar/NavDropdown';
+import AuthTabs from '@/components/navbar/AuthTabs';
 
 import {checkUser, fetchProfile, checkAssessmentStatus} from '@/lib/actions';
 

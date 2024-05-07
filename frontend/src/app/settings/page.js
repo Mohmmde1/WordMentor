@@ -1,6 +1,6 @@
 'use client';
-import ProfileAvtar from '@/components/ProfileAvtar';
-import ProfileFormSkeleton from '@/components/skeletons/profile';
+import ProfileAvtar from '@/app/settings/ProfileAvtar';
+import ProfileFormSkeleton from '@/app/settings/Skeleton';
 
 import {useState, useEffect} from 'react';
 import {Separator} from '@/components/ui/separator';

@@ -1,4 +1,4 @@
-import VocabularyAssessment from '@/components/Card';
+import VocabularyAssessment from '@/app/assessment/Card';
 import {fetchAssessmentWords} from '@/lib/actions';
 
 const Page = async () => {
