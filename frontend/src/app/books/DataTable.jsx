@@ -73,7 +73,7 @@ export function DataTable({
             console.log(response);
           });
           console.log("Uploaded file:", file);
-        //   window.location.reload();
+          window.location.reload();
         } catch (error) {
           console.error("Error uploading file:", error);
         }
@@ -141,6 +141,7 @@ export function DataTable({
                         id="file-upload"
                         type="file"
                         className="hidden"
+                        accept=".pdf"
                     onChange={handleUpload}
                     />
                 </div>

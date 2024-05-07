@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 
 from settings.models import Profile
+from PyPDF2 import PdfReader
 
 
 from .permissions import IsOwner
@@ -19,9 +20,25 @@ class BookViewSet(mixins.CreateModelMixin,
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsOwner]
-    
 
-    @action(detail=False, methods=['get'], url_path='by-profile/(?P<profile_id>[^/.]+)')  
+    def create(self, request, *args, **kwargs):
+        try:
+            # Access the uploaded file
+            file = request.FILES.get('file')
+            if not file:
+                return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
+            # Extract number of pages from the PDF file
+            reader = PdfReader(file)
+            print(len(reader.pages))
+            num_pages = len(reader.pages)
+            # Add number of pages to request data
+            request.data['pages'] = num_pages
+            # Call the parent create method to save the book
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=False, methods=['get'], url_path='by-profile/(?P<profile_id>[^/.]+)')
     def get_books_by_profile(self, request, profile_id, *args, **kwargs):
         try:
             profile = Profile.objects.get(pk=profile_id)
