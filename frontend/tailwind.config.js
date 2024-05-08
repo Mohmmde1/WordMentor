@@ -49,6 +49,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        cadet:{
+          DEFAULT: "#323448",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
