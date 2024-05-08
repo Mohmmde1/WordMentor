@@ -1,7 +1,8 @@
 import {Inter} from 'next/font/google';
 import {Toaster} from '@/components/ui/sonner';
-import './globals.css';
 
+import './globals.css';
+import MainFooter from '@/components/Footer';
 import {MainNav} from '@/components/navbar/Navbar';
 import {ThemeProvider} from '@/components/ThemeProvider';
 
@@ -27,6 +28,7 @@ export default function RootLayout({children}) {
           <main>{children}</main>
 
           <Toaster />
+          <MainFooter />
         </ThemeProvider>
       </body>
 
