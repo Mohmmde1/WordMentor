@@ -1,5 +1,6 @@
 'use client';
 import {useEffect, useState} from 'react';
+import {ModeToggle} from '@/components/navbar/Toggle';
 
 import {
   NavigationMenuItem,
@@ -36,6 +37,9 @@ export function AuthSection () {
   );
   return (
     <NavigationMenuList>
+      <NavigationMenuItem>
+        <ModeToggle />
+        </NavigationMenuItem>  
       <NavigationMenuItem>
         {!isAuthenticated
           ? <AuthTabs setIsAuthenticated={setIsAuthenticated} />

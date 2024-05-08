@@ -3,6 +3,7 @@ import {Toaster} from '@/components/ui/sonner';
 import './globals.css';
 
 import {MainNav} from '@/components/navbar/Navbar';
+import {ThemeProvider} from '@/components/ThemeProvider';
 
 const inter = Inter ({subsets: ['latin']});
 
@@ -16,10 +17,17 @@ export default function RootLayout({children}) {
     <html lang="en">
 
       <body className={inter.className}>
-        <MainNav />
-        <main>{children}</main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <MainNav />
+          <main>{children}</main>
 
-        <Toaster />
+          <Toaster />
+        </ThemeProvider>
       </body>
 
     </html>
