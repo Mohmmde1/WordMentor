@@ -5,7 +5,7 @@ import SidebarNav from "@/app/settings/SidebarNav";
 const sidebarNavItems = [
   {
     title: "Profile",
-    href: "/profile",
+    href: "/settings/profile",
   },
 ];
 

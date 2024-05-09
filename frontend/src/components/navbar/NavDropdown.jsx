@@ -1,4 +1,6 @@
 import {useRouter} from 'next/navigation';
+import { usePathname } from "next/navigation";
+
 import Link from 'next/link';
 
 import {LogOut, Settings, LibraryBig} from 'lucide-react';
@@ -14,6 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const ProfileDropdown = ({profile, setIsAuthenticated}) => {
+  const pathname = usePathname ();
   const router = useRouter ();
   return (
     <DropdownMenu>
@@ -33,7 +36,14 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
       <DropdownMenuContent className="w-40">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem
+          asChild
+          className={
+            pathname === '/books'
+              ? 'bg-muted hover:bg-muted'
+              : 'hover:bg-transparent hover:underline'
+          }
+        >
 
           <Link href="/books">
             <LibraryBig className="mr-2 h-4 w-4" />
@@ -42,8 +52,15 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/settings">
+        <DropdownMenuItem
+          asChild
+          className={
+            pathname.startsWith('/settings')
+              ? 'bg-muted hover:bg-muted'
+              : 'hover:bg-transparent hover:underline'
+          }
+        >
+          <Link href="/settings/profile">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </Link>

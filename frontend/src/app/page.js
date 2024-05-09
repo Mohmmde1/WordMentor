@@ -64,6 +64,7 @@ export default function Page () {
               width={200}
               className=" "
             />
+
             <h3 className="text-xl font-bold">The Great Gatsby</h3>
             <p className="text-gray-500 dark:text-gray-400">
               F. Scott Fitzgerald
@@ -75,6 +76,7 @@ export default function Page () {
               Learn More
             </Link>
           </div>
+
           <div className="flex flex-col items-start h-96 space-x-2  space-y-2">
             <Image
               alt="airy-magnifier-with-a-book-search-for-information-learning"
@@ -82,15 +84,17 @@ export default function Page () {
               src="/airy-magnifier-with-a-book-search-for-information-learning.png"
               width={200}
             />
-            <h3 className="text-xl font-bold">To Kill a Mockingbird</h3>
-            <p className="text-gray-500 dark:text-gray-400">Harper Lee</p>
-            <Link
-              className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-              href="#"
-            >
-              Learn More
-            </Link>
+            <div className='h-full flex flex-col align-bottom border'>
+
+              <h3 className="text-xl font-bold">To Kill a Mockingbird</h3>
+              <p className="text-gray-500 dark:text-gray-400">Harper Lee</p>
+              <Button>
+
+                Learn More
+              </Button>
+            </div>
           </div>
+
           <div className="flex flex-col items-start h-96 space-x-2  space-y-2">
             <Image
               alt="props-robo-advisor-working-on-holographic-screen-1"
