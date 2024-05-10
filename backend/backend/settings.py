@@ -16,7 +16,6 @@ from datetime import timedelta
 
 
 from configurations import Configuration, values
-from configurations import values
 import logging
 import socket
 
