@@ -18,6 +18,10 @@ pillow = "*"
 python-dotenv = "*"
 firebase-admin = "*"
 pypdf2 = "*"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+transformers = "*"
 
 [dev-packages]
 
