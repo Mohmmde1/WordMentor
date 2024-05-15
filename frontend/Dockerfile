@@ -7,6 +7,8 @@ WORKDIR /app/frontend
 # Copy package.json and package-lock.json files
 COPY ./frontend/package*.json ./
 
+RUN npm install -g npm@10.7.0
+
 # Install dependencies
 RUN npm install
 

@@ -24,7 +24,11 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+MODE = os.environ.get('MODE')
+
+if MODE == "docker":
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+
 
 logger = logging.getLogger(__name__)
 
@@ -145,17 +149,24 @@ class Dev(Configuration):
     # Database
     # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': values.Value(environ_name='DATABASE_NAME'),
-            'USER': values.Value(environ_name='DATABASE_USER'),
-            'PASSWORD': values.Value(environ_name='DATABASE_PASSWORD'),
-            'HOST': values.Value(environ_name='DATABASE_HOST'),
-            'PORT': values.Value(environ_name='DATABASE_PORT'),
+    if MODE == "docker":
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': values.Value(environ_name='DATABASE_NAME'),
+                'USER': values.Value(environ_name='DATABASE_USER'),
+                'PASSWORD': values.Value(environ_name='DATABASE_PASSWORD'),
+                'HOST': values.Value(environ_name='DATABASE_HOST'),
+                'PORT': values.Value(environ_name='DATABASE_PORT'),
+            }
         }
-    }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
     # Password validation
     # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -200,8 +211,9 @@ class Dev(Configuration):
 
 
 
-
-    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1']
+    if MODE == "docker":
+        INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1']
+        
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda request: False if False else True,
     }
@@ -244,6 +256,18 @@ class Dev(Configuration):
         # Needed to login by username in Django admin, regardless of allauth
         'django.contrib.auth.backends.ModelBackend',
     ]
+    if MODE != "docker":
+        # Celery Configuration
+        CELERY_BROKER_URL = 'redis://localhost:6379/0'
+        CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+    else:
+        CELERY_BROKER_URL = 'redis://redis:6379/0'
+        CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+        
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = 'UTC'
 
 
 

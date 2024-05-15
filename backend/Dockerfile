@@ -1,5 +1,5 @@
-# Use a more specific Python base image
-FROM python:3.12-slim
+# Base image with PyTorch
+FROM python:3.12-slim AS base
 
 # Set environment variables for Python
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -11,20 +11,23 @@ RUN apt-get update \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Pipenv
-RUN pip install pipenv
+# Create a virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install dependencies
+COPY ./backend/requirements.txt /app/backend/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /app/backend/requirements.txt
+
+# Stage 2: Copy the application code
+FROM base AS final
 
 # Set the working directory in the container
 WORKDIR /app/backend
 
-# Copy only the Pipfiles
-COPY ./backend/Pipfile* ./
-
-# Install project dependencies
-RUN pipenv install --system --deploy --ignore-pipfile
-
 # Copy the rest of the application code
-COPY ./backend .
+COPY ./backend /app/backend
 
 # Copy the startup script into the container
 COPY ./docker/backend/startup.sh /docker/backend/startup.sh

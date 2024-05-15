@@ -22,6 +22,8 @@ torch = "*"
 torchvision = "*"
 torchaudio = "*"
 transformers = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 
