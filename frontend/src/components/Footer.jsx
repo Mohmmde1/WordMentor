@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/icons";
 
 export default function MainFooter() {
     return (

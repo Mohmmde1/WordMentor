@@ -24,11 +24,14 @@ export default function RootLayout({children}) {
           enableSystem
           disableTransitionOnChange
         >
-          <MainNav />
-          <main>{children}</main>
+          <div className="flex flex-col min-h-screen">
 
-          <Toaster />
-          <MainFooter />
+            <MainNav />
+            <main>{children}</main>
+
+            <MainFooter />
+            <Toaster className="top-right"/>
+          </div>
         </ThemeProvider>
       </body>
 

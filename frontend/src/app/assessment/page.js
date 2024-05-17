@@ -17,9 +17,9 @@ const Page = async () => {
           </p>
         </div>
       </div>
-      <div className="container h-20">
+
         <VocabularyAssessment words={words} />
-      </div>
+
     </div>
   );
 };

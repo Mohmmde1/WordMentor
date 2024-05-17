@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CarouselItem, CarouselContent, CarouselPrevious, CarouselNext, Carousel } from "@/components/ui/carousel"
 import { AccordionTrigger, AccordionContent, AccordionItem, Accordion } from "@/components/ui/accordion"
+import Image from "next/image"
 
 export default function Component() {
   return (
@@ -33,7 +34,7 @@ export default function Component() {
             </div>
             <div className="relative mx-auto w-full max-w-[400px] sm:w-full lg:order-last">
               <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#ff6b6b] to-[#ffa500] opacity-50 blur-xl" />
-              <img
+              <Image
                 alt="Hero"
                 className="relative z-10 mx-auto aspect-square overflow-hidden rounded-xl object-cover"
                 height="550"
@@ -49,7 +50,7 @@ export default function Component() {
           <div className="flex flex-col items-start space-y-2">
             <div className="relative w-full max-w-[200px] mx-auto">
               <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#9b59b6] to-[#8e44ad] opacity-50 blur-xl" />
-              <img
+              <Image
                 alt="Book Cover"
                 className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                 height="300"
@@ -69,7 +70,7 @@ export default function Component() {
           <div className="flex flex-col items-start space-y-2">
             <div className="relative w-full max-w-[200px] mx-auto">
               <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#2980b9] to-[#3498db] opacity-50 blur-xl" />
-              <img
+              <Image
                 alt="Book Cover"
                 className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                 height="300"
@@ -89,7 +90,7 @@ export default function Component() {
           <div className="flex flex-col items-start space-y-2">
             <div className="relative w-full max-w-[200px] mx-auto">
               <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#27ae60] to-[#2ecc71] opacity-50 blur-xl" />
-              <img
+              <Image
                 alt="Book Cover"
                 className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                 height="300"
@@ -140,7 +141,7 @@ export default function Component() {
                 <div className="p-1">
                   <div className="relative w-full max-w-[200px] mx-auto">
                     <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#ff6b6b] to-[#ffa500] opacity-50 blur-xl" />
-                    <img
+                    <Image
                       alt="Book Cover"
                       className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                       height="300"
@@ -154,7 +155,7 @@ export default function Component() {
                 <div className="p-1">
                   <div className="relative w-full max-w-[200px] mx-auto">
                     <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#9b59b6] to-[#8e44ad] opacity-50 blur-xl" />
-                    <img
+                    <Image
                       alt="Book Cover"
                       className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                       height="300"
@@ -168,7 +169,7 @@ export default function Component() {
                 <div className="p-1">
                   <div className="relative w-full max-w-[200px] mx-auto">
                     <div className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-[#2980b9] to-[#3498db] opacity-50 blur-xl" />
-                    <img
+                    <Image
                       alt="Book Cover"
                       className="relative z-10 aspect-[2/3] overflow-hidden rounded-xl object-cover"
                       height="300"
@@ -187,8 +188,8 @@ export default function Component() {
               <AccordionTrigger>The Great Gatsby</AccordionTrigger>
               <AccordionContent>
                 The Great Gatsby is a 1925 novel by American writer F. Scott Fitzgerald. Set in the Jazz Age on Long
-                Island, near New York City, the novel depicts first-person narrator Nick Carraway's interactions with
-                mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy
+                Island, near New York City, the novel depicts first-person narrator Nick Carraway interactions with
+                mysterious millionaire Jay Gatsby and Gatsbys obsession to reunite with his former lover, Daisy
                 Buchanan.
               </AccordionContent>
             </AccordionItem>
@@ -205,7 +206,7 @@ export default function Component() {
               <AccordionTrigger>1984</AccordionTrigger>
               <AccordionContent>
                 Nineteen Eighty-Four, often published as 1984, is a dystopian social science fiction novel by English
-                novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final
+                novelist George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwells ninth and final
                 book completed in his lifetime.
               </AccordionContent>
             </AccordionItem>

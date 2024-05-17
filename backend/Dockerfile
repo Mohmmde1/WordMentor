@@ -16,18 +16,18 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Install dependencies
-COPY ./backend/requirements.txt /app/backend/requirements.txt
+COPY ./backend/requirements.txt /backend/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r /app/backend/requirements.txt
+    && pip install --no-cache-dir -r /backend/requirements.txt
 
 # Stage 2: Copy the application code
 FROM base AS final
 
 # Set the working directory in the container
-WORKDIR /app/backend
+WORKDIR /backend
 
 # Copy the rest of the application code
-COPY ./backend /app/backend
+COPY ./backend /backend
 
 # Copy the startup script into the container
 COPY ./docker/backend/startup.sh /docker/backend/startup.sh

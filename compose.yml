@@ -58,7 +58,7 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-    command: celery -A backend worker -l info
+    command: celery -A backend worker --uid nobody -l info
     volumes:
       - ./backend:/app/backend
     env_file:
@@ -68,6 +68,10 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    environment:
+      - TRANSFORMERS_CACHE=/tmp/transformers_cache
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
 
   frontend:
     build:
@@ -77,6 +81,9 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      - NODE_ENV=development
     depends_on:
       - backend
   
