@@ -8,5 +8,5 @@ class TrainedModel(BaseModel):
     version = models.CharField(max_length=20)
     description = models.TextField()
     file_path = models.CharField(max_length=255) 
-
+    celery_task_id = models.CharField(max_length=255, null=True)
 

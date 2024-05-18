@@ -78,6 +78,7 @@ class Dev(Configuration):
         'assessment',
         'books',
         'trainedmodels',
+        'django_celery_results',
     ])
 
     MIDDLEWARE = values.ListValue(default=[
@@ -268,6 +269,18 @@ class Dev(Configuration):
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TIMEZONE = 'UTC'
+    CELERY_RESULT_BACKEND = 'django-db'
+    CELERY_CACHE_BACKEND = 'django-cache'
+    # django setting.
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'my_cache_table',
+        }
+    }
+    CELERY_RESULT_EXTENDED = True
+
+
 
 
 

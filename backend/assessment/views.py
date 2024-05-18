@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 from .models import Assessment
 from .serializers import AssessmentSerializer
-from .tasks import fine_tune_bert
 
 
 class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -32,9 +31,4 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         profile.unknown_words.add(*unselected_words)
         profile.save()
         
-        # Fine-tune the BERT model with the labeled data
-        labeled_data = profile.extract_data()
-        path = f"{profile.user.username}_model"
-        fine_tune_bert.delay(labeled_data, path)
-        TrainedModel.objects.create(profile=profile, path=path, name=f"{profile.user.username}_model", version="1.0", description="Fine-tuned BERT model")
         return Response(serializer.data, status=status.HTTP_201_CREATED)

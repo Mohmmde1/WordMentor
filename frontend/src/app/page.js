@@ -55,7 +55,7 @@ export default function Page () {
 
       <section className="w-full py-14 relative">
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#9b59b6] to-[#8e44ad] opacity-10 blur-3xl" />
-        <div className="flex  px-4 md:grid-cols-3 md:px-6 m-3 space-x-60 ">
+        <div className="flex justify-between px-4 lg:px-20 md:px-6 m-3  ">
           <div className="flex flex-col items-start h-96 space-x-2  space-y-2 ">
             <Image
               alt="silky-knowledge-assessment"
@@ -84,7 +84,7 @@ export default function Page () {
               src="/airy-magnifier-with-a-book-search-for-information-learning.png"
               width={200}
             />
-            <div className='h-full flex flex-col align-bottom border'>
+            <div className='h-full flex flex-col align-bottom '>
 
               <h3 className="text-xl font-bold">To Kill a Mockingbird</h3>
               <p className="text-gray-500 dark:text-gray-400">Harper Lee</p>

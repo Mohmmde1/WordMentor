@@ -32,6 +32,7 @@ urlpatterns += [
     path(api + "word/", include("word.urls")),
     path(api + "assessment/", include("assessment.urls")),
     path(api + "books/", include("books.urls")),
+    path(api + "trainedmodels/", include("trainedmodels.urls")),
 
 ]
 
