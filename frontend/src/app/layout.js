@@ -27,7 +27,7 @@ export default function RootLayout({children}) {
           <div className="flex flex-col min-h-screen">
 
             <MainNav />
-            <main>{children}</main>
+            <main className='mb-auto'>{children}</main>
 
             <MainFooter />
             <Toaster className="top-right"/>
