@@ -16,18 +16,13 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Set the working directory in the container
-WORKDIR /app/backend
+WORKDIR /app
 
 # Install dependencies
-COPY ./backend/requirements.txt /app/backend/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r /app/backend/requirements.txt
+    && pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the startup script into the container
-COPY ./docker/backend/startup.sh /docker/backend/startup.sh
-
-# Set execute permissions on the startup script
-RUN chmod +x /docker/backend/startup.sh
 
 # Start the Django application using the startup script
-CMD ["/docker/backend/startup.sh"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
