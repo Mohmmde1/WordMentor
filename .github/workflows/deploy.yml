@@ -1,0 +1,64 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - producation  # Change this to the branch you want to trigger the deploy on
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        project_id: ${{ secrets.PROJECT_ID }}
+
+    - name: Configure Docker for Google Cloud
+      run: gcloud auth configure-docker
+
+    - name: Build and push backend Docker image
+      run: |
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/backend ./backend
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/backend
+
+    - name: Deploy backend to Cloud Run
+      run: |
+        gcloud run deploy backend \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/backend \
+          --platform managed \
+          --region ${{ secrets.REGION }} \
+          --allow-unauthenticated \
+          --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }}
+
+    - name: Build and push celery Docker image
+      run: |
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/celery ./backend
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/celery
+
+    - name: Deploy celery to Cloud Run
+      run: |
+        gcloud run deploy celery \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/celery \
+          --platform managed \
+          --region ${{ secrets.REGION }} \
+          --allow-unauthenticated \
+          --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }}
+
+    - name: Build and push Redis Docker image
+      run: |
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/redis ./redis
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/redis
+
+    - name: Deploy Redis to Cloud Run
+      run: |
+        gcloud run deploy redis \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/redis \
+          --platform managed \
+          --region ${{ secrets.REGION }} \
+          --allow-unauthenticated
