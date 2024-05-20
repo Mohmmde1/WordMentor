@@ -20,7 +20,7 @@ jobs:
         project_id: ${{ secrets.PROJECT_ID }}
 
     - name: Configure Docker for Google Cloud
-      run: gcloud auth configure-docker gcr.io
+      run: gcloud auth configure-docker us-docker.pkg.dev
 
     - name: Build and push backend Docker image
       run: |
