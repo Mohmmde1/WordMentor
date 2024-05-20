@@ -3,7 +3,7 @@ name: Push Image to Artifact Registry
 on:
   push:
     branches:
-      - main
+      - producation
 
 jobs:
   build-and-push:
