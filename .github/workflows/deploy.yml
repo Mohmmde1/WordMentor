@@ -3,7 +3,7 @@ name: Deploy to Google Cloud Run
 on:
   push:
     branches:
-      - producation  # Change this to the branch you want to trigger the deploy on
+      - production  # Change this to the branch you want to trigger the deploy on
 
 jobs:
   deploy:
@@ -19,18 +19,18 @@ jobs:
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         project_id: ${{ secrets.PROJECT_ID }}
 
-    - name: Configure Docker for Google Cloud
-      run: gcloud auth configure-docker
+    - name: Configure Docker for Google Artifact Registry
+      run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
     - name: Build and push backend Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/backend ./backend
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/backend
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend ./backend
+        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend
 
     - name: Deploy backend to Cloud Run
       run: |
         gcloud run deploy backend \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/backend \
+          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
@@ -38,13 +38,13 @@ jobs:
 
     - name: Build and push celery Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/celery ./backend
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/celery
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery ./backend
+        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery
 
     - name: Deploy celery to Cloud Run
       run: |
         gcloud run deploy celery \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/celery \
+          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
@@ -52,13 +52,13 @@ jobs:
 
     - name: Build and push Redis Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/redis ./redis
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/redis
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis ./redis
+        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis
 
     - name: Deploy Redis to Cloud Run
       run: |
         gcloud run deploy redis \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/redis \
+          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated
