@@ -3,7 +3,7 @@ name: Deploy to Google Cloud Run
 on:
   push:
     branches:
-      - production  # Change this to the branch you want to trigger the deploy on
+      - producation  # Change this to the branch you want to trigger the deploy on
 
 jobs:
   deploy:
@@ -19,32 +19,45 @@ jobs:
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         project_id: ${{ secrets.PROJECT_ID }}
 
-    - name: Configure Docker for Google Artifact Registry
-      run: gcloud auth configure-docker us-central1-docker.pkg.dev
+    - name: Configure Docker for Google Cloud
+      run: gcloud auth configure-docker gcr.io
 
     - name: Build and push backend Docker image
       run: |
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend ./backend
-        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/backend ./backend
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/backend
 
     - name: Deploy backend to Cloud Run
       run: |
         gcloud run deploy backend \
-          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/backend \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/backend \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
           --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }}
 
+    - name: Build and push frontend Docker image
+      run: |
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/frontend ./frontend
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/frontend
+
+    - name: Deploy frontend to Cloud Run
+      run: |
+        gcloud run deploy frontend \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/frontend \
+          --platform managed \
+          --region ${{ secrets.REGION }} \
+          --allow-unauthenticated
+
     - name: Build and push celery Docker image
       run: |
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery ./backend
-        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/celery ./backend
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/celery
 
     - name: Deploy celery to Cloud Run
       run: |
         gcloud run deploy celery \
-          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/celery \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/celery \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
@@ -52,13 +65,13 @@ jobs:
 
     - name: Build and push Redis Docker image
       run: |
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis ./redis
-        docker push us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis
+        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/redis ./redis
+        docker push gcr.io/${{ secrets.PROJECT_ID }}/redis
 
     - name: Deploy Redis to Cloud Run
       run: |
         gcloud run deploy redis \
-          --image us-central1-docker.pkg.dev/${{ secrets.PROJECT_ID }}/quickstart-docker-repo/redis \
+          --image gcr.io/${{ secrets.PROJECT_ID }}/redis \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated
