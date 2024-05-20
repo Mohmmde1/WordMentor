@@ -23,33 +23,33 @@ jobs:
     
     - name: Use gcloud info
       run: gcloud info
-      
+
     - name: Configure Docker for Google Cloud
       run: gcloud auth configure-docker us-docker.pkg.dev
 
     - name: Build and push frontend Docker image
       run: |
         gcloud auth configure-docker us-docker.pkg.dev
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/frontend ./frontend
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/frontend
+        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend ./frontend
+        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend
 
     - name: Deploy frontend to Cloud Run
       run: |
         gcloud run deploy frontend \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/frontend \
+          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated
           
     - name: Build and push backend Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/backend ./backend
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/backend
+        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend ./backend
+        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend
 
     - name: Deploy backend to Cloud Run
       run: |
         gcloud run deploy backend \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/backend \
+          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
@@ -57,13 +57,13 @@ jobs:
 
     - name: Build and push celery Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/celery ./backend
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/celery
+        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery ./backend
+        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery
 
     - name: Deploy celery to Cloud Run
       run: |
         gcloud run deploy celery \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/celery \
+          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated \
@@ -71,13 +71,13 @@ jobs:
 
     - name: Build and push Redis Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.PROJECT_ID }}/redis ./redis
-        docker push gcr.io/${{ secrets.PROJECT_ID }}/redis
+        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis ./redis
+        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis
 
     - name: Deploy Redis to Cloud Run
       run: |
         gcloud run deploy redis \
-          --image gcr.io/${{ secrets.PROJECT_ID }}/redis \
+          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis \
           --platform managed \
           --region ${{ secrets.REGION }} \
           --allow-unauthenticated
