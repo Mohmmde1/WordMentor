@@ -20,4 +20,4 @@ jobs:
         run: docker build -t us-central1-docker.pkg.dev/wordmentor/frontend:latest ./frontend
 
       - name: Push the image to Artifact Registry
-        run: gcloud docker -- push us-central1-docker.pkg.dev/wordmentor/frontend:latest
+        run: gcloud docker -- push us-central1-docker.pkg.dev/wordmentor
