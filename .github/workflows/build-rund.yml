@@ -17,7 +17,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Build the image
-        run: docker build -t us-central1-docker.pkg.dev/wordmentor/frontend:latest ./frontend
+        run: docker build -t us-central1-docker.pkg.dev/wordmentor/gcr/frontend:latest ./frontend
 
       - name: Push the image to Artifact Registry
-        run: gcloud docker -- push us-central1-docker.pkg.dev/wordmentor
+        run: gcloud docker -- push us-central1-docker.pkg.dev/wordmentor/gcr/frontend:latest
