@@ -25,6 +25,7 @@ jobs:
 
     - name: Build and push frontend Docker image
       run: |
+        gcloud auth configure-docker us-docker.pkg.dev
         docker build -t gcr.io/${{ secrets.PROJECT_ID }}/frontend ./frontend
         docker push gcr.io/${{ secrets.PROJECT_ID }}/frontend
 
