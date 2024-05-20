@@ -1,83 +1,23 @@
-name: Deploy to Google Cloud Run
+name: Push Image to Artifact Registry
 
 on:
   push:
     branches:
-      - producation  # Change this to the branch you want to trigger the deploy on
+      - main
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Authenticate with Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-    
-    - name: Use gcloud info
-      run: gcloud info
+      - name: Build the image
+        run: docker build -t us-central1-docker.pkg.dev/wordmentor/frontend:latest ./frontend
 
-    - name: Configure Docker for Google Cloud
-      run: gcloud auth configure-docker us-docker.pkg.dev
-
-    - name: Build and push frontend Docker image
-      run: |
-        gcloud auth configure-docker us-docker.pkg.dev
-        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend ./frontend
-        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend
-
-    - name: Deploy frontend to Cloud Run
-      run: |
-        gcloud run deploy frontend \
-          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/frontend \
-          --platform managed \
-          --region ${{ secrets.REGION }} \
-          --allow-unauthenticated
-          
-    - name: Build and push backend Docker image
-      run: |
-        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend ./backend
-        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend
-
-    - name: Deploy backend to Cloud Run
-      run: |
-        gcloud run deploy backend \
-          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/backend \
-          --platform managed \
-          --region ${{ secrets.REGION }} \
-          --allow-unauthenticated \
-          --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }}
-
-    - name: Build and push celery Docker image
-      run: |
-        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery ./backend
-        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery
-
-    - name: Deploy celery to Cloud Run
-      run: |
-        gcloud run deploy celery \
-          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/celery \
-          --platform managed \
-          --region ${{ secrets.REGION }} \
-          --allow-unauthenticated \
-          --set-env-vars DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }}
-
-    - name: Build and push Redis Docker image
-      run: |
-        docker build -t us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis ./redis
-        docker push us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis
-
-    - name: Deploy Redis to Cloud Run
-      run: |
-        gcloud run deploy redis \
-          --image us-central1-docker.pkg.dev/${{secrets.PROJECT_ID}}/gcr/redis \
-          --platform managed \
-          --region ${{ secrets.REGION }} \
-          --allow-unauthenticated
+      - name: Push the image to Artifact Registry
+        run: gcloud docker -- push us-central1-docker.pkg.dev/wordmentor/frontend:latest
