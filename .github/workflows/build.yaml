@@ -20,25 +20,7 @@ jobs:
 
     - name: Install gcloud CLI
       uses: google-github-actions/setup-gcloud@v2
-    
-    - name: Build and push the frontend Docker image
-      env:
-        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-      run: |
-        gcloud auth configure-docker us-central1-docker.pkg.dev
-        docker build -t us-central1-docker.pkg.dev/${{secrets.GOOGLE_PROJECT}}/demo/frontend:latest ./frontend
-        docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/demo/frontend:latest
-
-    - name: Deploy frontend to Cloud Run
-      env:
-        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-      run: |
-        gcloud run deploy frontend \
-          --image us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT }}/demo/frontend:latest \
-          --platform managed \
-          --region us-central1 \
-          --allow-unauthenticated
-    
+      
     - name: Build and push the backend Docker image
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
@@ -71,3 +53,23 @@ jobs:
           --region us-central1 \
           --allow-unauthenticated \
           --update-env-vars MODE=${{ secrets.MODE }},DJANGO_DATABASE_NAME=${{ secrets.DJANGO_DATABASE_NAME }},DJANGO_DATABASE_USER=${{ secrets.DJANGO_DATABASE_USER }},DJANGO_DATABASE_PASSWORD=${{ secrets.DJANGO_DATABASE_PASSWORD }},DJANGO_DATABASE_HOST=${{ secrets.DJANGO_DATABASE_HOST }},DJANGO_DATABASE_PORT=${{ secrets.DJANGO_DATABASE_PORT }},DJANGO_X_RAPID_API_KEY=${{ secrets.DJANGO_X_RAPID_API_KEY }}
+
+    - name: Build and push the frontend Docker image
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        docker build -t us-central1-docker.pkg.dev/${{secrets.GOOGLE_PROJECT}}/demo/frontend:latest ./frontend
+        docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/demo/frontend:latest
+
+    - name: Deploy frontend to Cloud Run
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+        gcloud run deploy frontend \
+          --image us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT }}/demo/frontend:latest \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated
+    
+    
