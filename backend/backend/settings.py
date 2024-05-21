@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import timedelta
 import logging
 import socket
+import dj_database_url
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -124,15 +125,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 if MODE == "docker":
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DJANGO_DATABASE_NAME'),
-            'USER': os.environ.get('DJANGO_DATABASE_USER'),
-            'PASSWORD': os.environ.get('DJANGO_DATABASE_PASSWORD'),
-            'HOST': os.environ.get('DJANGO_DATABASE_HOST'),
-            'PORT': os.environ.get('DJANGO_DATABASE_PORT'),
-        }
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DJANGO_DATABASE_URL')
+    )
+}
 else:
     DATABASES = {
         'default': {

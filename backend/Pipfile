@@ -21,6 +21,7 @@ redis = "*"
 django-celery-results = "*"
 torch = "*"
 transformers = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
