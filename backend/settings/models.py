@@ -48,10 +48,11 @@ class Profile(BaseModel):
         """
         Method to generte a dictionary of labled words for the ML model.
         """
-        selected_words = self.known_words.values_list('entry', flat=True)
-        unselected_words = self.unknown_words.values_list('entry', flat=True)
-        labeled_data = {word: 1 for word in selected_words}
-        labeled_data.update({word: 0 for word in unselected_words})
+        known_words = self.known_words.values_list('entry', flat=True)
+        unknown_words = self.unknown_words.values_list('entry', flat=True)
+        labeled_data = {word: 1 for word in known_words}
+        
+        labeled_data.update({word: 0 for word in unknown_words})
         return labeled_data
 
     def __str__(self):

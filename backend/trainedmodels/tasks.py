@@ -1,9 +1,8 @@
 import os
 import logging
 import torch
-from torch.optim import AdamW
 from torch.utils.data import DataLoader, TensorDataset
-from transformers import BertTokenizer, BertForSequenceClassification
+from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 from django.conf import settings
 from celery import shared_task
 
