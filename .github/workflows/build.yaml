@@ -38,3 +38,21 @@ jobs:
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated
+    
+    - name: build and push the backend image
+      env:
+          GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        docker build -t us-central1-docker.pkg.dev/${{secrets.GOOGLE_PROJECT}}/demo/backend:latest ./backend
+        docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/demo/backend:latest
+
+    - name: Deploy backend to Cloud Run
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+        gcloud run deploy backend \
+          --image us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT }}/demo/backend:latest \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated
