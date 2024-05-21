@@ -1,3 +1,4 @@
+import logging
 from rest_framework import mixins, viewsets, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
@@ -9,6 +10,8 @@ from trainedmodels.models import TrainedModel
 from .models import Assessment
 from .serializers import AssessmentSerializer
 
+logger = logging.getLogger(__name__)
+
 class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = AssessmentSerializer
 
@@ -18,6 +21,10 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             profile_id = assessment_data.get('profile')
             selected_words = assessment_data.get('selected_words', [])
             unselected_words = assessment_data.get('unselected_words', [])
+            
+            logger.info(f"Creating assessment for profile ID {profile_id}")
+            logger.info(f"Selected words: {selected_words}")
+            logger.info(f"Unselected words: {unselected_words}")
             
             # Check if profile_id is provided
             if profile_id is None:
@@ -38,7 +45,8 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             profile.known_words.add(*selected_words)
             profile.unknown_words.add(*unselected_words)
             profile.save()
-            
+            logger.info(f"Profile known words: {profile.known_words.all()}")
+            logger.info(f"Profile unknown words: {profile.unknown_words.all()}")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             # Handle IntegrityError if assessment creation fails due to database constraints
