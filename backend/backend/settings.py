@@ -50,7 +50,7 @@ class Dev(Configuration):
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = values.BooleanValue(True)
 
-    ALLOWED_HOSTS = values.ListValue(["backend", "localhost", "*"])
+    ALLOWED_HOSTS = values.ListValue(["*", "0.0.0.0"])
 
 
     # Application definition
