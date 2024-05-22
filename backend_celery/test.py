@@ -36,7 +36,7 @@ def extract_text_from_pdf(pdf_path, from_page, to_page):
 
 
 def main():
-    pdf_path = '/app/backend/media/books/bookC34dayang.pdf'
+    pdf_path = '/app/backend_celery/media/books/bookC34dayang.pdf'
     from_page = 1
     to_page = 5
     start_time = time.time()

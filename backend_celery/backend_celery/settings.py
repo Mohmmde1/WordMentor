@@ -73,7 +73,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware'
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'backend_celery.urls'
 
 TEMPLATES = [
     {
@@ -119,7 +119,7 @@ LOGGING = {
     },
 }
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'backend_celery.wsgi.application'
 
 # Database
 

@@ -3,10 +3,10 @@ import os
 from celery import Celery
 
 # Set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend_celery.settings')
 
 # Initialize Celery application
-app = Celery('backend')
+app = Celery('backend_celery')
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
