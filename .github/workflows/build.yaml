@@ -35,14 +35,14 @@ jobs:
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         MODE: ${{ secrets.MODE }}
-        DJANGO_X_RAPID_API_KEY: ${{ secrets.DJANGO_X_RAPID_API_KEY }}
+        X_RAPID_API_KEY: ${{ secrets.X_RAPID_API_KEY }}
       run: |
         gcloud run deploy backend \
           --image us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT }}/demo/backend:latest \
           --platform managed \
           --region us-central1 \
           --allow-unauthenticated \
-          --update-env-vars MODE=${{ secrets.MODE }},DJANGO_X_RAPID_API_KEY=${{ secrets.DJANGO_X_RAPID_API_KEY }}
+          --update-env-vars MODE=${{ secrets.MODE }},X_RAPID_API_KEY=${{ secrets.X_RAPID_API_KEY }}
 
     - name: Build and push the frontend Docker image
       env:
