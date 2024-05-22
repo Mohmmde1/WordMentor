@@ -213,3 +213,4 @@ CACHES = {
     }
 }
 
+CSRF_TRUSTED_ORIGINS = ['https://backend-bvutct6wjq-uc.a.run.app']
