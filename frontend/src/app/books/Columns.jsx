@@ -1,6 +1,5 @@
 'use client';
 
-import PDFViewer from '@/app/books/Document';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import {
   Dialog,

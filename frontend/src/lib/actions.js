@@ -171,9 +171,21 @@ export async function submitAssessment (selected, unselected) {
       unselected_words: unselected,
     };
     console.log (data);
-    const response = await apiService.postUpdate (
+    const responseAssessment = await apiService.postUpdate (
       'assessment/',
       JSON.stringify (data),
+      'POST'
+    );
+
+    if(responseAssessment.error){
+      throw new Error(responseAssessment.error);
+    }
+    
+    const responseModel = await apiService.postUpdate (
+      'trainedmodels/',
+      JSON.stringify ({
+        profile: profileId,
+      }),
       'POST'
     );
     setAssessmentStatus (true);
@@ -182,6 +194,19 @@ export async function submitAssessment (selected, unselected) {
     throw error;
   }
 }
+
+export async function getStatus () {
+  try {
+    const response = await apiService.get (`trainedmodels/task-status/`);
+    console.log (response.status);
+    return response.status;
+  } catch (error) {
+    console.error ('Error fetching status:', error);
+    throw error;
+  }
+
+}
+
 
 export async function fetchBooks () {
   const profileId = getProfileId ();

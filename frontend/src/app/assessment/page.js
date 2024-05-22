@@ -1,4 +1,4 @@
-import VocabularyAssessment from '@/components/Card';
+import VocabularyAssessment from '@/app/assessment/Card';
 import {fetchAssessmentWords} from '@/lib/actions';
 
 const Page = async () => {
@@ -17,9 +17,9 @@ const Page = async () => {
           </p>
         </div>
       </div>
-      <div className="container h-20">
+
         <VocabularyAssessment words={words} />
-      </div>
+
     </div>
   );
 };

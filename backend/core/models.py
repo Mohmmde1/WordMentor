@@ -1,7 +1,6 @@
 from django.db import models
-from django_softdelete.models import SoftDeleteModel
 
-class BaseModel(SoftDeleteModel):
+class BaseModel(models.Model):
     """
     Abstract base model that includes common attributes
     such as created_at, updated_at, and deleted_at.

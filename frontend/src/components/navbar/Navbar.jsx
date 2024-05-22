@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
 import { NavigationItems } from "@/components/navbar/NavbarItems";
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/icons";
 
 export function MainNav() {
   return (

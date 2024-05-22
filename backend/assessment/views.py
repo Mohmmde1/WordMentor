@@ -1,32 +1,57 @@
-from settings.models import Profile
+import logging
 from rest_framework import mixins, viewsets, status
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 
+from settings.models import Profile
+from trainedmodels.models import TrainedModel
 from .models import Assessment
 from .serializers import AssessmentSerializer
+
+logger = logging.getLogger(__name__)
 
 class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = AssessmentSerializer
 
     def create(self, request):
-        assessment_data = request.data
-        profile_id = assessment_data.get('profile')
-        selected_words = assessment_data.get('selected_words')
-        unselected_words = assessment_data.get('unselected_words')
         try:
-            profile = Profile.objects.get(id=profile_id)
+            assessment_data = request.data
+            profile_id = assessment_data.get('profile')
+            selected_words = assessment_data.get('selected_words', [])
+            unselected_words = assessment_data.get('unselected_words', [])
+            
+            logger.info(f"Creating assessment for profile ID {profile_id}")
+            logger.info(f"Selected words: {selected_words}")
+            logger.info(f"Unselected words: {unselected_words}")
+            
+            # Check if profile_id is provided
+            if profile_id is None:
+                return Response({"error": "Profile ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Retrieve the profile object or raise a NotFound exception if not found
+            profile = get_object_or_404(Profile, id=profile_id)
+            print('profile', profile)
+            # Check if both selected and unselected words are provided
+            if not selected_words or not unselected_words:
+                return Response({"error": "Both selected_words and unselected_words are required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Create a new assessment for the profile
+            assessment = Assessment.objects.create()
+            serializer = self.get_serializer(assessment)
 
-        except Profile.DoesNotExist:
-            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        assessment = Assessment.objects.create(profile=profile)
-        serializer = self.get_serializer(assessment)
-
-        # Update the has_taken_assessment boolean value in the profile
-        profile.has_taken_assessment = True
-        # Add selected and unselected words to the profile's known_words and unknown_words
-        profile.known_words.add(*selected_words)
-        profile.unknown_words.add(*unselected_words)
-        profile.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Add selected and unselected words to the profile's known_words and unknown_words
+            profile.known_words.add(*selected_words)
+            profile.unknown_words.add(*unselected_words)
+            profile.assessment = assessment
+            profile.save()
+            logger.info(f"Profile known words: {profile.known_words.all()}")
+            logger.info(f"Profile unknown words: {profile.unknown_words.all()}")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            # Handle IntegrityError if assessment creation fails due to database constraints
+            return Response({"error": "IntegrityError occurred while creating assessment"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            # Handle other exceptions
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
