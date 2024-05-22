@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'assessment',
     'books',
     'trainedmodels',
-    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -204,20 +203,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-if MODE != "docker":
-    # Celery Configuration
-    CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-else:
-    CELERY_BROKER_URL = f'redis://{os.environ.get("REDISHOST")}:{os.environ.get("REDISPORT")}'
-    CELERY_RESULT_BACKEND = f'redis://{os.environ.get("REDISHOST")}:{os.environ.get("REDISPORT")}'
 
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'django-cache'
 
 # Django caching setting
 CACHES = {
@@ -227,4 +213,3 @@ CACHES = {
     }
 }
 
-CELERY_RESULT_EXTENDED = True

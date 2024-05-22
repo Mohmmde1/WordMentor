@@ -1,6 +1,7 @@
 from word.models import Word
 from django.db import models
 from django.utils.text import slugify
+from assessment.models import Assessment
 
 from wordmentor_auth.models import User
 from core.models import BaseModel
@@ -18,6 +19,7 @@ class Profile(BaseModel):
         Word, related_name='profiles_known', blank=True)
     unknown_words = models.ManyToManyField(
         Word, related_name='profiles_unknown', blank=True)
+    assessment = models.OneToOneField(Assessment, on_delete=models.SET_NULL, null=True, related_name='profile')
 
     def save(self, *args, **kwargs):
         """
@@ -33,7 +35,11 @@ class Profile(BaseModel):
         """
         Property method to check if an assessment related to the profile exists.
         """
-        return self.assessment != None
+        try:
+            return self.assessment is not None
+        except Assessment.DoesNotExist:
+            return False  # Or you can return 'skull' if you prefer
+ # Or you can re
 
     @property
     def get_avatar_url(self):

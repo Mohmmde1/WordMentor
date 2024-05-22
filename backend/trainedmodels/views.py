@@ -4,11 +4,10 @@ from transformers import BertTokenizer, BertForSequenceClassification
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from django_celery_results.models import TaskResult
 from books.models import Book
 from trainedmodels.models import TrainedModel
 from settings.models import Profile
-from .tasks import fine_tune_bert
+from .tasks import fine_tune_bert, check_status
 from .serializers import FineTuneSerializer, PDFUploadSerializer
 import logging
 
@@ -41,17 +40,16 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             path = f"{profile.user.username}_model"
             print(labeled_data, path)
             # Start the fine-tuning task asynchronously
-            task = fine_tune_bert.delay(labeled_data, path)
+            task = fine_tune_bert(labeled_data, path)
             TrainedModel.objects.create(
                 profile=profile,
                 file_path=path,
                 name=f"{profile.user.username}_model",
                 version="1.0",
                 description="Fine-tuned BERT model",
-                celery_task_id=task.id
             )
 
-            logger.info(f"Fine-tuning task started for profile ID {profile_id} with task ID {task.id}")
+            logger.info(f"Fine-tuning task started for profile ID {profile_id}")
             return Response({"message": "Fine-tuning started"}, status=status.HTTP_201_CREATED)
 
         except Profile.DoesNotExist:
@@ -72,27 +70,18 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         Returns:
             Response: A response with the task ID, status, and result.
         """
-        profile_id = request.user.profile.id
-
+        path = f"{request.user.username}_model"
         try:
-            # Get the Celery task ID for the fine-tuning task
-            trained_model = TrainedModel.objects.get(profile_id=profile_id)
-            task_id = trained_model.celery_task_id
-            result = TaskResult.objects.get(task_id=task_id)
-
-            logger.info(f"Task status for task ID {task_id} retrieved successfully")
-            return Response({'task_id': task_id, 'status': result.status, 'result': result.result}, status=status.HTTP_200_OK)
-
-        except TrainedModel.DoesNotExist:
-            logger.error(f"No trained model found for profile ID {profile_id}")
-            return Response({'task_id': None, 'status': 'PENDING', 'result': None}, status=status.HTTP_404_NOT_FOUND)
-        except TaskResult.DoesNotExist:
-            logger.error(f"No task result found for task ID {task_id}")
-            return Response({'task_id': task_id, 'status': 'PENDING', 'result': None}, status=status.HTTP_404_NOT_FOUND)
+            # check folder if it has file with name profile.user.username_model
+            ready = check_status(path=path)
+            if ready:
+                return Response({"status": "completed"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "pending"}, status=status.HTTP_200_OK)
         except Exception as e:
-            logger.error(f"An error occurred while retrieving task status: {str(e)}")
-            return Response({"error": "An error occurred while retrieving task status"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            logger.error(f"An error occurred while checking task status: {str(e)}")
+            return Response({"error": "An error occurred while checking task status"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
     @action(detail=False, methods=['post'], url_path='extract-tokenize')
     def extract_tokenize(self, request):
         """

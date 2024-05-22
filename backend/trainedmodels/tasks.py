@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 from django.conf import settings
-from celery import shared_task
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -15,7 +15,6 @@ cache_dir = os.path.join(settings.BASE_DIR, 'cache_dir')
 tokenizer_cache = os.path.join(cache_dir, 'tokenizer')
 model_cache = os.path.join(cache_dir, 'model')
 
-@shared_task
 def fine_tune_bert(labeled_data, path, epochs=3, batch_size=8, learning_rate=1e-5):
     """
     Fine-tunes a BERT model for sequence classification on the provided labeled data.
@@ -78,3 +77,16 @@ def fine_tune_bert(labeled_data, path, epochs=3, batch_size=8, learning_rate=1e-
     except Exception as e:
         logger.error(f"An error occurred during fine-tuning: {str(e)}")
         raise
+
+def check_status(path):
+    """
+    Check if a fine-tuned model exists at the specified path.
+
+    Args:
+        path (str): Path to the fine-tuned model.
+
+    Returns:
+        bool: True if the model exists, False otherwise.
+    """
+    fine_tuned_model_path = os.path.join(settings.BASE_DIR, "fine_tuned_models", path)
+    return os.path.exists(fine_tuned_model_path)

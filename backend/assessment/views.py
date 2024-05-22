@@ -38,12 +38,13 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 return Response({"error": "Both selected_words and unselected_words are required"}, status=status.HTTP_400_BAD_REQUEST)
             
             # Create a new assessment for the profile
-            assessment = Assessment.objects.create(profile=profile)
+            assessment = Assessment.objects.create()
             serializer = self.get_serializer(assessment)
 
             # Add selected and unselected words to the profile's known_words and unknown_words
             profile.known_words.add(*selected_words)
             profile.unknown_words.add(*unselected_words)
+            profile.assessment = assessment
             profile.save()
             logger.info(f"Profile known words: {profile.known_words.all()}")
             logger.info(f"Profile unknown words: {profile.unknown_words.all()}")
