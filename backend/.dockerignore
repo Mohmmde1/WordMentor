@@ -24,10 +24,8 @@ build/
 *.pot
 *.pyc
 *.pyo
-*.sqlite3
 *.mo
 *.pyc
-db.sqlite3
 
 # Local environment settings
 .env
