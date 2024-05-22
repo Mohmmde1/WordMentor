@@ -34,7 +34,7 @@ export default async function Page () {
           <CardTitle className="p-4">Books</CardTitle>
           <CardTitle className="p-4 text-sm">
 
-            {status === 'SUCCESS'
+            {status === 'completed'
               ? <HoverCard>
                   <HoverCardTrigger>
                     <Badge>Model is Ready</Badge>

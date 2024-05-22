@@ -176,6 +176,10 @@ export async function submitAssessment (selected, unselected) {
       JSON.stringify (data),
       'POST'
     );
+
+    if(responseAssessment.error){
+      throw new Error(responseAssessment.error);
+    }
     
     const responseModel = await apiService.postUpdate (
       'trainedmodels/',
