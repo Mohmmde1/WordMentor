@@ -7,5 +7,7 @@ set -e
 python manage.py makemigrations
 python manage.py migrate
 
+python manage.py seed_data
+
 # Start the Django server
 python manage.py runserver 0.0.0.0:8000

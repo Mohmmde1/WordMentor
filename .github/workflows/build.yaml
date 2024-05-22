@@ -47,6 +47,8 @@ jobs:
     - name: Build and push the frontend Docker image
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        
+
       run: |
         gcloud auth configure-docker us-central1-docker.pkg.dev
         docker build -t us-central1-docker.pkg.dev/${{secrets.GOOGLE_PROJECT}}/demo/frontend:latest ./frontend
@@ -55,11 +57,15 @@ jobs:
     - name: Deploy frontend to Cloud Run
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        NEXT_PUBLIC_API_HOST: ${{ secrets.NEXT_PUBLIC_API_HOST }}
+        NEXT_PUBLIC_FRONTEND_HOST: ${{ secrets.NEXT_PUBLIC_FRONTEND_HOST }}
+        NEXT_PUBLIC_BACKEND_HOST: ${{ secrets.NEXT_PUBLIC_BACKEND_HOST }}
       run: |
         gcloud run deploy frontend \
           --image us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT }}/demo/frontend:latest \
           --platform managed \
           --region us-central1 \
-          --allow-unauthenticated
+          --allow-unauthenticated \
+          --update-env-vars NEXT_PUBLIC_API_HOST=${{ secrets.NEXT_PUBLIC_API_HOST }},NEXT_PUBLIC_FRONTEND_HOST=${{ secrets.NEXT_PUBLIC_FRONTEND_HOST }},NEXT_PUBLIC_BACKEND_HOST=${{ secrets.NEXT_PUBLIC_BACKEND_HOST }}
     
     
