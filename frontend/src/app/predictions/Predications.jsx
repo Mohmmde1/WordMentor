@@ -19,13 +19,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 const Predictions = () => {
   const searchParams = useSearchParams();
   const [words, setWords] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const wordsParam = searchParams.get('words');
     if (wordsParam) {
       setWords(JSON.parse(wordsParam));
     }
+    setLoading(false);
   }, [searchParams]);
 
   const removeWord = (wordToRemove) => {
@@ -33,7 +34,6 @@ const Predictions = () => {
   };
 
   const schema = z.object({
-    // Define schema for the form if needed
   });
 
   const form = useForm({
