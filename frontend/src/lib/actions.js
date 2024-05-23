@@ -269,3 +269,19 @@ export async function extract_unknown_words(form){
     throw error;
   }
 }
+
+export async function addToKnownWords(word){
+  const form = new FormData();
+  form.append("word", word);
+  
+  const profileId = getProfileId();
+  try {
+
+    const response = await apiService.postFile(`profile/${profileId}/remove-word/`, form, "POST");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}
