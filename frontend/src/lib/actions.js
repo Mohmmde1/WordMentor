@@ -261,7 +261,7 @@ export async function extract_unknown_words(form){
       from_page: form.from_page,
       to_page: form.to_page
     }
-    const response = await apiService.postUpdate("trainedmodels/extract-tokenize/", JSON.stringify(data), "POST");
+    const response = await apiService.postUpdate("trainedmodels/predict/", JSON.stringify(data), "POST");
     console.log(response);
     return response;
   } catch (error) {
@@ -278,6 +278,17 @@ export async function addToKnownWords(word){
   try {
 
     const response = await apiService.postFile(`profile/${profileId}/remove-word/`, form, "POST");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}
+
+export async function getLastPrediction(){
+  try {
+    const response = await apiService.get("trainedmodels/last-prediction/");
     console.log(response);
     return response;
   } catch (error) {

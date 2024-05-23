@@ -141,6 +141,41 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['get'], url_path='last-prediction')
+    def get_last_prediction(self, request):
+        """
+        Retrieves the last prediction made by the user.
+
+        Args:
+            request (Request): The request object.
+
+        Returns:
+            Response: A response with the last prediction data.
+        """
+        try:
+            # Fetch the last prediction made by the user
+            profile = Profile.objects.get(user=request.user)
+            last_prediction = Prediction.objects.filter(
+                profile=profile).order_by('-created_at').first()
+
+            if last_prediction:
+                unknown_words = [word.entry for word in last_prediction.words.all()]
+                return Response({
+                    "unknown_words": unknown_words,
+                    "book": last_prediction.book.title,
+                    "from_page": last_prediction.from_page,
+                    "to_page": last_prediction.to_page,
+                    "created_at": last_prediction.created_at
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "No predictions found"}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            logger.error("Profile not found")
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
@@ -244,3 +279,5 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(
                 f"An error occurred while saving prediction metadata: {str(e)}")
+
+    

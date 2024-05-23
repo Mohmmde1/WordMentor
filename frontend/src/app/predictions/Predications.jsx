@@ -1,6 +1,5 @@
 'use client';
 
-import {useSearchParams} from 'next/navigation';
 import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -10,22 +9,27 @@ import {Card, CardDescription} from '@/components/ui/card';
 import {X} from 'lucide-react';
 import {Form} from '@/components/ui/form';
 import {Skeleton} from '@/components/ui/skeleton';
-import {addToKnownWords} from '@/lib/actions';
+import {addToKnownWords, getLastPrediction} from '@/lib/actions';
 
 const Predictions = () => {
-  const searchParams = useSearchParams ();
   const [words, setWords] = useState ([]);
   const [loading, setLoading] = useState (true);
 
   useEffect (
     () => {
-      const wordsParam = searchParams.get ('words');
-      if (wordsParam) {
-        setWords (JSON.parse (wordsParam));
-      }
+      // Fetch unknown words from the
+      const fetchWords = async () => {
+        const response = await getLastPrediction ();
+        console.log (response);
+        const fetched_words = response.unknown_words;
+        setWords (fetched_words);
+      };
+
+      fetchWords ();
+
       setLoading (false);
     },
-    [searchParams]
+    []
   );
 
   const removeWord = async wordToRemove => {
