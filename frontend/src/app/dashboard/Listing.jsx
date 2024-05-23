@@ -48,7 +48,7 @@ export default function Listing ({books}) {
             </TableHeader>
             <TableBody>
             {books.map((book) =>  (
-                    <TableRow>
+                    <TableRow key={book.id}>
                     <TableCell>
                         <div className="font-medium">{book.title}</div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
