@@ -35,6 +35,20 @@ def create_word_objects(word_entries):
                 }
                 word_objects.append(word_data)
             else:
+                word_data = {
+                    "author": word_definition.author,
+                    "email": word_definition.email,
+                    "entry": word_entry,
+                    "ipa": "",
+                    "meaning": "",
+                    "request": "",
+                    "response": "",
+                    "result_code": word_definition.result_code,
+                    "result_msg": word_definition.result_msg,
+                    "version": word_definition.version,
+                    "ten_degree": "0"
+                }
+                word_objects.append(word_data)
                 logger.error("Failed to fetch data for '%s' from the Twinword API. Result message is not 200.", word_entry)
         else:
             logger.error("Failed to fetch data for '%s' from the Twinword API.", word_entry)

@@ -49,23 +49,17 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
         if not word_entry:
             logger.error("Word entry is missing in the request data")
             return Response({'error': 'Word entry is missing'}, status=status.HTTP_400_BAD_REQUEST)
-        word_entry = word_entry.capitalize()
+        
+        word_entry = word_entry.lower()
+
         try:
-            word_to_remove = Word.objects.get(entry=word_entry)
+            word_to_remove = Word.objects.get_or_fetch(entry=word_entry)
         except Word.DoesNotExist:
-            logger.warning(f"Word '{word_entry}' does not exist in the database, fetching from external API")
-            try:
-                word_data = create_word_objects([word_entry])[0]
-                if word_data:
-                    word_to_remove = Word.objects.create(**word_data)
-                    word_to_remove.save()
-                    logger.info(f"Word '{word_entry}' fetched and saved from external API")
-                else:
-                    logger.error(f"Failed to retrieve details for '{word_entry}' from external API")
-                    return Response({'error': f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                logger.exception(f"An error occurred while fetching word '{word_entry}' from external API")
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(f"Failed to retrieve details for '{word_entry}'")
+            return Response({'error': f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.exception(f"An error occurred while fetching word '{word_entry}'")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         if word_to_remove in profile.unknown_words.all():
             profile.unknown_words.remove(word_to_remove)
