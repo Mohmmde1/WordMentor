@@ -100,3 +100,6 @@ wordmentor_firebase.json
 # Models
 fine_tuned_models/
 cache_dir/
+
+#nltk data
+nltk_data/
