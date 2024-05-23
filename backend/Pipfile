@@ -22,6 +22,7 @@ django-celery-results = "*"
 torch = "*"
 transformers = "*"
 dj-database-url = "*"
+nltk = "*"
 
 [dev-packages]
 

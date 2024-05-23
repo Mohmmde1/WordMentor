@@ -1,9 +1,16 @@
+import os
+import time
+import nltk
+import ssl
 import torch
 from PyPDF2 import PdfReader
 from transformers import BertTokenizer, BertForSequenceClassification
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.conf import settings
+from nltk.corpus import stopwords, words
+from nltk.tokenize import word_tokenize
 from books.models import Book
 from trainedmodels.models import TrainedModel
 from settings.models import Profile
@@ -93,45 +100,33 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         Returns:
             Response: A response with the tokenized text.
         """
+        print("HI")
+        print("extract_tokenize", request.data)
         serializer = PDFUploadSerializer(data=request.data)
         if serializer.is_valid():
-            pdf_id = serializer.validated_data['pdf_id']
             from_page = serializer.validated_data['from_page']
             to_page = serializer.validated_data['to_page']
+            book_id = serializer.validated_data['book_id']
 
             try:
                 # Fetch the PDF file by ID
-                pdf = Book.objects.get(id=pdf_id)
-                with open(pdf.file.path, 'rb') as file:
-                    reader = PdfReader(file)
-                    text = ""
-                    for page_num in range(from_page - 1, to_page):
-                        page = reader.pages[page_num]
-                        text += page.extract_text()
+                pdf = Book.objects.get(id=book_id)
+                pdf_path = pdf.file.path
 
-                 # Fetch the user's trained BERT model
-                trained_model = TrainedModel.objects.get(profile=request.user.profile)
+                # Extract unknown words using the custom function
+                result = self.extract_unknown_words(pdf_path, from_page, to_page)
 
-                # Load pre-trained BERT tokenizer
-                tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', cache_dir='/cache_dir/tokenizer')
+                if 'error' in result:
+                    logger.error(f"An error occurred: {result['error']}")
+                    return Response({"error": result['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                # Tokenize the input text
-                inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
-
-                # Load the fine-tuned BERT model
-                model = BertForSequenceClassification.from_pretrained(trained_model.file_path)
-
-                # Perform prediction
-                outputs = model(**inputs)
-                predicted_labels = torch.argmax(outputs.logits, dim=1)
-
-                # Decode predicted labels into words
-                predicted_words = [tokenizer.decode(label.item()) for label in predicted_labels]
-
-                return Response({'predicted_words': predicted_words}, status=status.HTTP_200_OK)
+                return Response({
+                    "unknown_words": result['unknown_words'],
+                    "processing_time": result['processing_time']
+                }, status=status.HTTP_200_OK)
 
             except Book.DoesNotExist:
-                logger.error(f"PDF with ID {pdf_id} does not exist")
+                logger.error(f"PDF with ID {book_id} does not exist")
                 return Response({"error": "PDF not found"}, status=status.HTTP_404_NOT_FOUND)
             except TrainedModel.DoesNotExist:
                 logger.error("Trained model not found for the user")
@@ -140,3 +135,67 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 logger.error(f"An error occurred: {str(e)}")
                 return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def extract_unknown_words(self, pdf_path, from_page, to_page):
+        # Create an unverified SSL context
+        ssl._create_default_https_context = ssl._create_unverified_context
+        
+        nltk_data_path = os.path.join(settings.BASE_DIR, 'nltk_data')
+        os.makedirs(nltk_data_path, exist_ok=True)
+        nltk.data.path.append(nltk_data_path)
+
+        # Download the required nltk corpora if not already present
+        nltk.download('stopwords', download_dir=nltk_data_path)
+        nltk.download('punkt', download_dir=nltk_data_path)
+        nltk.download('words', download_dir=nltk_data_path)
+
+        # List of valid English words
+        valid_words = set(words.words())
+
+        def extract_important_words(text):
+            words = word_tokenize(text)
+            filtered_words = [
+                word.lower() for word in words
+                if word.lower() not in stopwords.words('english') and word.isalpha() and len(word) > 1 and word.lower() in valid_words
+            ]
+            return set(filtered_words)
+
+        def extract_text_from_pdf(pdf_path, from_page, to_page):
+            with open(pdf_path, 'rb') as file:
+                reader = PdfReader(file)
+                text = ""
+                for page_num in range(from_page - 1, to_page):
+                    page = reader.pages[page_num]
+                    text += page.extract_text()
+            return text
+
+        start_time = time.time()
+        try:
+            tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', cache_dir=os.path.join(settings.BASE_DIR, 'cache_dir', 'tokenizer'))
+            model = BertForSequenceClassification.from_pretrained(os.path.join(settings.BASE_DIR, 'fine_tuned_models', 'mohammed_model'))
+            model.eval()
+
+            extracted_text = extract_text_from_pdf(pdf_path, from_page, to_page)
+            tokens = extract_important_words(extracted_text)
+
+            inputs = tokenizer(list(tokens), return_tensors="pt", padding=True, truncation=True)
+
+            with torch.no_grad():
+                outputs = model(**inputs)
+
+            probs = torch.softmax(outputs.logits, dim=-1)
+            predicted_labels = torch.argmax(probs, dim=-1).tolist()
+
+            class_names = ['Not_Known', 'Known']
+            predicted_classes = [class_names[label] for label in predicted_labels]
+
+            unknown_words = [word for word, predicted_class in zip(tokens, predicted_classes) if predicted_class == 'Not_Known']
+
+            return {
+                'unknown_words': unknown_words,
+                'processing_time': time.time() - start_time
+            }
+        except Exception as e:
+            return {
+                'error': str(e)
+            }

@@ -253,3 +253,19 @@ export async function saveBook(form){
     throw error;
   }
 }
+
+export async function extract_unknown_words(form){
+  try {
+    const data = {
+      book_id: form.book_id,
+      from_page: form.from_page,
+      to_page: form.to_page
+    }
+    const response = await apiService.postUpdate("trainedmodels/extract-tokenize/", JSON.stringify(data), "POST");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}

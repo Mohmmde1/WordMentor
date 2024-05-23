@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import {ArrowUpDown, MoreHorizontal} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import {Button} from '@/components/ui/button';
+import {Checkbox} from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,26 +20,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteBook } from '@/lib/actions';
+import {deleteBook} from '@/lib/actions';
 import Selection from './Selection';
 
 export const columns = [
   {
     id: 'select',
-    header: ({ table }) => (
+    header: ({table}) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
+          table.getIsAllPageRowsSelected () ||
+            (table.getIsSomePageRowsSelected () && 'indeterminate')
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={value => table.toggleAllPageRowsSelected (!!value)}
         aria-label="Select all"
       />
     ),
-    cell: ({ row }) => (
+    cell: ({row}) => (
       <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
+        checked={row.getIsSelected ()}
+        onCheckedChange={value => row.toggleSelected (!!value)}
         aria-label="Select row"
       />
     ),
@@ -48,11 +48,11 @@ export const columns = [
   },
   {
     accessorKey: 'title',
-    header: ({ column }) => {
+    header: ({column}) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
         >
           Title
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -62,11 +62,11 @@ export const columns = [
   },
   {
     accessorKey: 'pages',
-    header: ({ column }) => {
+    header: ({column}) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
           className="text-left"
         >
           Pages
@@ -74,7 +74,7 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => {
+    cell: ({row}) => {
       return (
         <div className="text-center pr-16">
           {row.original.pages}
@@ -85,11 +85,11 @@ export const columns = [
 
   {
     accessorKey: 'created_at',
-    header: ({ column }) => {
+    header: ({column}) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
         >
           Uploaded At
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -99,65 +99,61 @@ export const columns = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
-
+    cell: ({row}) => {
       const book = row.original;
       return (
         <Dialog>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(book.id)}
-            >
-              Copy book ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <a
-                href={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${book.file}`}
-                target="_blank"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText (book.id)}
               >
-                View book
-              </a>
-             
+                Copy book ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <a
+                  href={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${book.file}`}
+                  target="_blank"
+                >
+                  View book
+                </a>
 
-            </DropdownMenuItem>
-            
+              </DropdownMenuItem>
+
               <DialogTrigger>
                 <DropdownMenuItem>
 
                   Select Pages
                 </DropdownMenuItem>
               </DialogTrigger>
-              
-            
 
-            <DropdownMenuItem
-              onClick={async () => {
-                await deleteBook(book.id);
-                console.log('Delete book');
-              }}
-            >
-              Delete book
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DialogContent >
-                <DialogHeader>
-                  <DialogTitle>Select pages from and to</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>
-                  Select the pages you want to parse
-                </DialogDescription>
-                   <Selection noPages={book.pages}/>
-              </DialogContent>
+              <DropdownMenuItem
+                onClick={async () => {
+                  await deleteBook (book.id);
+                  console.log ('Delete book');
+                }}
+              >
+                Delete book
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Select pages from and to</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              Select the pages you want to parse
+            </DialogDescription>
+            <Selection noPages={book.pages} bookId={book.id}/>
+          </DialogContent>
         </Dialog>
       );
     },

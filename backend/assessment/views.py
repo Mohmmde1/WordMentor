@@ -40,7 +40,11 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # Create a new assessment for the profile
             assessment = Assessment.objects.create()
             serializer = self.get_serializer(assessment)
-
+            
+            # Clear the profile's known_words and unknown_words
+            profile.known_words.clear()
+            profile.unknown_words.clear()
+            
             # Add selected and unselected words to the profile's known_words and unknown_words
             profile.known_words.add(*selected_words)
             profile.unknown_words.add(*unselected_words)
