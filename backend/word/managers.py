@@ -6,8 +6,10 @@ logger = logging.getLogger(__name__)
 
 class WordManager(models.Manager):
     def get_or_fetch(self, entry):
+        
         try:
             # Try to get the word from the database
+            entry = entry.lower()
             return self.get(entry=entry)
         except self.model.DoesNotExist:
             # If the word is not found, fetch it from the Twinword API

@@ -1,3 +1,4 @@
+import logging
 from rest_framework.response import Response
 from rest_framework import mixins, viewsets, status
 from django.core.exceptions import ValidationError
@@ -7,6 +8,7 @@ from .models import Word
 from .serializers import WordListSerializer, WordSerializer
 from .wdapi_integration import create_word_objects
 
+logger = logging.getLogger(__name__)
 class WordViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     """
@@ -23,28 +25,18 @@ class WordViewSet(mixins.RetrieveModelMixin,
             return Response({"error": "Word entry is missing"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Attempt to fetch the word from the database
-            word = Word.objects.get(entry=word_entry)
+            # Attempt to fetch the word using the custom manager method
+            word = Word.objects.get_or_fetch(entry=word_entry)
             serializer = WordSerializer(word)
             return Response(serializer.data)
 
         except Word.DoesNotExist:
-            try:
-                # Fetch word details from the API
-                word_data = create_word_objects([word_entry])[0]
+            logger.error("Word with entry '%s' not found in database and API call failed", word_entry)
+            return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error("An error occurred while retrieving word details for '%s': %s", word_entry, str(e))
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                if word_data:
-                    # Save word details to the database
-                    serializer = WordSerializer(data=word_data)
-                    if serializer.is_valid():
-                        serializer.save()
-                        return Response(serializer.data, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['GET'], url_path='assessment')
     def get_assessment_words(self, request):
