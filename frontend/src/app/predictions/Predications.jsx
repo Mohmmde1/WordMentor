@@ -15,22 +15,22 @@ const Predictions = () => {
   const [words, setWords] = useState ([]);
   const [loading, setLoading] = useState (true);
 
-  useEffect (
-    () => {
-      // Fetch unknown words from the
-      const fetchWords = async () => {
+  useEffect (() => {
+    const fetchWords = async () => {
+      try {
         const response = await getLastPrediction ();
         console.log (response);
         const fetched_words = response.unknown_words;
         setWords (fetched_words);
-      };
+      } catch (error) {
+        console.error ('Error fetching unknown words:', error);
+      } finally {
+        setLoading (false);
+      }
+    };
 
-      fetchWords ();
-
-      setLoading (false);
-    },
-    []
-  );
+    fetchWords ();
+  }, []);
 
   const removeWord = async wordToRemove => {
     setWords (words.filter (word => word !== wordToRemove));
@@ -71,26 +71,30 @@ const Predictions = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {loading
               ? [...Array (12)].map ((_, index) => (
-                  <Skeleton key={index} className="h-10 w-full" />
+                  <Skeleton key={index} className="h-20 w-full" />
                 ))
-              : words.map (word => (
-                  <Card
-                    key={word}
-                    className="bg-gray-100 dark:bg-gray-800 p-4 flex items-center justify-between"
-                  >
-                    <div className="text-gray-700 dark:text-gray-300 font-medium">
-                      {word}
-                    </div>
-                    <Button
-                      className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                      size="icon"
-                      variant="ghost"
-                      onClick={async () => removeWord (word)}
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </Card>
-                ))}
+              : words.length > 0
+                  ? words.map (word => (
+                      <Card
+                        key={word}
+                        className="bg-gray-100 dark:bg-gray-800 p-4 flex items-center justify-between"
+                      >
+                        <div className="text-gray-700 dark:text-gray-300 font-medium">
+                          {word}
+                        </div>
+                        <Button
+                          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                          size="icon"
+                          variant="ghost"
+                          onClick={async () => removeWord (word)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </Card>
+                    ))
+                  : <div className="text-gray-700 dark:text-gray-300 font-medium">
+                      No unknown words
+                    </div>}
           </div>
         </Card>
 
