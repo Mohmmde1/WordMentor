@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,10 +16,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useRouter } from 'next/navigation';
 import { extract_unknown_words } from '@/lib/actions';
 
 const Selection = ({ noPages, bookId }) => {
+  const router = useRouter();
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const schema = z.object({
     from_page: z.coerce.number().min(1).max(noPages),
@@ -29,17 +34,27 @@ const Selection = ({ noPages, bookId }) => {
     mode: 'onChange',
   });
 
-  const onSubmit = async formData => {
+  const createQueryString = (words) => {
+    const params = new URLSearchParams();
+    params.set('words', JSON.stringify(words));
+    return params.toString();
+  };
+
+  const onSubmit = async (formData) => {
+    setLoading(true);
     try {
-      setError(null); // Clear any previous errors
-      
+      setError(null);
       const data = { ...formData, book_id: bookId };
       console.log('formData', data);
       const result = await extract_unknown_words(data);
-      console.log('result', result); // Handle the result as needed
+      console.log('result', result);
+      // Navigate to the predictions page with the result
+      router.push("/predictions?" + createQueryString(result.unknown_words));
     } catch (error) {
       console.error('An error occurred:', error);
       setError('An error occurred while extracting unknown words.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,7 +98,9 @@ const Selection = ({ noPages, bookId }) => {
           )}
         />
         <DialogFooter>
-          <Button type="submit" className="mt-4">Select</Button>
+          <Button type="submit" className="mt-4" disabled={loading}>
+            {loading ? 'Loading...' : 'Select'}
+          </Button>
         </DialogFooter>
       </form>
       {error && <p className="text-red-500">{error}</p>}
