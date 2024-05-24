@@ -6,8 +6,11 @@ export function middleware(request ) {
   const acessToken = getAccessToken();
   if(!acessToken){
     return NextResponse.redirect(new URL('/', request.url))
-  }
+  } 
   const { pathname } = request.nextUrl
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 }
  
 // See "Matching Paths" below to learn more

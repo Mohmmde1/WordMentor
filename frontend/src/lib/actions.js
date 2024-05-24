@@ -296,3 +296,15 @@ export async function getLastPrediction(){
     throw error;
   }
 }
+
+export async function fetchPredictions(){
+  const profileId = getProfileId();
+  try {
+    const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}

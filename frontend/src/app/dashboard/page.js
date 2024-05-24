@@ -21,10 +21,11 @@ import {
 
 
 import Listing from "./Listing"
-import { fetchBooks } from "@/lib/actions"
+import { fetchBooks, fetchPredictions } from "@/lib/actions"
 
 export default async function Page() {
     const books = await fetchBooks();
+    const predictions = await fetchPredictions();
   return (
     <div className="flex min-h-screen w-full flex-col">
      
@@ -83,8 +84,8 @@ export default async function Page() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-         <Listing books={books}/>
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 ">
+         <Listing books={books} predictions={predictions}/>
           <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
               <CardTitle>Recent Sales</CardTitle>

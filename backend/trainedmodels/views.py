@@ -175,7 +175,45 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+    
+    @action(detail=True, methods=['get'], url_path='predictions')
+    def get_predictions(self, request, pk=None):
+        """
+        Retrieves all predictions made by the user.
+
+        Args:
+            request (Request): The request object.
+
+        Returns:
+            Response: A response with the user's predictions.
+        """
+        try:
+            # Fetch the user's profile
+            profile = Profile.objects.get(id=pk)
+
+            # Fetch all predictions made by the user
+            predictions = Prediction.objects.filter(profile=profile)
+
+            if predictions:
+                data = []
+                for prediction in predictions:
+                    unknown_words = [word.entry for word in prediction.words.all()]
+                    data.append({
+                        "unknown_words": unknown_words,
+                        "book": prediction.book.title,
+                        "from_page": prediction.from_page,
+                        "to_page": prediction.to_page,
+                        "created_at": prediction.created_at
+                    })
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "No predictions found"}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            logger.error("Profile not found")
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
