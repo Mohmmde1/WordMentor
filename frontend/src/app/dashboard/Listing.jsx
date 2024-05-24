@@ -18,49 +18,58 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import {Badge} from '@/components/ui/badge';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {Button} from '@/components/ui/button';
-export default function Listing ({books}) {
+export default function Listing({books}) {
   return (
     <div>
-      <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-        <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle>Books</CardTitle>
-            <CardDescription>
-              Recent books that you have uploaded.
-            </CardDescription>
-          </div>
-          <Button asChild size="sm" className="ml-auto gap-1">
-            <Link href="/books">
-              View All
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Book</TableHead>
-                <TableHead className="text-right">Pages</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-            {books.map((book) =>  (
+      <Tabs defaultValue="books" >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="books">Books</TabsTrigger>
+          <TabsTrigger value="predications">predications</TabsTrigger>
+        </TabsList>
+        <TabsContent value="books">
+          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle>Books</CardTitle>
+                <CardDescription>
+                  Recent books that you have uploaded.
+                </CardDescription>
+              </div>
+              <Button asChild size="sm" className="ml-auto gap-1">
+                <Link href="/books">
+                  View All
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Book</TableHead>
+                    <TableHead className="text-right">Pages</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {books.map (book => (
                     <TableRow key={book.id}>
-                    <TableCell>
+                      <TableCell>
                         <div className="font-medium">{book.title}</div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
-                            mohammed@gmail.com
+                          mohammed@gmail.com
                         </div>
-                    </TableCell><TableCell className="text-right">{book.pages}</TableCell>
+                      </TableCell>
+                      <TableCell className="text-right">{book.pages}</TableCell>
                     </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
