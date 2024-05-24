@@ -1,10 +1,4 @@
 services:
-  redis:
-    container_name: redis
-    image: redis:alpine
-    restart: always
-    expose:
-      - 6379
 
   backend:
     build:
@@ -19,20 +13,6 @@ services:
       - ./backend/.env
  
     
-  # celery:
-  #   build:
-  #     context: ./backend_celery
-  #     dockerfile: ./Dockerfile
-  #   command: celery -A backend_celery worker --uid nobody -l info
-  #   volumes:
-  #     - ./backend_celery:/app/backend_celery
-  #   env_file:
-  #     - ./backend_celery/.env
-  #   environment:
-  #    - HF_HOME=/tmp/transformers_cache
-  #    - TRANSFORMERS_CACHE=/tmp/transformers_cache
-  #    - REDIS_HOST=redis
-  #    - REDIS_PORT=6379
    
 
   frontend:
