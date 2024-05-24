@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'django_extensions',
     'settings',
     'word',
     'assessment',
@@ -203,8 +204,6 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-
-
 # Django caching setting
 CACHES = {
     'default': {
@@ -214,3 +213,7 @@ CACHES = {
 }
 
 CSRF_TRUSTED_ORIGINS = ['https://backend-bvutct6wjq-uc.a.run.app']
+
+GRAPH_MODELS = {
+    'app_labels': ["assessment", "books", "settings", "trainedmodels", "word"],
+}

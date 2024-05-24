@@ -51,7 +51,7 @@ export default function Listing({books, predictions}) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Book</TableHead>
-                    <TableHead className="text-right">Pages</TableHead>
+                    <TableHead className="text-center">Pages</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -63,7 +63,7 @@ export default function Listing({books, predictions}) {
                           Uploaded At: {parseDate(book.created_at)}
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">{book.pages}</TableCell>
+                      <TableCell className="text-center">{book.pages}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -92,7 +92,7 @@ export default function Listing({books, predictions}) {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Predictions</TableHead>
-                    <TableHead className="text-right">No Predicated Words</TableHead>
+                    <TableHead className="text-center">No Predicated Words</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -104,7 +104,7 @@ export default function Listing({books, predictions}) {
                           Predicted At: {parseDate(prediction.created_at)}
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">{prediction.unknown_words.length}</TableCell>
+                      <TableCell className="text-center">{prediction.unknown_words.length}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

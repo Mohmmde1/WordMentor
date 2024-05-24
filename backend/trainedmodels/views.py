@@ -214,6 +214,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
+    
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
