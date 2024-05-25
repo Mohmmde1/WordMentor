@@ -12,8 +12,9 @@ from django.conf import settings
 from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
 from word.models import Word
+from progress_tracking.models import WordProgress
 from books.models import Book
-from trainedmodels.models import TrainedModel, Prediction
+from .models import TrainedModel, Prediction, WordPrediction
 from settings.models import Profile
 from .tasks import fine_tune_bert, check_status
 from .serializers import FineTuneSerializer, PDFUploadSerializer
@@ -124,7 +125,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     logger.error(f"An error occurred: {result['error']}")
                     return Response({"error": result['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 self._save_prediction_metadata(profile=pdf.profile, trained_model_version=pdf.profile.trainedmodel.version,
-                                         unknown_words=result['unknown_words'], book=pdf, from_page=from_page, to_page=to_page)
+                                               unknown_words=result['unknown_words'], book=pdf, from_page=from_page, to_page=to_page)
                 return Response({
                     "unknown_words": result['unknown_words'],
                     "processing_time": result['processing_time']
@@ -159,7 +160,8 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 profile=profile).order_by('-created_at').first()
 
             if last_prediction:
-                unknown_words = [word.entry for word in last_prediction.words.all()]
+                unknown_words = [
+                    word_prediction.word.entry for word_prediction in last_prediction.word_predictions.all()]
                 return Response({
                     "unknown_words": unknown_words,
                     "book": last_prediction.book.title,
@@ -175,7 +177,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
     @action(detail=True, methods=['get'], url_path='predictions')
     def get_predictions(self, request, pk=None):
         """
@@ -197,7 +199,8 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             if predictions:
                 data = []
                 for prediction in predictions:
-                    unknown_words = [word.entry for word in prediction.words.all()]
+                    unknown_words = [
+                        word_prediction.word.entry for word_prediction in prediction.word_predictions.all()]
                     data.append({
                         "unknown_words": unknown_words,
                         "book": prediction.book.title,
@@ -214,8 +217,8 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
-            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
-    
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
@@ -292,7 +295,11 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         Args:
             profile (Profile): The profile of the user.
+            trained_model_version (str): The version of the trained model.
             unknown_words (list): The list of unknown words.
+            book (Book): The book associated with the prediction.
+            from_page (int): The starting page of the prediction.
+            to_page (int): The ending page of the prediction.
 
         Returns:
             None
@@ -301,23 +308,28 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # Create a new Prediction entry
             prediction = Prediction.objects.create(
                 profile=profile,
-                trained_model=trained_model_version,
+                trained_model_version=trained_model_version,
                 book=book,
                 from_page=from_page,
                 to_page=to_page
             )
 
             # Add the words to the prediction
-            for word in unknown_words:
-                word_obj = Word.objects.get_or_fetch(entry=word)
-                prediction.words.add(word_obj)
+            for word_entry in unknown_words:
+                word_obj = Word.objects.get_or_fetch(entry=word_entry)
+                # Assuming 'entry' is the unique field
+                word_prediction = WordPrediction(
+                    word=word_obj, profile=profile, status="unknown", prediction=prediction)
+                word_prediction.save()
+                prediction.word_predictions.add(word_prediction)
+
+            prediction.save()
 
             logger.info(
                 f"Prediction metadata saved for profile ID {profile.id}")
-        except TrainedModel.DoesNotExist:
-            logger.error(f"No trained model found for profile ID {profile.id}")
+
+        except WordProgress.DoesNotExist:
+            logger.error(f"Word '{word_entry}' does not exist")
         except Exception as e:
             logger.error(
                 f"An error occurred while saving prediction metadata: {str(e)}")
-
-    

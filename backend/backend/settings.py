@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'assessment',
     'books',
     'trainedmodels',
+    'progress_tracking',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -215,5 +217,5 @@ CACHES = {
 CSRF_TRUSTED_ORIGINS = ['https://backend-bvutct6wjq-uc.a.run.app']
 
 GRAPH_MODELS = {
-    'app_labels': ["assessment", "books", "settings", "trainedmodels", "word"],
+    'app_labels': ["assessment", "books", "settings", "trainedmodels", "word", 'progress_tracking', 'core'],
 }

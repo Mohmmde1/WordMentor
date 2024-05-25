@@ -15,10 +15,6 @@ class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True)
-    known_words = models.ManyToManyField(
-        Word, related_name='profiles_known', blank=True)
-    unknown_words = models.ManyToManyField(
-        Word, related_name='profiles_unknown', blank=True)
     assessment = models.OneToOneField(Assessment, on_delete=models.SET_NULL, null=True, related_name='profile')
 
     def save(self, *args, **kwargs):
@@ -54,8 +50,8 @@ class Profile(BaseModel):
         """
         Method to generte a dictionary of labled words for the ML model.
         """
-        known_words = self.known_words.values_list('entry', flat=True)
-        unknown_words = self.unknown_words.values_list('entry', flat=True)
+        known_words = self.word_progress.filter(status="unknown").word.values_list('entry', flat=True)
+        unknown_words = self.word_progress.filter(status="known").word.values_list('entry', flat=True)
         labeled_data = {word: 1 for word in known_words}
         
         labeled_data.update({word: 0 for word in unknown_words})

@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 
+from progress_tracking.models import WordProgress
 from settings.models import Profile
-from trainedmodels.models import TrainedModel
 from .models import Assessment
 from .serializers import AssessmentSerializer
 
@@ -32,7 +32,7 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             
             # Retrieve the profile object or raise a NotFound exception if not found
             profile = get_object_or_404(Profile, id=profile_id)
-            print('profile', profile)
+            logger.info('profile', profile)
             # Check if both selected and unselected words are provided
             if not selected_words or not unselected_words:
                 return Response({"error": "Both selected_words and unselected_words are required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -42,16 +42,23 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             serializer = self.get_serializer(assessment)
             
             # Clear the profile's known_words and unknown_words
-            profile.known_words.clear()
-            profile.unknown_words.clear()
+            profile.word_progress.clear()
+            
             
             # Add selected and unselected words to the profile's known_words and unknown_words
-            profile.known_words.add(*selected_words)
-            profile.unknown_words.add(*unselected_words)
+            
+            WordProgress.objects.bulk_create([
+                WordProgress(word=word, profile=profile, status="known") for word in selected_words
+            ])
+            WordProgress.objects.bulk_create([
+                WordProgress(word=word, profile=profile, status="unknown") for word in unselected_words
+            ])
+            
             profile.assessment = assessment
             profile.save()
-            logger.info(f"Profile known words: {profile.known_words.all()}")
-            logger.info(f"Profile unknown words: {profile.unknown_words.all()}")
+            logger.info(f"Profile known words: {profile.word_progress.filter(status='known').all()}")
+            logger.info(f"Profile unknown words: {profile.word_progress.filter(status='unknown').all()}")
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             # Handle IntegrityError if assessment creation fails due to database constraints
