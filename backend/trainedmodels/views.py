@@ -123,7 +123,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 if 'error' in result:
                     logger.error(f"An error occurred: {result['error']}")
                     return Response({"error": result['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                self._save_prediction_metadata(profile=pdf.profile, trained_model=pdf.profile.trainedmodel,
+                self._save_prediction_metadata(profile=pdf.profile, trained_model_version=pdf.profile.trainedmodel.version,
                                          unknown_words=result['unknown_words'], book=pdf, from_page=from_page, to_page=to_page)
                 return Response({
                     "unknown_words": result['unknown_words'],
@@ -203,7 +203,8 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                         "book": prediction.book.title,
                         "from_page": prediction.from_page,
                         "to_page": prediction.to_page,
-                        "created_at": prediction.created_at
+                        "created_at": prediction.created_at,
+                        "trained_model_version": prediction.trained_model_version
                     })
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -285,7 +286,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 'error': str(e)
             }
 
-    def _save_prediction_metadata(self, profile, trained_model, unknown_words, book, from_page, to_page):
+    def _save_prediction_metadata(self, profile, trained_model_version, unknown_words, book, from_page, to_page):
         """
         Saves the prediction metadata to the database.
 
@@ -300,7 +301,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # Create a new Prediction entry
             prediction = Prediction.objects.create(
                 profile=profile,
-                trained_model=trained_model,
+                trained_model=trained_model_version,
                 book=book,
                 from_page=from_page,
                 to_page=to_page

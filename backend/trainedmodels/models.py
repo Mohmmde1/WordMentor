@@ -13,8 +13,8 @@ class TrainedModel(BaseModel):
 
 class Prediction(BaseModel):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="predictions")
-    trained_model = models.ForeignKey(TrainedModel, on_delete=models.CASCADE, related_name="predictions")
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="predictions")
+    trained_model_version = models.CharField(max_length=20)
     from_page = models.IntegerField()
     to_page = models.IntegerField()
     words = models.ManyToManyField(Word)
@@ -24,4 +24,4 @@ class Prediction(BaseModel):
         verbose_name_plural = "Predictions"
 
     def __str__(self):
-        return f"Prediction for {self.profile} using {self.trained_model}"
+        return f"Prediction for {self.profile} using {self.trained_model_version}"
