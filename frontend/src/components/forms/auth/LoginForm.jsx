@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {useRouter} from 'next/navigation';
 
 const loginFormSchema = z.object ({
   email: z.string ().email ({message: 'Invalid email address'}).min (1),
@@ -24,6 +25,7 @@ const loginFormSchema = z.object ({
 });
 
 const LoginForm = ({setIsAuthenticated}) => {
+  const router = useRouter();
   const form = useForm ({
     resolver: zodResolver (loginFormSchema),
     mode: 'onChange',
@@ -34,6 +36,7 @@ const LoginForm = ({setIsAuthenticated}) => {
       await login (formData);
       setIsAuthenticated (true);
       toast ('Login Successfully!');
+      router.push ('/dashboard'); // Redirect to the home page
     } catch (error) {
       // Handle login error
     }

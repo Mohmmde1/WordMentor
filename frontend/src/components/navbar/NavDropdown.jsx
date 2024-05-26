@@ -1,5 +1,5 @@
 import {useRouter} from 'next/navigation';
-import { usePathname } from "next/navigation";
+import {usePathname} from 'next/navigation';
 
 import Link from 'next/link';
 
@@ -55,7 +55,7 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
         <DropdownMenuItem
           asChild
           className={
-            pathname.startsWith('/settings')
+            pathname.startsWith ('/settings')
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline'
           }
@@ -69,9 +69,14 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
           <button
             className="flex w-full"
             onClick={async () => {
-              await logout ();
-              setIsAuthenticated (false);
-              router.push ('/');
+              try {
+                await logout (); 
+                setIsAuthenticated (false); // Update the authentication state
+                router.push ('/'); // Redirect to the home page
+              } catch (error) {
+                console.error ('Error during logout:', error);
+                // Optionally, handle the error state
+              }
             }}
           >
             <LogOut className="mr-2 h-4 w-4" color="red" />

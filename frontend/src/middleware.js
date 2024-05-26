@@ -1,19 +1,30 @@
 import { getAccessToken } from '@/lib/helpers'
 import { NextResponse } from 'next/server'
- 
-// This function can be marked `async` if using `await` inside
-export function middleware(request ) {
-  const acessToken = getAccessToken();
-  if(!acessToken){
-    return NextResponse.redirect(new URL('/', request.url))
-  } 
-  const { pathname } = request.nextUrl
-  if (pathname === '/') {
+
+// Middleware function to handle redirection based on user authentication status
+export function middleware(request) {
+  const accessToken = getAccessToken(request);
+
+  // Get the pathname from the request URL
+  const { pathname } = request.nextUrl;
+  console.log('Pathname:', pathname);
+  // If no access token is found and the user is not already on the home page, redirect to the home page
+  if (!accessToken) {
+    if (pathname !== '/') {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    return NextResponse.next();
+  }
+
+  // If the user is logged in and the pathname is '/', redirect to '/dashboard'
+  if (accessToken && pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
+
+  return NextResponse.next();
 }
- 
-// See "Matching Paths" below to learn more
+
+// Configure middleware to match specific paths
 export const config = {
-  matcher: ['/settings/:path*', '/books', '/home'],
-}
+  matcher: ['/', '/settings/:path*', '/books', '/home'],
+};
