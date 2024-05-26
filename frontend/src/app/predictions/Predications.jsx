@@ -52,7 +52,9 @@ const Predictions = () => {
     setLoading (true);
     try {
       // Handle form submission, such as generating flashcards
-      console.log ('Generating flashcards with words:', words);
+      console.log ('Form data:', formData);
+      console.log('Known words:', knownWords);
+      console.log('Unknown words:', unknownWords);
     } catch (error) {
       console.error ('Error generating flashcards:', error);
     } finally {
