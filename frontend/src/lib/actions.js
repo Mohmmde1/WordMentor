@@ -8,6 +8,7 @@ import setSessionCookies, {
 } from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
+import { parseDate } from './utils';
 
 export async function checkUser () {
   try {
@@ -212,6 +213,11 @@ export async function fetchBooks () {
   const profileId = getProfileId ();
   try {
     const response = await apiService.get (`books/by-profile/${profileId}`);
+    console.log (response);
+    response.forEach(item => {
+      item.created_at = parseDate(item.created_at);
+      item.updated_at = parseDate(item.updated_at);
+    });
     return response;
   } catch (error) {
     console.error ('Error fetching books:', error);

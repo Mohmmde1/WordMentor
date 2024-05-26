@@ -85,7 +85,7 @@ export default function Listing({books, predictions}) {
               </CardDescription>
             </div>
             <Button asChild size="sm" className="ml-auto gap-1">
-              <Link href="/predictions">
+              <Link href="/flashcards">
                 View All
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
