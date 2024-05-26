@@ -307,6 +307,9 @@ export async function fetchPredictions(){
   const profileId = getProfileId();
   try {
     const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    response.forEach(item => {
+      item.created_at = parseDate(item.created_at);
+    });
     console.log(response);
     return response;
   } catch (error) {

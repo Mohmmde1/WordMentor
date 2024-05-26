@@ -20,7 +20,6 @@ import {
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {Button} from '@/components/ui/button';
-import {parseDate} from '@/lib/utils';
 export default function Listing({books, predictions}) {
   return (
     <Tabs defaultValue="books">
@@ -59,7 +58,7 @@ export default function Listing({books, predictions}) {
                         <TableCell>
                           <div className="font-medium">{book.title}</div>
                           <div className="hidden text-sm text-muted-foreground md:inline">
-                            Uploaded At: {parseDate (book.created_at)}
+                            Uploaded At: {book.created_at}
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
@@ -108,7 +107,7 @@ export default function Listing({books, predictions}) {
                         <TableCell>
                           <div className="font-medium">{prediction.book}</div>
                           <div className="hidden text-sm text-muted-foreground md:inline">
-                            Predicted At: {parseDate (prediction.created_at)}
+                            Predicted At: {prediction.created_at}
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
