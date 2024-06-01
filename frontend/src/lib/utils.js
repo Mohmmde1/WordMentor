@@ -35,3 +35,32 @@ export function parseDate (date) {
 
   return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
 }
+// utils.js
+export function parseAndTransformDefinitions(inputString) {
+  // Convert single quotes to double quotes and handle escaped double quotes
+  const doubleQuotedString = inputString.replace(/\\'/g, "'").replace(/'/g, '"');
+  
+  // Parse the string into a JSON object
+  let cardData;
+  try {
+    cardData = JSON.parse(doubleQuotedString);
+  } catch (error) {
+    console.error('Failed to parse JSON:', error);
+    return 'Invalid JSON format';
+  }
+
+  // Format the definitions
+  const definitions = [];
+  for (const [partOfSpeech, definition] of Object.entries(cardData)) {
+    if (definition) {
+      const formattedDefinition = `${capitalizeFirstLetter(partOfSpeech)}: ${definition}`;
+      definitions.push(formattedDefinition);
+    }
+  }
+
+  return definitions.join('\n\n');
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

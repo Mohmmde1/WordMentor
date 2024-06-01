@@ -317,3 +317,15 @@ export async function fetchPredictions(){
     throw error;
   }
 }
+
+export async function getPrediction(predictionId){
+  try {
+
+    const response = await apiService.get(`trainedmodels/prediction/${predictionId}/`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}

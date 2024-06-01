@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
 import { format } from 'date-fns';
-
+import {ChevronRightIcon} from 'lucide-react';
 export default function Collections({predictions}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('newest');
@@ -91,9 +91,9 @@ export default function Collections({predictions}) {
                 <span className="text-gray-500 dark:text-gray-400">
                   {prediction.noFlashcards} flashcards
                 </span>
-                <Link href="#">
+                <a href={`/flashcards/${prediction.id}`}>
                   <ChevronRightIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                </Link>
+                </a>
               </div>
             </div>
           </Card>
@@ -103,21 +103,3 @@ export default function Collections({predictions}) {
   );
 }
 
-function ChevronRightIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
