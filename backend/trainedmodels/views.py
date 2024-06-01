@@ -202,6 +202,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     unknown_words = [
                         word_prediction.word.entry for word_prediction in prediction.word_predictions.all()]
                     data.append({
+                        "id": prediction.id,
                         "unknown_words": unknown_words,
                         "book": prediction.book.title,
                         "from_page": prediction.from_page,
@@ -219,6 +220,38 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(detail=False, methods=['get'], url_path='prediction/(?P<pk>[^/.]+)')
+    def get_prediction(self, request, pk=None):
+        """
+        Retrieves a specific prediction made by the user.
+
+        Args:
+            request (Request): The request object.
+            pk (int): The ID of the prediction.
+
+        Returns:
+            Response: A response with the prediction data.
+        """
+        try:
+            # Fetch the prediction by ID
+            prediction = Prediction.objects.get(id=pk)
+            unknown_words = {
+                word_prediction.word.entry:word_prediction.word.meaning for word_prediction in prediction.word_predictions.all()}
+            return Response({
+                "unknown_words": unknown_words,
+                "book": prediction.book.title,
+                "from_page": prediction.from_page,
+                "to_page": prediction.to_page,
+                "created_at": prediction.created_at,
+                "trained_model_version": prediction.trained_model_version
+            }, status=status.HTTP_200_OK)
+        except Prediction.DoesNotExist:
+            logger.error(f"Prediction with ID {pk} does not exist")
+            return Response({"error": "Prediction not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context

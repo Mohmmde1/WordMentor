@@ -1,6 +1,6 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2024-05-25 15:00
+  // Created: 2024-05-26 23:18
   // Cli Options: -g --dot -o word_mentor_erd.dot
 
   fontname = "Roboto"
@@ -500,6 +500,32 @@ digraph model_graph {
     
       </TABLE>
       >]
+  
+    trainedmodels_models_WordPrediction [label=<
+      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+      WordPrediction
+      </B></FONT></TD></TR>
+    
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Roboto"><B>wordprogress_ptr</B></FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Roboto"><B>OneToOneField (id)</B></FONT>
+      </TD></TR>
+    
+    
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Roboto"><B>prediction</B></FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Roboto"><B>ForeignKey (id)</B></FONT>
+      </TD></TR>
+    
+    
+      </TABLE>
+      >]
 
   }
   subgraph cluster_word {
@@ -760,56 +786,6 @@ digraph model_graph {
     
       </TABLE>
       >]
-  
-    progress_tracking_models_WordPrediction [label=<
-      <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
-      <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
-      <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
-      WordPrediction<BR/>&lt;<FONT FACE="Roboto"><I>BaseModel</I></FONT>&gt;
-      </B></FONT></TD></TR>
-    
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT FACE="Roboto"><B>id</B></FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT FACE="Roboto"><B>BigAutoField</B></FONT>
-      </TD></TR>
-    
-    
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT FACE="Roboto"><B>prediction</B></FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT FACE="Roboto"><B>ForeignKey (id)</B></FONT>
-      </TD></TR>
-    
-    
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT FACE="Roboto"><B>word</B></FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT FACE="Roboto"><B>ForeignKey (id)</B></FONT>
-      </TD></TR>
-    
-    
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT COLOR="#7B7B7B" FACE="Roboto"><I>created_at</I></FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT COLOR="#7B7B7B" FACE="Roboto"><I>DateTimeField</I></FONT>
-      </TD></TR>
-    
-    
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT COLOR="#7B7B7B" FACE="Roboto"><I>updated_at</I></FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT COLOR="#7B7B7B" FACE="Roboto"><I>DateTimeField</I></FONT>
-      </TD></TR>
-    
-    
-      </TABLE>
-      >]
 
   }
 
@@ -858,6 +834,12 @@ digraph model_graph {
   trainedmodels_models_Prediction -> core_models_BaseModel
   [label=" abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
 
+  trainedmodels_models_WordPrediction -> trainedmodels_models_Prediction
+  [label=" prediction (word_predictions)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  trainedmodels_models_WordPrediction -> progress_tracking_models_WordProgress
+  [label=" multi-table\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
+
 
   word_models_Word -> core_models_BaseModel
   [label=" abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
@@ -870,15 +852,6 @@ digraph model_graph {
   [label=" profile (word_progress)"] [arrowhead=none, arrowtail=dot, dir=both];
 
   progress_tracking_models_WordProgress -> core_models_BaseModel
-  [label=" abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
-
-  progress_tracking_models_WordPrediction -> trainedmodels_models_Prediction
-  [label=" prediction (word_predictions)"] [arrowhead=none, arrowtail=dot, dir=both];
-
-  progress_tracking_models_WordPrediction -> progress_tracking_models_WordProgress
-  [label=" word (word_progress_predictions)"] [arrowhead=none, arrowtail=dot, dir=both];
-
-  progress_tracking_models_WordPrediction -> core_models_BaseModel
   [label=" abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
 
 
