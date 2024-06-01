@@ -3,7 +3,7 @@ import {usePathname} from 'next/navigation';
 
 import Link from 'next/link';
 
-import {LogOut, Settings, LibraryBig} from 'lucide-react';
+import {LogOut, Settings, LibraryBig, PercentDiamondIcon} from 'lucide-react';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {logout} from '@/lib/actions';
 import {
@@ -49,6 +49,21 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
             <LibraryBig className="mr-2 h-4 w-4" />
 
             <span>Books</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className={
+            pathname === '/flashcards'
+              ? 'bg-muted hover:bg-muted'
+              : 'hover:bg-transparent hover:underline'
+          }
+        >
+
+          <Link href="/flashcards">
+            <PercentDiamondIcon className="mr-2 h-4 w-4" />
+
+            <span>Predictions</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
