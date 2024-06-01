@@ -163,6 +163,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 unknown_words = [
                     word_prediction.word.entry for word_prediction in last_prediction.word_predictions.all()]
                 return Response({
+                    "id": last_prediction.id,
                     "unknown_words": unknown_words,
                     "book": last_prediction.book.title,
                     "from_page": last_prediction.from_page,
@@ -236,7 +237,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             # Fetch the prediction by ID
             prediction = Prediction.objects.get(id=pk)
             unknown_words = {
-                word_prediction.word.entry:word_prediction.word.meaning for word_prediction in prediction.word_predictions.all()}
+                word_prediction.word.entry:word_prediction.word.meaning for word_prediction in prediction.word_predictions.all().filter(status="unknown")}
             return Response({
                 "unknown_words": unknown_words,
                 "book": prediction.book.title,
@@ -252,6 +253,37 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+    @action(detail=False, methods=['put'], url_path='update-word-status/(?P<pk>[^/.]+)')
+    def update_word_status(self, request, pk=None):
+        """
+        Updates the status of a word in a prediction.
+
+        Args:
+            request (Request): The request object containing the new status.
+            pk (int): The ID of the word prediction.
+
+        Returns:
+            Response: A response indicating the status has been updated.
+        """
+        word_status = request.data.get('status')
+        prediction = request.data.get('prediction')
+        logger.info(f"Updating status of word prediction with ID {pk} to {word_status}")
+        try:
+            word_id = Word.objects.get(entry=pk).id
+            # Fetch the word prediction by ID
+            word_prediction = WordPrediction.objects.get(word=word_id, prediction=prediction)
+            word_prediction.status = word_status
+            word_prediction.save()
+            logger.info(f"Status updated for word prediction with ID {pk}")
+            return Response({"message": "Status updated"}, status=status.HTTP_200_OK)
+        except WordPrediction.DoesNotExist:
+            logger.error(f"Word prediction with ID {pk} does not exist")
+            return Response({"error": "Word prediction not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
     def _extract_unknown_words(self, pdf_path, from_page, to_page):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context

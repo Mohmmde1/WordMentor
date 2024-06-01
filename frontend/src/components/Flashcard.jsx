@@ -104,7 +104,7 @@ const Flashcard = ({ cardData }) => {
           </div>
           <div className="flip-card-back w-[100%] h-[100%] 
            rounded-lg p-4 flex justify-center items-center">
-            <div className="text-3xl sm:text-4xl md:text-sm lg:text-xl ">{cardBack}</div>
+            <div className="text-3xl sm:text-4xl md:text-sm  ">{cardBack}</div>
           </div>
         </motion.div>
       </Card>

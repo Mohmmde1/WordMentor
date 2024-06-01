@@ -46,7 +46,7 @@ export function parseAndTransformDefinitions(inputString) {
     cardData = JSON.parse(doubleQuotedString);
   } catch (error) {
     console.error('Failed to parse JSON:', error);
-    return 'Invalid JSON format';
+    return 'Not Found';
   }
 
   // Format the definitions

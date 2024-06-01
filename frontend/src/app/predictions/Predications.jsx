@@ -9,9 +9,11 @@ import {Card, CardDescription} from '@/components/ui/card';
 import {X, ChevronLeft, ChevronRight} from 'lucide-react';
 import {Form} from '@/components/ui/form';
 import {Skeleton} from '@/components/ui/skeleton';
-import {addToKnownWords, getLastPrediction} from '@/lib/actions';
-
+import {addToKnownWords, getLastPrediction, updateWordStatus} from '@/lib/actions';
+import { useRouter } from 'next/navigation';
 const Predictions = () => {
+  const router = useRouter ();
+  const [predictionId, setPredictionId] = useState (null);
   const [unknownWords, setUnknownWords] = useState ([]);
   const [knownWords, setknownWords] = useState ([]);
   const [loading, setLoading] = useState (true);
@@ -22,6 +24,7 @@ const Predictions = () => {
         const response = await getLastPrediction ();
         console.log (response);
         const fetched_words = response.unknown_words;
+        setPredictionId (response.id);
         setUnknownWords (fetched_words);
       } catch (error) {
         console.error ('Error fetching unknown words:', error);
@@ -33,11 +36,12 @@ const Predictions = () => {
     fetchWords ();
   }, []);
 
-  const moveToKnown = async wordToRemove => {
+
+  const moveToKnown =  wordToRemove => {
     setUnknownWords (unknownWords.filter (word => word !== wordToRemove));
     setknownWords ([...knownWords, wordToRemove]);
   };
-  const moveToUnknown = async wordToRemove => {
+  const moveToUnknown =  wordToRemove => {
     setknownWords (knownWords.filter (word => word !== wordToRemove));
     setUnknownWords ([...unknownWords, wordToRemove]);
   };
@@ -55,6 +59,14 @@ const Predictions = () => {
       console.log ('Form data:', formData);
       console.log('Known words:', knownWords);
       console.log('Unknown words:', unknownWords);
+
+      // Add known words to the database
+      knownWords.forEach(async word => {
+        await updateWordStatus(word, "known", predictionId );
+      });
+
+      router.push(`/flashcards/${predictionId}`)
+      
     } catch (error) {
       console.error ('Error generating flashcards:', error);
     } finally {

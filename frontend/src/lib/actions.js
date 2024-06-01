@@ -329,3 +329,14 @@ export async function getPrediction(predictionId){
     throw error;
   }
 }
+
+export async function updateWordStatus(wordId, status, predictionId){
+  try {
+    const response = await apiService.postUpdate(`trainedmodels/update-word-status/${wordId}/`, JSON.stringify({"status":status, "prediction":predictionId}), "PUT");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}
