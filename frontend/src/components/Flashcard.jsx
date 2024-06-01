@@ -87,7 +87,7 @@ const Flashcard = ({ cardData }) => {
   return (
     <div className="flex flex-col items-center justify-center space-y-4">
       <Card
-        className="flip-card w-full h-[328px] max-w-[816px] md:h-[428px]"
+        className="flip-card w-full h-[328px] max-w-[816px] md:w-[500px] md:h-[200px] "
         onClick={handleFlip}
       >
         {/* Flashcard */}
@@ -104,7 +104,7 @@ const Flashcard = ({ cardData }) => {
           </div>
           <div className="flip-card-back w-[100%] h-[100%] 
            rounded-lg p-4 flex justify-center items-center">
-            <div className="text-3xl sm:text-4xl">{cardBack}</div>
+            <div className="text-3xl sm:text-4xl md:text-sm lg:text-xl ">{cardBack}</div>
           </div>
         </motion.div>
       </Card>
