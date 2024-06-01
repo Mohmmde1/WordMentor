@@ -3,6 +3,7 @@
 import { getPrediction } from "@/lib/actions";
 import { useEffect, useState } from "react";
 import Flashcard from '@/components/Flashcard';
+import { parseAndTransformDefinitions } from "@/lib/utils";
 
 export default function FlashcardPage({ params }) {
   const { predictionId } = params;
@@ -20,7 +21,7 @@ export default function FlashcardPage({ params }) {
             console.log(`Parsing definitions for word "${word}":`, definitions);
             return {
               word,
-              definitions: definitions
+              definitions: parseAndTransformDefinitions(definitions)
             };
           } catch (e) {
             console.error(`Error parsing definitions for word "${word}":`, e);

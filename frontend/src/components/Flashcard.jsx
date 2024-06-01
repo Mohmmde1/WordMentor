@@ -6,7 +6,6 @@ import { FaForward, FaBackward } from 'react-icons/fa';
 
 import { Button } from '@/components/ui/button';
 import {Card} from '@/components/ui/card';
-import { parseAndTransformDefinitions } from '@/lib/utils';
 
 
 const Flashcard = ({ cardData }) => {
@@ -23,7 +22,7 @@ const Flashcard = ({ cardData }) => {
   useEffect(() => {
     console.log(currentCard, currentCard.definitions)
     setTimeout(() => {
-      setCardBack(parseAndTransformDefinitions(currentCard.definitions));
+      setCardBack(currentCard.definitions);
     }, 150);
   }, [currentIndex]);
 
