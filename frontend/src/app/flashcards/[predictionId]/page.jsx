@@ -1,54 +1,45 @@
-'use client';
-
-import {getPrediction} from '@/lib/actions';
-import {useEffect, useState} from 'react';
+'use client'
+import { getPrediction } from '@/lib/actions';
+import { useEffect, useState } from 'react';
 import Flashcard from '@/components/Flashcard';
-import {parseAndTransformDefinitions} from '@/lib/utils';
-import {Card} from '@/components/ui/card';
+import { parseAndTransformDefinitions } from '@/lib/utils';
+import { Card } from '@/components/ui/card';
 import Link from 'next/link';
-import {ArrowLeft} from 'lucide-react'
+import { ArrowLeft } from 'lucide-react';
 
-export default function FlashcardPage({params}) {
-  const {predictionId} = params;
-  const [prediction, setPrediction] = useState (null);
-  const [flashcards, setFlashcards] = useState ([]);
-  const [error, setError] = useState (null);
+export default function FlashcardPage({ params }) {
+  const { predictionId } = params;
+  const [prediction, setPrediction] = useState(null);
+  const [flashcards, setFlashcards] = useState([]);
+  const [error, setError] = useState(null);
 
-  useEffect (
-    () => {
-      getPrediction (predictionId)
-        .then (data => {
-          setPrediction (data);
+  useEffect(() => {
+    getPrediction(predictionId)
+      .then(data => {
+        setPrediction(data);
 
-          const flashcardData = Object.entries (
-            data.unknown_words
-          ).map (([word, definitions]) => {
-            try {
-              return {
-                word,
-                definitions: parseAndTransformDefinitions (definitions),
-              };
-            } catch (e) {
-              console.error (
-                `Error parsing definitions for word "${word}":`,
-                e
-              );
-              setError (`Error parsing definitions for word "${word}"`);
-              return {
-                word,
-                definitions: {},
-              };
-            }
-          });
-          setFlashcards (flashcardData);
-        })
-        .catch (error => {
-          console.error ('Error fetching prediction:', error);
-          setError ('Failed to fetch prediction data.');
+        const flashcardData = Object.entries(data.unknown_words).map(([word, definitions]) => {
+          try {
+            return {
+              word,
+              definitions: parseAndTransformDefinitions(definitions),
+            };
+          } catch (e) {
+            console.error(`Error parsing definitions for word "${word}":`, e);
+            setError(`Error parsing definitions for word "${word}"`);
+            return {
+              word,
+              definitions: {},
+            };
+          }
         });
-    },
-    [predictionId]
-  );
+        setFlashcards(flashcardData);
+      })
+      .catch(error => {
+        console.error('Error fetching prediction:', error);
+        setError('Failed to fetch prediction data.');
+      });
+  }, [predictionId]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -70,13 +61,13 @@ export default function FlashcardPage({params}) {
             <ArrowLeft /> Back
           </Link>
           <h1 className="text-2xl sm:text-4xl font-bold">{prediction.title}</h1>
-          {/* <p className="text-neutral-400 font-semibold">
-            Lesson {lesson.lessonNumber}: {lesson.lessonTitle} ({lesson.lessonPages})
-          </p> */}
         </div>
 
-        {/* Flashcard Component */}
-        <Flashcard cardData={flashcards} />
+        {flashcards.length > 0 ? (
+          <Flashcard cardData={flashcards} />
+        ) : (
+          <p>No flashcards available for this prediction.</p>
+        )}
       </div>
 
       <section className="space-y-5">
@@ -93,7 +84,6 @@ export default function FlashcardPage({params}) {
           ))}
         </ul>
       </section>
-
     </div>
   );
 }

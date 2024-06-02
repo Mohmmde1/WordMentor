@@ -50,11 +50,19 @@ class Profile(BaseModel):
         """
         Method to generte a dictionary of labled words for the ML model.
         """
-        known_words = self.word_progress.filter(status="unknown").word.values_list('entry', flat=True)
-        unknown_words = self.word_progress.filter(status="known").word.values_list('entry', flat=True)
-        labeled_data = {word: 1 for word in known_words}
+        # Get the IDs of words with status "unknown"
+        unknown_word_ids = self.word_progress.filter(status="unknown").values_list('word', flat=True)
+        unknown_words = Word.objects.filter(id__in=unknown_word_ids)
+        unknown_word_entries = unknown_words.values_list('entry', flat=True)
+
+        # Get the IDs of words with status "known"
+        known_word_ids = self.word_progress.filter(status="known").values_list('word', flat=True)
+        known_words = Word.objects.filter(id__in=known_word_ids)
+        known_word_entries = known_words.values_list('entry', flat=True)
         
-        labeled_data.update({word: 0 for word in unknown_words})
+        # Create a dictionary with the words as keys and their labels as values
+        labeled_data = {word: 1 for word in known_word_entries}
+        labeled_data.update({word: 0 for word in unknown_word_entries})
         return labeled_data
 
     def __str__(self):
