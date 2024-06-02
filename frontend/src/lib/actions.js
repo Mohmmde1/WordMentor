@@ -8,6 +8,7 @@ import setSessionCookies, {
 } from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
+import { parseDate } from './utils';
 
 export async function checkUser () {
   try {
@@ -212,6 +213,11 @@ export async function fetchBooks () {
   const profileId = getProfileId ();
   try {
     const response = await apiService.get (`books/by-profile/${profileId}`);
+    console.log (response);
+    response.forEach(item => {
+      item.created_at = parseDate(item.created_at);
+      item.updated_at = parseDate(item.updated_at);
+    });
     return response;
   } catch (error) {
     console.error ('Error fetching books:', error);
@@ -293,6 +299,44 @@ export async function getLastPrediction(){
     return response;
   } catch (error) {
     console.error("Error uploading file:", error);
+    throw error;
+  }
+}
+
+export async function fetchPredictions(){
+  const profileId = getProfileId();
+  try {
+    const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    response.forEach(item => {
+      item.created_at = parseDate(item.created_at);
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}
+
+export async function getPrediction(predictionId){
+  try {
+
+    const response = await apiService.get(`trainedmodels/prediction/${predictionId}/`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    throw error;
+  }
+}
+
+export async function updateWordStatus(wordId, status, predictionId){
+  try {
+    const response = await apiService.postUpdate(`trainedmodels/update-word-status/${wordId}/`, JSON.stringify({"status":status, "prediction":predictionId}), "PUT");
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching books:", error);
     throw error;
   }
 }

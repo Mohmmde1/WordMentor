@@ -5,36 +5,30 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Toggle } from "@/components/ui/toggle"
 
 export function ModeToggle() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   return (
-    <DropdownMenu asChild>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="focus:outline-none bg-inherit border-none clicked:border-none focus:border-none hover:bg-inherit">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 hover:text-white" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"  />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex items-center">
+      <Toggle
+        pressed={theme === "dark"}
+        onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
+        className="relative flex items-center justify-center p-2 focus:outline-none bg-inherit border-none clicked:border-none focus:border-none hover:bg-inherit transition-transform duration-300 ease-in-out transform hover:scale-110"
+      >
+        <Sun
+          className={`h-[1.2rem] w-[1.2rem] transition-all duration-300 ${
+            theme === "dark" ? "rotate-90 scale-0" : "rotate-0 scale-100"
+          }`}
+        />
+        <Moon
+          className={`absolute h-[1.2rem] w-[1.2rem] transition-all duration-300 ${
+            theme === "dark" ? "rotate-0 scale-100" : "-rotate-90 scale-0"
+          }`}
+        />
+        <span className="sr-only">Toggle theme</span>
+      </Toggle>
+    </div>
   )
-} 
+}

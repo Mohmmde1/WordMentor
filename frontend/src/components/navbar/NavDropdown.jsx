@@ -1,9 +1,9 @@
 import {useRouter} from 'next/navigation';
-import { usePathname } from "next/navigation";
+import {usePathname} from 'next/navigation';
 
 import Link from 'next/link';
 
-import {LogOut, Settings, LibraryBig} from 'lucide-react';
+import {LogOut, Settings, LibraryBig, PercentDiamondIcon} from 'lucide-react';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {logout} from '@/lib/actions';
 import {
@@ -51,11 +51,26 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
             <span>Books</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className={
+            pathname === '/flashcards'
+              ? 'bg-muted hover:bg-muted'
+              : 'hover:bg-transparent hover:underline'
+          }
+        >
+
+          <Link href="/flashcards">
+            <PercentDiamondIcon className="mr-2 h-4 w-4" />
+
+            <span>Predictions</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           asChild
           className={
-            pathname.startsWith('/settings')
+            pathname.startsWith ('/settings')
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline'
           }
@@ -69,9 +84,14 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
           <button
             className="flex w-full"
             onClick={async () => {
-              await logout ();
-              setIsAuthenticated (false);
-              router.push ('/');
+              try {
+                await logout (); 
+                setIsAuthenticated (false); // Update the authentication state
+                router.push ('/'); // Redirect to the home page
+              } catch (error) {
+                console.error ('Error during logout:', error);
+                // Optionally, handle the error state
+              }
             }}
           >
             <LogOut className="mr-2 h-4 w-4" color="red" />

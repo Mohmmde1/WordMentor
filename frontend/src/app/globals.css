@@ -75,4 +75,24 @@
     }
   }
 
+/* Flashcard Animation Start */
+.flip-card {
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  transition: transform 0.1s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateX(180deg);
+}
+/* Flashcard Animation End */
 

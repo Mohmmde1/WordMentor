@@ -16,15 +16,15 @@ pillow = "*"
 python-dotenv = "*"
 firebase-admin = "*"
 pypdf2 = "*"
-celery = "*"
-redis = "*"
-django-celery-results = "*"
 torch = "*"
 transformers = "*"
 dj-database-url = "*"
 nltk = "*"
 
 [dev-packages]
+django-extensions = "*"
+graphviz = "*"
+pygraphviz = "*"
 
 [requires]
 python_version = "3.12"
