@@ -19,7 +19,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-
+import { ScrollArea } from '@/components/ui/scroll-area';
 export default function Listing({ books = [], predictions = [] }) {
   return (
     <Tabs defaultValue="books"  >
@@ -44,6 +44,7 @@ export default function Listing({ books = [], predictions = [] }) {
             </Button>
           </CardHeader>
           <CardContent >
+          <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
             <Table >
               <TableHeader>
                 <TableRow>
@@ -75,6 +76,7 @@ export default function Listing({ books = [], predictions = [] }) {
                 )}
               </TableBody>
             </Table>
+            </ScrollArea>
           </CardContent>
         </Card>
       </TabsContent>
@@ -95,6 +97,7 @@ export default function Listing({ books = [], predictions = [] }) {
             </Button>
           </CardHeader>
           <CardContent>
+          <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -126,6 +129,7 @@ export default function Listing({ books = [], predictions = [] }) {
                 )}
               </TableBody>
             </Table>
+            </ScrollArea>
           </CardContent>
         </Card>
       </TabsContent>

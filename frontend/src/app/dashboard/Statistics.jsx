@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Book, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 
-export default function LearningStatistics() {
+export default function LearningStatistics({noKnown=0, noUnknown=0}) {
     return (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
             <Card x-chunk="learning-01-chunk-0">
@@ -12,7 +12,7 @@ export default function LearningStatistics() {
                     <CheckCircle className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">1,250</div>
+                    <div className="text-2xl font-bold">{noKnown}</div>
                     <p className="text-xs text-muted-foreground">
                         +150 from last week
                     </p>
@@ -26,7 +26,7 @@ export default function LearningStatistics() {
                     <Book className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">430</div>
+                    <div className="text-2xl font-bold">{noUnknown}</div>
                     <p className="text-xs text-muted-foreground">
                         -50 from last week
                     </p>
