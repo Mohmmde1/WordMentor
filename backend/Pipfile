@@ -20,6 +20,7 @@ torch = "*"
 transformers = "*"
 dj-database-url = "*"
 nltk = "*"
+drf-yasg = "*"
 
 [dev-packages]
 django-extensions = "*"

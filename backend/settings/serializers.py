@@ -4,7 +4,7 @@ from rest_framework import serializers
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
     avatar_url = serializers.SerializerMethodField()
     has_taken_assessment = serializers.BooleanField()
 
