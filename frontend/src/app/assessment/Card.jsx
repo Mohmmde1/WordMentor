@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { submitAssessment } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 import {toast} from "sonner";
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 
 const VocabularyAssessment = ({ words }) => {
@@ -78,19 +80,21 @@ const VocabularyAssessment = ({ words }) => {
                 <CardContent>
                     <div className="grid grid-cols-3 gap-4">
                         {displayedWords.map((word) => (
-                            <div key={word.id}>
+                            <div key={word.id} className='space-x-4'>
                                 <input
-                                type="checkbox"
-                                    id={word.id}
+                                    type="checkbox"
+                                    id={`checkbox-${word.id}`}
                                     checked={selectedWords.includes(word.id)}
                                     onChange={() => handleCheckboxChange(word.id)}
+                                    className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                                 />
-                                <label
+
+                                <Label
                                     htmlFor={word.id} // Use unique id for each label
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ml-2"
+
                                 >
-                                    {word.entry}
-                                </label>
+                                   {word.entry}
+                                </Label>
                             </div>
                         ))}
                     </div>

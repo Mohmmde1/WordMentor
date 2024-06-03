@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 
+from word.models import Word
 from progress_tracking.models import WordProgress
 from settings.models import Profile
 from .models import Assessment
@@ -41,19 +42,22 @@ class AssessmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             assessment = Assessment.objects.create()
             serializer = self.get_serializer(assessment)
             
-            # Clear the profile's known_words and unknown_words
-            profile.word_progress.clear()
+            # Delete all related WordProgress objects
+            profile.word_progress.all().delete()
             
+             # Retrieve Word instances for selected and unselected words
+            selected_word_objects = Word.objects.filter(id__in=selected_words)
+            unselected_word_objects = Word.objects.filter(id__in=unselected_words)
             
             # Add selected and unselected words to the profile's known_words and unknown_words
-            
             WordProgress.objects.bulk_create([
-                WordProgress(word=word, profile=profile, status="known") for word in selected_words
+                WordProgress(word=word, profile=profile, status="known") for word in selected_word_objects
             ])
             WordProgress.objects.bulk_create([
-                WordProgress(word=word, profile=profile, status="unknown") for word in unselected_words
+                WordProgress(word=word, profile=profile, status="unknown") for word in unselected_word_objects
             ])
             
+            # Update the profile's assessment field
             profile.assessment = assessment
             profile.save()
             logger.info(f"Profile known words: {profile.word_progress.filter(status='known').all()}")
