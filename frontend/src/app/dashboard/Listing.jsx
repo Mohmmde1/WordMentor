@@ -120,7 +120,7 @@ export default function Listing({ books = [], predictions = [] }) {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={2} className="text-center">
-                      No unknown words
+                      No predictions have been predicted.
                     </TableCell>
                   </TableRow>
                 )}

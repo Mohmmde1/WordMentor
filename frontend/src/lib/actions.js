@@ -10,6 +10,7 @@ import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
 import { parseDate } from './utils';
 
+
 export async function checkUser () {
   try {
     const userId = getUserId ();
@@ -340,5 +341,40 @@ export async function updateWordStatus(wordId, status, predictionId){
   } catch (error) {
     console.error("Error fetching books:", error);
     throw error;
+  }
+}
+
+export async function fetchWords() {
+  try {
+    const response = await apiService.get('progress/');
+
+
+    // Initialize arrays for known and unknown words
+    const knownWords = [];
+    const unknownWords = [];
+
+    // Iterate through the data and categorize words as known or unknown
+    response.forEach(item => {
+      
+      if (item.status === 'known') {
+        const wordData = {
+          word: item.word.entry,
+          learned_at: parseDate(item.created_at)
+        };
+        knownWords.push(wordData);
+      } else {
+        const wordData = {
+          word: item.word.entry,
+          added_at: parseDate(item.created_at)
+        };
+        unknownWords.push(wordData);
+      }
+    });
+
+    // Return the categorized words
+    return { knownWords, unknownWords };
+  } catch (error) {
+    console.error('Error fetching words:', error);
+    throw error; // Re-throw the error to be caught by the caller
   }
 }
