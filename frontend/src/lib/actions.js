@@ -213,7 +213,7 @@ export async function fetchBooks () {
   const profileId = getProfileId ();
   try {
     const response = await apiService.get (`books/by-profile/${profileId}`);
-    console.log (response);
+    console.log (`response: ${response}`);
     response.forEach(item => {
       item.created_at = parseDate(item.created_at);
       item.updated_at = parseDate(item.updated_at);
@@ -307,6 +307,8 @@ export async function fetchPredictions(){
   const profileId = getProfileId();
   try {
     const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    if(response.message) return [];
+    
     response.forEach(item => {
       item.created_at = parseDate(item.created_at);
     });

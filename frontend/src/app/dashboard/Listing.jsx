@@ -6,8 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-import {ArrowUpRight} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 import {
@@ -18,17 +17,18 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {Button} from '@/components/ui/button';
-export default function Listing({books, predictions}) {
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+
+export default function Listing({ books = [], predictions = [] }) {
   return (
-    <Tabs defaultValue="books">
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs defaultValue="books"  >
+      <TabsList className="grid w-full grid-cols-2 ">
         <TabsTrigger value="books">Books</TabsTrigger>
         <TabsTrigger value="predictions">Predictions</TabsTrigger>
       </TabsList>
-      <TabsContent value="books">
-        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+      <TabsContent value="books" className=' h-full'>
+        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4  ">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Books</CardTitle>
@@ -43,39 +43,43 @@ export default function Listing({books, predictions}) {
               </Link>
             </Button>
           </CardHeader>
-          <CardContent>
-            <Table>
+          <CardContent >
+            <Table >
               <TableHeader>
                 <TableRow>
                   <TableHead>Book</TableHead>
                   <TableHead className="text-center">Pages</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {books.length > 0
-                  ? books.slice (0, 5).map (book => (
-                      <TableRow key={book.id}>
-                        <TableCell>
-                          <div className="font-medium">{book.title}</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            Uploaded At: {book.created_at}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {book.pages}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  : <TableRow className="mt-3 text-right text-gray-700  dark:text-gray-300 font-medium">
+              <TableBody >
+                {books.length > 0 ? (
+                  books.slice(0, 5).map((book) => (
+                    <TableRow key={book.id}>
+                      <TableCell>
+                        <div className="font-medium">{book.title}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">
+                          Uploaded At: {book.created_at}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {book.pages}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={2} className="text-center">
                       No books uploaded
-                    </TableRow>}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="predictions">
-        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+      <TabsContent value="predictions" className=' h-full'>
+        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Predictions</CardTitle>
@@ -95,29 +99,31 @@ export default function Listing({books, predictions}) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Predictions</TableHead>
-                  <TableHead className="text-center">
-                    No Predicated Words
-                  </TableHead>
+                  <TableHead className="text-center">No Predicated Words</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {predictions.length > 0
-                  ? predictions.slice (0, 5).map ((prediction, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="font-medium">{prediction.book}</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            Predicted At: {prediction.created_at}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {prediction.unknown_words.length}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  : <TableRow className="text-right text-gray-700  dark:text-gray-300 font-medium grid-cols-2 border" >
+                {predictions.length > 0 ? (
+                  predictions.slice(0, 5).map((prediction, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <div className="font-medium">{prediction.book}</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">
+                          Predicted At: {prediction.created_at}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {prediction.unknown_words.length}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={2} className="text-center">
                       No unknown words
-                    </TableRow>}
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </CardContent>
