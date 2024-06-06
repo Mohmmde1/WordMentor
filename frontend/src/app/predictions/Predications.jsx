@@ -53,27 +53,26 @@ const Predictions = () => {
   });
 
   const onSubmit = async formData => {
-    setLoading (true);
+    setLoading(true);
     try {
       // Handle form submission, such as generating flashcards
-      console.log ('Form data:', formData);
+      console.log('Form data:', formData);
       console.log('Known words:', knownWords);
       console.log('Unknown words:', unknownWords);
-
-      // Add known words to the database
-      knownWords.forEach(async word => {
-        await updateWordStatus(word, "known", predictionId );
-      });
-
-      router.push(`/flashcards/${predictionId}`)
-      
+  
+      // Add known words to the database and wait for all updates to complete
+      const updatePromises = knownWords.map(word => updateWordStatus(word, "known", predictionId));
+      await Promise.all(updatePromises);
+  
+      // Navigate to the flashcards page after all updates are done
+      router.push(`/flashcards/${predictionId}`);
     } catch (error) {
-      console.error ('Error generating flashcards:', error);
+      console.error('Error generating flashcards:', error);
     } finally {
-      setLoading (false);
+      setLoading(false);
     }
   };
-
+  
   return (
     <main className=" container mx-auto py-12 px-4 md:px-6 ">
       <div className="flex  justify-between space-x-2">
