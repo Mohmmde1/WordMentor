@@ -27,8 +27,8 @@ export default function Listing({ books = [], predictions = [] }) {
         <TabsTrigger value="books">Books</TabsTrigger>
         <TabsTrigger value="predictions">Predictions</TabsTrigger>
       </TabsList>
-      <TabsContent value="books" className=' h-full'>
-        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4  ">
+      <TabsContent value="books" >
+        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4  ">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Books</CardTitle>
@@ -80,8 +80,8 @@ export default function Listing({ books = [], predictions = [] }) {
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="predictions" className=' h-full'>
-        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4">
+      <TabsContent value="predictions" >
+        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Predictions</CardTitle>

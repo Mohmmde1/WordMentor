@@ -29,9 +29,9 @@ export default function WordsListing({knownWords, unknownWords}) {
         <TabsTrigger value="unknown-words">Unknown Words</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="known-words" className="h-full">
+      <TabsContent value="known-words" >
 
-        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4">
+        <Card className="xl:col-span-2 " x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Known Words</CardTitle>
@@ -74,8 +74,8 @@ export default function WordsListing({knownWords, unknownWords}) {
         </Card>
 
       </TabsContent>
-      <TabsContent value="unknown-words" className="h-full">
-        <Card className="xl:col-span-2 h-full" x-chunk="dashboard-01-chunk-4">
+      <TabsContent value="unknown-words" >
+        <Card className="xl:col-span-2 " x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle>Unknown Words</CardTitle>
