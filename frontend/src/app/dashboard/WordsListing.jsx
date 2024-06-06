@@ -9,8 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import {ArrowUpRight} from 'lucide-react';
-import Link from 'next/link';
+
 
 import {
   Card,
@@ -21,7 +20,6 @@ import {
 } from '@/components/ui/card';
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {Button} from '@/components/ui/button';
 
 export default function WordsListing({knownWords, unknownWords}) {
   return (
@@ -41,12 +39,7 @@ export default function WordsListing({knownWords, unknownWords}) {
                 Words you already know.
               </CardDescription>
             </div>
-            <Button asChild size="sm" className="ml-auto gap-1">
-              <Link href="/known-words">
-                View All
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </Button>
+  
           </CardHeader>
           <CardContent>
 
@@ -90,12 +83,6 @@ export default function WordsListing({knownWords, unknownWords}) {
                 Words you need to learn.
               </CardDescription>
             </div>
-            <Button asChild size="sm" className="ml-auto gap-1">
-              <Link href="/unknown-words">
-                View All
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </Button>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
