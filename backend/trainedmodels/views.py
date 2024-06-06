@@ -119,7 +119,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
                 # Extract unknown words using the custom function
                 result = self._extract_unknown_words(
-                    pdf_path, from_page, to_page)
+                    pdf_path, from_page, to_page, request.user)
 
                 if 'error' in result:
                     logger.error(f"An error occurred: {result['error']}")
@@ -284,13 +284,16 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
-    def _extract_unknown_words(self, pdf_path, from_page, to_page):
+    def _extract_unknown_words(self, pdf_path, from_page, to_page, user):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
 
         nltk_data_path = os.path.join(settings.BASE_DIR, 'nltk_data')
         os.makedirs(nltk_data_path, exist_ok=True)
         nltk.data.path.append(nltk_data_path)
+        
+        profile = Profile.objects.get(user=user)
+        trained_model = TrainedModel.objects.get(profile=profile)
 
         # Download the required nltk corpora if not already present
         nltk.download('stopwords', download_dir=nltk_data_path)
@@ -322,9 +325,9 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             tokenizer = BertTokenizer.from_pretrained(
                 'bert-base-uncased', cache_dir=os.path.join(settings.BASE_DIR, 'cache_dir', 'tokenizer'))
             model = BertForSequenceClassification.from_pretrained(
-                os.path.join(settings.BASE_DIR, 'fine_tuned_models', 'mohammed_model'))
+                os.path.join(settings.BASE_DIR, 'fine_tuned_models', trained_model.file_path))
             model.eval()
-
+            logger.info(f"Model of {trained_model.file_path} has been used!")
             extracted_text = extract_text_from_pdf(
                 pdf_path, from_page, to_page)
             tokens = extract_important_words(extracted_text)
