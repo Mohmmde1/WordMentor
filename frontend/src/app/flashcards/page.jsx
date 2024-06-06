@@ -21,7 +21,7 @@ export default async function Page() {
   const predictions = transformInputToPredictions(input);
   
   return (
-    <main className="container mx-auto px-4 py-8 md:px-6 lg:px-8 mb-12 space-y-5 max-w-full">
+    <div className="px-4 py-8 md:px-6 lg:px-8 mb-12 space-y-5">
 
       <div className="space-y-1.5">
           {/* Back link */}
@@ -31,14 +31,10 @@ export default async function Page() {
           >
             <ArrowLeft /> Back
           </Link>
-          {/* <h1 className="text-2xl sm:text-4xl font-bold">{prediction.title}</h1> */}
-          {/* <p className="text-neutral-400 font-semibold">
-            Lesson {lesson.lessonNumber}: {lesson.lessonTitle} ({lesson.lessonPages})
-          </p> */}
         </div>
 
       <Collections predictions={predictions} />
-    </main>
+    </div>
   );
 }
 
