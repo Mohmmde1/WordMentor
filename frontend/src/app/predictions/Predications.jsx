@@ -11,6 +11,7 @@ import {Form} from '@/components/ui/form';
 import {Skeleton} from '@/components/ui/skeleton';
 import {addToKnownWords, getLastPrediction, updateWordStatus} from '@/lib/actions';
 import { useRouter } from 'next/navigation';
+import { ScrollArea } from '@/components/ui/scroll-area';
 const Predictions = () => {
   const router = useRouter ();
   const [predictionId, setPredictionId] = useState (null);
@@ -55,11 +56,7 @@ const Predictions = () => {
   const onSubmit = async formData => {
     setLoading(true);
     try {
-      // Handle form submission, such as generating flashcards
-      console.log('Form data:', formData);
-      console.log('Known words:', knownWords);
-      console.log('Unknown words:', unknownWords);
-  
+
       // Add known words to the database and wait for all updates to complete
       const updatePromises = knownWords.map(word => updateWordStatus(word, "known", predictionId));
       await Promise.all(updatePromises);
@@ -83,6 +80,7 @@ const Predictions = () => {
             <CardDescription className="mb-4">
               These are words the app thinks you may not know. Remove the ones you do know.
             </CardDescription>
+            <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 ">
               {loading
                 ? [...Array (12)].map ((_, index) => (
@@ -111,6 +109,7 @@ const Predictions = () => {
                         No unknown words
                       </div>}
             </div>
+            </ScrollArea>
           </Card>
 
         </div>
@@ -120,6 +119,7 @@ const Predictions = () => {
             <CardDescription className="mb-4">
               These are words the you have selected as known. Move them back to unknown if you want.
             </CardDescription>
+            <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 ">
               {loading
                 ? [...Array (12)].map ((_, index) => (
@@ -148,6 +148,7 @@ const Predictions = () => {
                         No known words
                       </div>}
             </div>
+            </ScrollArea>
           </Card>
 
         </div>
