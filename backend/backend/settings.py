@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+import dj_database_url
 import logging
 import socket
 from dotenv import load_dotenv
@@ -10,6 +11,7 @@ load_dotenv()
 
 MODE = os.environ.get('MODE')
 
+# Get hostname and IPs for Docker mode
 if MODE == "docker":
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'drf_yasg',
+    'drf_yasg',
     'debug_toolbar',
     'rest_framework',
     'rest_framework.authtoken',
@@ -99,8 +101,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.IsAuthenticated',
-        ]
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 LOGGING = {
@@ -108,7 +110,10 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}", "style": "{", }, },
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
@@ -125,13 +130,18 @@ LOGGING = {
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR}/db.sqlite3')
+if MODE and MODE.lower() == 'docker':
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL),
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -161,11 +171,12 @@ STATIC_URL = 'static/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Internal IPs for Docker
 if MODE == "docker":
     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1']
-    
+
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: False if False else True,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
 }
 
 X_RAPID_API_KEY = os.environ.get("X_RAPID_API_KEY")
@@ -215,8 +226,8 @@ CACHES = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://backend-bvutct6wjq-uc.a.run.app']
 
+# Uncomment if needed
 # GRAPH_MODELS = {
 #     'app_labels': ["assessment", "books", "settings", "trainedmodels", "word", 'progress_tracking', 'core'],
 # }
