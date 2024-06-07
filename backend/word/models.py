@@ -19,3 +19,12 @@ class Word(BaseModel):
 
     def __str__(self):
         return self.entry
+
+class WordNet(BaseModel):
+    word = models.CharField(max_length=100, unique=True)
+    definition = models.TextField()
+    part_of_speech = models.CharField(max_length=50, blank=True)
+    example_sentence = models.TextField(blank=True, default="")  # Provide a default value
+
+    def __str__(self):
+        return self.word
