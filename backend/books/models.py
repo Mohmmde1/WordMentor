@@ -13,7 +13,6 @@ class Book(BaseModel):
         return f"id: {self.pk}, title: {self.title}"
     
 class UserBook(BaseModel):
-    book_id = models.AutoField(primary_key=True)
     file_path = models.FileField(upload_to='books/')
     pages = models.IntegerField()
     title = models.CharField(max_length=255)

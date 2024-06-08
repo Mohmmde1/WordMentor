@@ -3,13 +3,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 
-from settings.models import Profile
+from settings.models import UserProfile
 from PyPDF2 import PdfReader
 
 
 from .permissions import IsOwner
-from .models import Book
-from .serializers import BookSerializer
+from .models import UserBook
+from .serializers import UserBookSerializer
 
 
 class BookViewSet(mixins.CreateModelMixin,
@@ -17,8 +17,8 @@ class BookViewSet(mixins.CreateModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):
 
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+    queryset = UserBook.objects.all()
+    serializer_class = UserBookSerializer
     permission_classes = [IsOwner]
 
     def create(self, request, *args, **kwargs):
@@ -42,12 +42,12 @@ class BookViewSet(mixins.CreateModelMixin,
     @action(detail=False, methods=['get'], url_path='by-profile/(?P<profile_id>[^/.]+)')
     def get_books_by_profile(self, request, profile_id, *args, **kwargs):
         try:
-            profile = Profile.objects.get(pk=profile_id)
+            profile = UserProfile.objects.get(pk=profile_id)
             self.check_object_permissions(request, profile)
-            books = Book.objects.filter(profile__id=profile_id)
-            serializer = BookSerializer(books, many=True)
+            books = UserBook.objects.filter(profile__id=profile_id)
+            serializer = UserBookSerializer(books, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Profile.DoesNotExist:
+        except UserProfile.DoesNotExist:
             return Response({"error": "Profile not found for the given profile ID"}, status=status.HTTP_404_NOT_FOUND)
         except PermissionDenied:
             return Response({"error": "You do not have permission to access this profile"}, status=status.HTTP_403_FORBIDDEN)
@@ -62,7 +62,7 @@ class BookViewSet(mixins.CreateModelMixin,
             book_ids = request.data.get('book_ids', [])
             if not book_ids:
                 return Response({"error": "No book IDs provided for deletion"}, status=status.HTTP_400_BAD_REQUEST)
-            books = Book.objects.filter(id__in=book_ids)
+            books = UserBook.objects.filter(id__in=book_ids)
             books.delete()
             return Response({"message": "Books deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
