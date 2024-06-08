@@ -1,7 +1,7 @@
 import logging
 from django.db import models
 from .wdapi_integration import create_word_objects  
-
+from .models import Word
 
 logger = logging.getLogger(__name__)
 
@@ -41,33 +41,46 @@ logger = logging.getLogger(__name__)
 
 class WordMeaningManager(models.Manager):
     def get_or_fetch(self, word):
+        
+        # Determine if the input is a Word object or a string
+        if isinstance(word, Word):
+            word_text = word.word
+        elif isinstance(word, str):
+            word_text = word.lower()
+        else:
+            raise ValueError("Input must be a Word instance or a string")
+
         try:
-            # Try to get the word from the database
-            return self.get(word__word=word)
+            # Try to get the WordMeaning from the database
+            return self.get(word__word=word_text)
         except self.model.DoesNotExist:
-            from nltk.corpus import wordnet as wn
-            from .models import Word
             # If the word is not found, fetch it from WordNet
-            synsets = wn.synsets(word)
-            if synsets:
-                synset = synsets[0]  # Take the first synset for simplicity
-                definition = synset.definition()
-                part_of_speech = synset.pos()
-                examples = synset.examples()
-                example_sentence = examples[0] if examples else ""
-                try:
-                    # Create the WordMeaning object and associate it with the word
-                    word_obj, _ = Word.objects.get_or_create(word=word)
-                    word_meaning_instance = self.create(
-                        word=word_obj,
-                        definition=definition,
-                        part_of_speech=part_of_speech,
-                        example_sentence=example_sentence,
-                    )
-                    return word_meaning_instance
-                except Exception as e:
-                    logger.error("Failed to create WordMeaning object for '%s': %s", word, str(e))
-                    raise self.model.DoesNotExist(f"Failed to create WordMeaning object for '{word}'")
-            else:
-                logger.error("Word with entry '%s' not found in WordNet", word)
-                raise self.model.DoesNotExist(f"Word with entry '{word}' not found in WordNet")
+            return self._fetch_from_wordnet(word_text)
+
+    def _fetch_from_wordnet(self, word_text):
+        from nltk.corpus import wordnet as wn
+        synsets = wn.synsets(word_text)
+        if synsets:
+            synset = synsets[0]  # Take the first synset for simplicity
+            definition = synset.definition()
+            part_of_speech = synset.pos()
+            examples = synset.examples()
+            example_sentence = examples[0] if examples else ""
+            return self._create_word_meaning(word_text, definition, part_of_speech, example_sentence)
+        else:
+            logger.error("Word with entry '%s' not found in WordNet", word_text)
+            raise self.model.DoesNotExist(f"Word with entry '{word_text}' not found in WordNet")
+
+    def _create_word_meaning(self, word_text, definition, part_of_speech, example_sentence):
+        try:
+            word_obj, _ = Word.objects.get_or_create(word=word_text)
+            word_meaning_instance = self.create(
+                word=word_obj,
+                definition=definition,
+                part_of_speech=part_of_speech,
+                example_sentence=example_sentence,
+            )
+            return word_meaning_instance
+        except Exception as e:
+            logger.error("Failed to create WordMeaning object for '%s': %s", word_text, str(e))
+            raise self.model.DoesNotExist(f"Failed to create WordMeaning object for '{word_text}'")
