@@ -1,4 +1,4 @@
 from django.contrib import admin
-from assessment.models import Assessment
+from assessment.models import UserAssessment
 
-admin.site.register(Assessment)
+admin.site.register(UserAssessment)
