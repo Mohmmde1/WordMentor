@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from .models import Word, WordNet
+from .models import Word
 
 admin.site.register(Word)
-admin.site.register(WordNet)

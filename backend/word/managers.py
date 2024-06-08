@@ -38,32 +38,32 @@ class WordManager(models.Manager):
                 logger.error("Word with entry '%s' not found in database and Twinword API call failed", entry)
                 raise self.model.DoesNotExist(f"Word with entry '{entry}' not found in database and Twinword API call failed")
 
-class WordNetManager(models.Manager):
-    def get_or_fetch(self, word):
-        try:
-            # Try to get the word from the database
-            return self.get(word=word)
-        except self.model.DoesNotExist:
-            from nltk.corpus import wordnet as wn
-            # If the word is not found, fetch it from WordNet
-            synsets = wn.synsets(word)
-            if synsets:
-                synset = synsets[0]  # Take the first synset for simplicity
-                definition = synset.definition()
-                part_of_speech = synset.pos()
-                examples = synset.examples()
-                example_sentence = examples[0] if examples else ""  
-                try:
-                    wordnet_instance = self.create(
-                        word=word,
-                        definition=definition,
-                        part_of_speech=part_of_speech,
-                        example_sentence=example_sentence,
-                    )
-                    return wordnet_instance
-                except Exception as e:
-                    logger.error("Failed to create WordNet object for '%s': %s", word, str(e))
-                    raise self.model.DoesNotExist(f"Failed to create WordNet object for '{word}'")
-            else:
-                logger.error("Word with entry '%s' not found in WordNet", word)
-                raise self.model.DoesNotExist(f"Word with entry '{word}' not found in WordNet")
+# class WordNetManager(models.Manager):
+#     def get_or_fetch(self, word):
+#         try:
+#             # Try to get the word from the database
+#             return self.get(word=word)
+#         except self.model.DoesNotExist:
+#             from nltk.corpus import wordnet as wn
+#             # If the word is not found, fetch it from WordNet
+#             synsets = wn.synsets(word)
+#             if synsets:
+#                 synset = synsets[0]  # Take the first synset for simplicity
+#                 definition = synset.definition()
+#                 part_of_speech = synset.pos()
+#                 examples = synset.examples()
+#                 example_sentence = examples[0] if examples else ""  
+#                 try:
+#                     wordnet_instance = self.create(
+#                         word=word,
+#                         definition=definition,
+#                         part_of_speech=part_of_speech,
+#                         example_sentence=example_sentence,
+#                     )
+#                     return wordnet_instance
+#                 except Exception as e:
+#                     logger.error("Failed to create WordNet object for '%s': %s", word, str(e))
+#                     raise self.model.DoesNotExist(f"Failed to create WordNet object for '{word}'")
+#             else:
+#                 logger.error("Word with entry '%s' not found in WordNet", word)
+#                 raise self.model.DoesNotExist(f"Word with entry '{word}' not found in WordNet")
