@@ -3,7 +3,7 @@ from core.models import BaseModel
 
 from .managers import WordManager
 
-class Word(models.Model):
+class Word(BaseModel):
     word = models.CharField(max_length=255)
 
     def __str__(self):
