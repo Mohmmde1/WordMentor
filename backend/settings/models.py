@@ -1,4 +1,3 @@
-from word.models import Word
 from django.db import models
 from django.utils.text import slugify
 from assessment.models import Assessment
@@ -50,6 +49,7 @@ class Profile(BaseModel):
         """
         Method to generte a dictionary of labled words for the ML model.
         """
+        from word.models import Word
         # Get the IDs of words with status "unknown"
         unknown_word_ids = self.word_progress.filter(status="unknown").values_list('word', flat=True)
         unknown_words = Word.objects.filter(id__in=unknown_word_ids)
@@ -67,3 +67,11 @@ class Profile(BaseModel):
 
     def __str__(self):
         return f"Profile for {self.user.username}"
+
+class UserProfile(models.Model):
+    avatar = models.ImageField(upload_to='avatars/')
+    slug = models.SlugField(unique=True)
+    user = models.OneToOneField('wordmentor_auth.User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username

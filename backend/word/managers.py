@@ -1,7 +1,7 @@
 import logging
 from django.db import models
 from .wdapi_integration import create_word_objects  
-from .models import Word, WordMeaning
+
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +46,7 @@ class WordMeaningManager(models.Manager):
             return self.get(word__word=word)
         except self.model.DoesNotExist:
             from nltk.corpus import wordnet as wn
+            from .models import Word
             # If the word is not found, fetch it from WordNet
             synsets = wn.synsets(word)
             if synsets:
