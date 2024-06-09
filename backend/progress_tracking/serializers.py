@@ -1,10 +1,12 @@
-from rest_framework.serializers import ModelSerializer
 
-from word.serializers import WordSerializer
-from .models import WordProgress
+from rest_framework import serializers
 
-class WordProgressSerializer(ModelSerializer):
-    word = WordSerializer(read_only=True)
+
+from .models import UserWordProgress
+
+
+
+class UserWordProgressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WordProgress    
+        model = UserWordProgress    
         fields = "__all__"
