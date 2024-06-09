@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from assessment.models import Assessment
+from assessment.models import Assessment, UserAssessment
 
 from wordmentor_auth.models import User
 from core.models import BaseModel
@@ -75,3 +75,21 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    def save(self, *args, **kwargs):
+        """
+        Override the save method to generate and update the slug field.
+        """
+        if not self.slug:
+            # Generate slug based on user's email or any other field
+            self.slug = slugify(self.user.username)
+        super().save(*args, **kwargs)
+
+    def has_taken_assessment(self):
+        """
+        Property method to check if an assessment related to the profile exists.
+        """
+        try:
+            return UserAssessment.objects.get(profile=self) is not None
+        except UserAssessment.DoesNotExist:
+            return False
