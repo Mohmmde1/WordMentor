@@ -73,10 +73,9 @@ class Profile(BaseModel):
 
 
 class UserProfile(models.Model):
-    avatar = models.ImageField(upload_to='avatars/')
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     slug = models.SlugField(unique=True)
-    user = models.OneToOneField(
-        'wordmentor_auth.User', on_delete=models.CASCADE)
+    user = models.OneToOneField('wordmentor_auth.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -86,22 +85,25 @@ class UserProfile(models.Model):
         Override the save method to generate and update the slug field.
         """
         if not self.slug:
-            # Generate slug based on user's email or any other field
+            # Generate slug based on user's username
             self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
 
+    @property
     def has_taken_assessment(self):
         """
         Property method to check if an assessment related to the profile exists.
         """
         try:
-            return UserAssessment.objects.get(profile=self) is not None
-        except UserAssessment.DoesNotExist:
+            from progress_tracking.models import UserAssessment
+            return UserAssessment.objects.filter(profile=self).exists()
+        except Exception as e:
+            # Log error if needed
             return False
 
     def extract_data(self):
         """
-        Method to generte a dictionary of labled words for the ML model.
+        Method to generate a dictionary of labeled words for the ML model.
         """
         from progress_tracking.models import UserWordProgress
         
