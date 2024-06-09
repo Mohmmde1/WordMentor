@@ -1,14 +1,22 @@
 from rest_framework import serializers
-from .models import Word
+from .models import WordMeaning
+from assessment.models import WordAssessment
 
-class WordSerializer(serializers.ModelSerializer):
-    meaning = serializers.JSONField()
+class WordAssessmentListSerializer(serializers.ModelSerializer):
+    word = serializers.SerializerMethodField()
+    class Meta:
+        model = WordAssessment
+        fields = ['id', 'word']
+        
+    def get_word(self, obj):
+        return obj.word.word
+
+class WordMeaningSerializer(serializers.ModelSerializer):
+    word = serializers.SerializerMethodField()
 
     class Meta:
-        model = Word
-        fields = '__all__'
+        model = WordMeaning
+        fields = ['id', 'word', 'definition', 'part_of_speech', 'example_sentence']
 
-class WordListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Word
-        fields = ['id', 'entry']
+    def get_word(self, obj):
+        return obj.word.word

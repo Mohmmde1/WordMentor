@@ -4,8 +4,9 @@ from rest_framework import mixins, viewsets, status
 from django.core.exceptions import ValidationError
 from rest_framework.decorators import action
 
-from .models import Word
-from .serializers import WordListSerializer, WordSerializer
+from assessment.models import WordAssessment
+from .models import Word, WordMeaning
+from .serializers import WordMeaningSerializer, WordAssessmentListSerializer
 from .wdapi_integration import create_word_objects
 
 logger = logging.getLogger(__name__)
@@ -26,8 +27,8 @@ class WordViewSet(mixins.RetrieveModelMixin,
 
         try:
             # Attempt to fetch the word using the custom manager method
-            word = Word.objects.get_or_fetch(entry=word_entry)
-            serializer = WordSerializer(word)
+            word = WordMeaning.objects.get_or_fetch(word=word_entry)
+            serializer = WordMeaningSerializer(word)
             return Response(serializer.data)
 
         except Word.DoesNotExist:
@@ -40,9 +41,6 @@ class WordViewSet(mixins.RetrieveModelMixin,
 
     @action(detail=False, methods=['GET'], url_path='assessment')
     def get_assessment_words(self, request):
-        words = []
-        for i in range(1, 11):
-            words.extend(list(Word.objects.filter(ten_degree=i)[:10]))
-        serializer = WordListSerializer(words, many=True)
-
+        word_assessments = WordAssessment.objects.all()
+        serializer = WordAssessmentListSerializer(word_assessments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
