@@ -3,7 +3,6 @@ import { useState, useMemo } from 'react';
 import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
-import Link from 'next/link';
 import { format } from 'date-fns';
 import {ChevronRightIcon} from 'lucide-react';
 export default function Collections({predictions}) {
@@ -52,7 +51,7 @@ export default function Collections({predictions}) {
 
     
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Predictions</h1>
+        <h1 className="text-2xl font-bold">Sessions</h1>
         <div className="flex items-center space-x-4">
           <Select value={sortOption} onValueChange={setSortOption}>
             <SelectTrigger className="px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">

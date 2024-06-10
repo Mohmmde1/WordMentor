@@ -63,7 +63,7 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
           <Link href="/flashcards">
             <PercentDiamondIcon className="mr-2 h-4 w-4" />
 
-            <span>Predictions</span>
+            <span>Sessions</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

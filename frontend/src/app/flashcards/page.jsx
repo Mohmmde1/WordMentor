@@ -9,7 +9,7 @@ export default async function Page() {
   function transformInputToPredictions(input) {
     return input.map((item, index) => ({
       id: item.id,
-      title: `Prediction ${index + 1}`, 
+      title: `Session ${index + 1}`, 
       from: item.book,
       fromPage: item.from_page,
       toPage: item.to_page,

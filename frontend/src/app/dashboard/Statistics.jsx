@@ -1,7 +1,16 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Book, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 
-export default function LearningStatistics({noKnown=0, noUnknown=0}) {
+export default function LearningStatistics({
+    noKnown = 0,
+    noUnknown = 0,
+    knownWordsChange = 0,
+    unknownWordsChange = 0,
+    progress = 0,
+    progressChange = 0,
+    activeSessions = 0,
+    sessionsChange = 0
+}) {
     return (
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
             <Card x-chunk="learning-01-chunk-0">
@@ -14,7 +23,7 @@ export default function LearningStatistics({noKnown=0, noUnknown=0}) {
                 <CardContent>
                     <div className="text-2xl font-bold">{noKnown}</div>
                     <p className="text-xs text-muted-foreground">
-                        +150 from last week
+                        {knownWordsChange >= 0 ? `+${knownWordsChange}` : knownWordsChange} from last week
                     </p>
                 </CardContent>
             </Card>
@@ -28,7 +37,7 @@ export default function LearningStatistics({noKnown=0, noUnknown=0}) {
                 <CardContent>
                     <div className="text-2xl font-bold">{noUnknown}</div>
                     <p className="text-xs text-muted-foreground">
-                        -50 from last week
+                        {unknownWordsChange >= 0 ? `+${unknownWordsChange}` : unknownWordsChange} from last week
                     </p>
                 </CardContent>
             </Card>
@@ -38,9 +47,9 @@ export default function LearningStatistics({noKnown=0, noUnknown=0}) {
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">75%</div>
+                    <div className="text-2xl font-bold">{progress}%</div>
                     <p className="text-xs text-muted-foreground">
-                        +10% from last week
+                        {progressChange >= 0 ? `+${progressChange}%` : `${progressChange}%`} from last week
                     </p>
                 </CardContent>
             </Card>
@@ -50,9 +59,9 @@ export default function LearningStatistics({noKnown=0, noUnknown=0}) {
                     <Clock className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">5</div>
+                    <div className="text-2xl font-bold">{activeSessions}</div>
                     <p className="text-xs text-muted-foreground">
-                        +2 since last session
+                        {sessionsChange >= 0 ? `+${sessionsChange}` : sessionsChange} since last session
                     </p>
                 </CardContent>
             </Card>

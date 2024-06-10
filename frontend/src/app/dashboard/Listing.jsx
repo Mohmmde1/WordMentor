@@ -25,7 +25,7 @@ export default function Listing({ books = [], predictions = [] }) {
     <Tabs defaultValue="books"  >
       <TabsList className="grid w-full grid-cols-2 ">
         <TabsTrigger value="books">Books</TabsTrigger>
-        <TabsTrigger value="predictions">Predictions</TabsTrigger>
+        <TabsTrigger value="predictions">Sessions</TabsTrigger>
       </TabsList>
       <TabsContent value="books" >
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4  ">
@@ -84,7 +84,7 @@ export default function Listing({ books = [], predictions = [] }) {
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
-              <CardTitle>Predictions</CardTitle>
+              <CardTitle>Sessions</CardTitle>
               <CardDescription>
                 Recent predictions made by AI.
               </CardDescription>
@@ -101,7 +101,7 @@ export default function Listing({ books = [], predictions = [] }) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Predictions</TableHead>
+                  <TableHead>Sessions</TableHead>
                   <TableHead className="text-center">No Predicated Words</TableHead>
                 </TableRow>
               </TableHeader>
@@ -123,7 +123,7 @@ export default function Listing({ books = [], predictions = [] }) {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={2} className="text-center">
-                      No predictions have been predicted.
+                      No Sessions have been found yet.
                     </TableCell>
                   </TableRow>
                 )}
