@@ -96,8 +96,52 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 f"An error occurred while checking task status: {str(e)}")
             return Response({"error": "An error occurred while checking task status"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(detail=False, methods=['post'], url_path='predict')
-    def predict(self, request):
+class PredictionViewSet(viewsets.ViewSet):
+    """
+    A viewset for handling predictions and related actions.
+    """
+    def list(self, request):
+        """
+        Retrieves all predictions made by the user.
+
+        Args:
+            request (Request): The request object.
+
+        Returns:
+            Response: A response with the user's predictions.
+        """
+        try:
+            profile = get_object_or_404(UserProfile, user=request.user)
+            user_books = UserBook.objects.filter(profile=profile)
+            predictions = BookPrediction.objects.filter(book__in=user_books)
+
+            if predictions.exists():
+                data = []
+                for prediction in predictions:
+                    unknown_words_count = WordPredictionMapping.objects.filter(
+                        prediction=prediction, word_progress__is_known=False
+                    ).count()
+
+                    data.append({
+                        "id": prediction.id,
+                        "unknown_words": unknown_words_count,
+                        "book": prediction.book.title,
+                        "from_page": prediction.from_page,
+                        "to_page": prediction.to_page,
+                        "created_at": prediction.created_at,
+                        "trained_model_version": prediction.trained_model_version
+                    })
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "No predictions found"}, status=status.HTTP_404_NOT_FOUND)
+        except UserProfile.DoesNotExist:
+            logger.error("Profile not found")
+            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request):
         """
         Extracts text from a specified range of pages in a PDF file identified by its ID and tokenizes it.
 
@@ -114,25 +158,17 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             book_id = serializer.validated_data['book_id']
 
             try:
-                # Fetch the PDF file by ID
                 book = UserBook.objects.get(id=book_id)
                 pdf_path = book.file_path.path
-
-                # Extract unknown words using the custom function
-                result = self._extract_unknown_words(
-                    pdf_path, from_page, to_page, request.user)
+                result = self._extract_unknown_words(pdf_path, from_page, to_page, request.user)
 
                 if 'error' in result:
                     logger.error(f"An error occurred: {result['error']}")
                     return Response({"error": result['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                 profile = book.profile
-                trained_model_version = profile.usertrainedmodel_set.order_by(
-                    '-created_at').first().version
-
-                self._save_prediction_metadata(profile=profile, trained_model_version=trained_model_version,
-                                               unknown_words=result['unknown_words'], book=book,
-                                               from_page=from_page, to_page=to_page)
+                trained_model_version = profile.usertrainedmodel_set.order_by('-created_at').first().version
+                self._save_prediction_metadata(profile, trained_model_version, result['unknown_words'], book, from_page, to_page)
 
                 return Response({
                     "unknown_words": result['unknown_words'],
@@ -147,6 +183,40 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, pk=None):
+        """
+        Retrieves a specific prediction made by the user.
+
+        Args:
+            request (Request): The request object.
+            pk (int): The ID of the prediction.
+
+        Returns:
+            Response: A response with the prediction data.
+        """
+        try:
+            prediction = BookPrediction.objects.get(id=pk)
+            profile = UserProfile.objects.get(user=request.user)
+            word_prediction_mappings = WordPredictionMapping.objects.filter(prediction=prediction)
+            unknown_words_qs = word_prediction_mappings.filter(word_progress__profile=profile, word_progress__is_known=False).select_related('word_progress__word_meaning__word')
+
+            unknown_words_dict = {
+                word_prediction_mapping.word_progress.word_meaning.word.word: word_prediction_mapping.word_progress.word_meaning.definition
+                for word_prediction_mapping in unknown_words_qs
+            }
+
+            return Response({
+                "unknown_words": unknown_words_dict,
+                "book": prediction.book.title,
+                "from_page": prediction.from_page,
+                "to_page": prediction.to_page,
+                "created_at": prediction.created_at,
+                "trained_model_version": prediction.trained_model_version
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")
+            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     @action(detail=False, methods=['get'], url_path='last-prediction')
     def get_last_prediction(self, request):
         """
@@ -159,12 +229,8 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             Response: A response with the last prediction data.
         """
         try:
-            # Fetch the profile of the current user
             profile = get_object_or_404(UserProfile, user=request.user)
-
-            # Fetch the last prediction made by the user
-            last_prediction = BookPrediction.objects.filter(
-                book__profile=profile).order_by('-created_at').first()
+            last_prediction = BookPrediction.objects.filter(book__profile=profile).order_by('-created_at').first()
 
             if last_prediction:
                 unknown_words = [
@@ -190,93 +256,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(detail=True, methods=['get'], url_path='predictions')
-    def get_predictions(self, request, pk=None):
-        """
-        Retrieves all predictions made by the user.
-
-        Args:
-            request (Request): The request object.
-
-        Returns:
-            Response: A response with the user's predictions.
-        """
-        try:
-            profile = get_object_or_404(UserProfile, id=pk)
-
-            user_books = UserBook.objects.filter(profile=profile)
-            predictions = BookPrediction.objects.filter(book__in=user_books)
-
-            if predictions.exists():
-                data = []
-                for prediction in predictions:
-                    unknown_words_count = WordPredictionMapping.objects.filter(
-                        prediction=prediction,
-                        word_progress__is_known=False
-                    ).count()
-
-                    data.append({
-                        "id": prediction.id,
-                        "unknown_words": unknown_words_count,
-                        "book": prediction.book.title,
-                        "from_page": prediction.from_page,
-                        "to_page": prediction.to_page,
-                        "created_at": prediction.created_at,
-                        "trained_model_version": prediction.trained_model_version
-                    })
-                return Response(data, status=status.HTTP_200_OK)
-            else:
-                return Response({"message": "No predictions found"}, status=status.HTTP_404_NOT_FOUND)
-        except UserProfile.DoesNotExist:
-            logger.error("Profile not found")
-            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            logger.error(f"An error occurred: {str(e)}")
-            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-    @action(detail=False, methods=['get'], url_path='prediction/(?P<pk>[^/.]+)')
-    def get_prediction(self, request, pk=None):
-        """
-        Retrieves a specific prediction made by the user.
-
-        Args:
-            request (Request): The request object.
-            pk (int): The ID of the prediction.
-
-        Returns:
-            Response: A response with the prediction data.
-        """
-        try:
-            # Fetch the prediction by ID
-            prediction = BookPrediction.objects.get(id=pk)
-            profile = UserProfile.objects.get(user=request.user)
-            
-            # Retrieve word prediction mappings related to the prediction
-            word_prediction_mappings = WordPredictionMapping.objects.filter(prediction=prediction)
-            
-            # Retrieve unknown words and their meanings related to the user's profile
-            unknown_words_qs = word_prediction_mappings.filter(word_progress__profile=profile, word_progress__is_known=False).select_related('word_progress__word_meaning__word')
-
-            # Construct the dictionary
-            unknown_words_dict = {
-                word_prediction_mapping.word_progress.word_meaning.word.word: word_prediction_mapping.word_progress.word_meaning.definition
-                for word_prediction_mapping in unknown_words_qs
-            }
-
-            return Response({
-                "unknown_words": unknown_words_dict,
-                "book": prediction.book.title,
-                "from_page": prediction.from_page,
-                "to_page": prediction.to_page,
-                "created_at": prediction.created_at,
-                "trained_model_version": prediction.trained_model_version
-            }, status=status.HTTP_200_OK)
-        except Exception as e:
-            logger.error(f"An error occurred: {str(e)}")
-            return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
     def _extract_unknown_words(self, pdf_path, from_page, to_page, user):
-        # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context
 
         nltk_data_path = os.path.join(settings.BASE_DIR, 'nltk_data')
@@ -286,17 +266,13 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         profile = UserProfile.objects.get(user=user)
         trained_model = UserTrainedModel.objects.get(profile=profile)
 
-        # Download the required nltk corpora if not already present
         nltk.download('stopwords', download_dir=nltk_data_path)
         nltk.download('punkt', download_dir=nltk_data_path)
         nltk.download('words', download_dir=nltk_data_path)
 
-        # List of valid English words
         valid_words = set(words.words())
-        
-        # Get the user's known words
         known_words = set(UserWordProgress.objects.filter(profile=profile, is_known=True)
-                        .values_list('word_meaning__word__word', flat=True))
+                          .values_list('word_meaning__word__word', flat=True))
 
         def extract_important_words(text):
             words = word_tokenize(text)
@@ -323,19 +299,11 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             model = BertForSequenceClassification.from_pretrained(
                 os.path.join(settings.BASE_DIR, 'fine_tuned_models', trained_model.file_path))
             model.eval()
-            logger.info(f"Model of {trained_model.file_path} has been used!")
-            extracted_text = extract_text_from_pdf(
-                pdf_path, from_page, to_page)
+
+            extracted_text = extract_text_from_pdf(pdf_path, from_page, to_page)
             tokens = extract_important_words(extracted_text)
 
-            # Log metadata related to the extracted text
-            logger.info(f"Extracted text from pages {
-                        from_page} to {to_page}:\n{extracted_text}")
-            logger.info(f"Number of words extracted: {len(tokens)}")
-            logger.info(f"Extracted words: {tokens}")
-
-            inputs = tokenizer(list(tokens), return_tensors="pt",
-                            padding=True, truncation=True)
+            inputs = tokenizer(list(tokens), return_tensors="pt", padding=True, truncation=True)
 
             with torch.no_grad():
                 outputs = model(**inputs)
@@ -344,11 +312,9 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             predicted_labels = torch.argmax(probs, dim=-1).tolist()
 
             class_names = ['Not_Known', 'Known']
-            predicted_classes = [class_names[label]
-                                for label in predicted_labels]
+            predicted_classes = [class_names[label] for label in predicted_labels]
 
-            unknown_words = [word for word, predicted_class in zip(
-                tokens, predicted_classes) if predicted_class == 'Not_Known']
+            unknown_words = [word for word, predicted_class in zip(tokens, predicted_classes) if predicted_class == 'Not_Known']
 
             return {
                 'unknown_words': unknown_words,
@@ -376,39 +342,25 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             None
         """
         try:
-            # Create a new Prediction entry
             prediction = BookPrediction.objects.create(
                 trained_model_version=trained_model_version,
                 book=book,
                 from_page=from_page,
                 to_page=to_page
             )
-            
+
             prediction.save()
-            
-            # Add the words to the prediction
+
             for word_entry in unknown_words:
                 word_obj = WordMeaning.objects.get_or_fetch(word=word_entry)
-
-                user_word_progress = UserWordProgress(
-                    profile=profile, is_known=False, word_meaning=word_obj)
+                user_word_progress = UserWordProgress(profile=profile, is_known=False, word_meaning=word_obj)
                 user_word_progress.save()
-                logger.info(
-                    f"UserWordProgress created for profile ID {profile.id} and word '{word_entry}'.")
                 
-                word_prediction = WordPredictionMapping(
-                    word_progress=user_word_progress, prediction=prediction)
+                word_prediction = WordPredictionMapping(word_progress=user_word_progress, prediction=prediction)
                 word_prediction.save()
-                logger.info(
-                    f"WordPredictionMapping created for prediction ID {prediction.id} and word '{word_entry}'.")
 
-            logger.info(
-                f"Prediction metadata saved for profile ID {profile.id}.")
-            logger.debug(
-                f"Saved prediction metadata - Profile ID: {profile.id}, Trained Model Version: {trained_model_version}, Book: {book.title}, From Page: {from_page}, To Page: {to_page}, Unknown Words: {unknown_words}")
-
+            logger.info(f"Prediction metadata saved for profile ID {profile.id}.")
         except WordMeaning.DoesNotExist:
             logger.error(f"Word '{word_entry}' does not exist")
         except Exception as e:
-            logger.error(
-                f"An error occurred while saving prediction metadata: {str(e)}")
+            logger.error(f"An error occurred while saving prediction metadata: {str(e)}")

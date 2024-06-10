@@ -196,7 +196,7 @@ export async function submitAssessment (selected, unselected) {
     }
     
     const responseModel = await apiService.postUpdate (
-      'trainedmodels/',
+      'trainedmodels/train/',
       JSON.stringify ({
         profile: profileId,
       }),
@@ -211,7 +211,7 @@ export async function submitAssessment (selected, unselected) {
 
 export async function getStatus () {
   try {
-    const response = await apiService.get (`trainedmodels/task-status/`);
+    const response = await apiService.get (`trainedmodels/train/task-status/`);
     console.log (response.status);
     return response.status;
   } catch (error) {
@@ -309,7 +309,7 @@ export async function addToKnownWords(word){
 
 export async function getLastPrediction(){
   try {
-    const response = await apiService.get("trainedmodels/last-prediction/");
+    const response = await apiService.get("trainedmodels/predict/last-prediction/");
     console.log(response);
     return response;
   } catch (error) {
@@ -319,9 +319,8 @@ export async function getLastPrediction(){
 }
 
 export async function fetchPredictions(){
-  const profileId = getProfileId();
   try {
-    const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    const response = await apiService.get(`trainedmodels/predict/`);
     console.log(response)
     if(response.message) return [];
     
@@ -339,7 +338,7 @@ export async function fetchPredictions(){
 export async function getPrediction(predictionId){
   try {
 
-    const response = await apiService.get(`trainedmodels/prediction/${predictionId}/`);
+    const response = await apiService.get(`trainedmodels/predict/${predictionId}/`);
     console.log(response);
     return response;
   } catch (error) {
