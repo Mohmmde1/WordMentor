@@ -116,7 +116,7 @@ export default function Listing({ books = [], predictions = [] }) {
                         </div>
                       </TableCell>
                       <TableCell className="text-center">
-                        {prediction.unknown_words.length}
+                        {prediction.unknown_words}
                       </TableCell>
                     </TableRow>
                   ))

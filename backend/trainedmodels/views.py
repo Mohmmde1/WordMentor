@@ -202,33 +202,22 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             Response: A response with the user's predictions.
         """
         try:
-            # Fetch the user's profile
             profile = get_object_or_404(UserProfile, id=pk)
 
-            # Fetch all user books associated with the profile
             user_books = UserBook.objects.filter(profile=profile)
-
-            # Fetch all predictions made on these books
             predictions = BookPrediction.objects.filter(book__in=user_books)
 
             if predictions.exists():
                 data = []
                 for prediction in predictions:
-                    # Initialize list to store unknown words
-                    unknown_words = []
-                    # Get all related WordPredictionMapping instances for this prediction
-                    word_prediction_mappings = WordPredictionMapping.objects.filter(prediction=prediction)
-                    # Loop through each mapping to get the unknown words
-                    for mapping in word_prediction_mappings:
-                        word_progress = mapping.word_progress
-                        if word_progress.is_known:
-                            continue
-                        word_meaning = word_progress.word_meaning
-                        word = word_meaning.word
-                        unknown_words.append(word.word)
+                    unknown_words_count = WordPredictionMapping.objects.filter(
+                        prediction=prediction,
+                        word_progress__is_known=False
+                    ).count()
+
                     data.append({
                         "id": prediction.id,
-                        "unknown_words": unknown_words,
+                        "unknown_words": unknown_words_count,
                         "book": prediction.book.title,
                         "from_page": prediction.from_page,
                         "to_page": prediction.to_page,
@@ -244,7 +233,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        
     @action(detail=False, methods=['get'], url_path='prediction/(?P<pk>[^/.]+)')
     def get_prediction(self, request, pk=None):
         """
@@ -285,6 +274,7 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         except Exception as e:
             logger.error(f"An error occurred: {str(e)}")
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     def _extract_unknown_words(self, pdf_path, from_page, to_page, user):
         # Create an unverified SSL context
         ssl._create_default_https_context = ssl._create_unverified_context

@@ -14,7 +14,7 @@ export default async function Page() {
       fromPage: item.from_page,
       toPage: item.to_page,
       date: format(new Date(item.created_at), 'yyyy-MM-dd'), 
-      noFlashcards: item.unknown_words.length, 
+      noFlashcards: item.unknown_words, 
     }));
   }
   

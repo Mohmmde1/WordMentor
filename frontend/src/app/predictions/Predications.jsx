@@ -9,7 +9,7 @@ import {Card, CardDescription} from '@/components/ui/card';
 import {X, ChevronLeft, ChevronRight} from 'lucide-react';
 import {Form} from '@/components/ui/form';
 import {Skeleton} from '@/components/ui/skeleton';
-import {addToKnownWords, getLastPrediction, updateWordStatus} from '@/lib/actions';
+import {getLastPrediction, updateWordStatus} from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
 const Predictions = () => {
@@ -22,7 +22,7 @@ const Predictions = () => {
   useEffect (() => {
     const fetchWords = async () => {
       try {
-        const response = await getLastPrediction ();
+        const response = await getLastPrediction();
         console.log (response);
         const fetched_words = response.unknown_words;
         setPredictionId (response.id);
