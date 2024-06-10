@@ -32,7 +32,7 @@ class WordPrediction(WordProgress):
 class UserTrainedModel(BaseModel):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    file_path = models.FileField(upload_to='models/')
+    file_path = models.CharField(max_length=255)
     is_ready = models.BooleanField(default=False)
     version = models.CharField(max_length=50)
     profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -47,7 +47,7 @@ class BookPrediction(BaseModel):
     book = models.ForeignKey(UserBook, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Prediction {self.prediction_id}"
+        return f"Prediction {self.id}"
 
 
 class WordPredictionMapping(BaseModel):
@@ -55,4 +55,4 @@ class WordPredictionMapping(BaseModel):
     prediction = models.ForeignKey(BookPrediction, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"WordPrediction {self.word_prediction_id}"
+        return f"WordPrediction {self.id}"

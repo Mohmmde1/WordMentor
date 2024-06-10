@@ -159,9 +159,21 @@ export async function updateProfile (formData) {
   }
 }
 
-export async function fetchAssessmentWords () {
-  const words = await apiService.get ('word/assessment');
-  return words;
+export async function fetchAssessmentWords() {
+  try {
+    const words = await apiService.get('word/assessment');
+
+    // Ensure the data is in the correct format: { id: number, word: string }
+    const standardizedWords = words.map((word) => ({
+      id: word.id,
+      entry: word.word, 
+    }));
+
+    return standardizedWords;
+  } catch (error) {
+    console.error('Error fetching assessment words:', error);
+    throw error;
+  }
 }
 
 export async function submitAssessment (selected, unselected) {
@@ -249,7 +261,7 @@ export async function deleteBooks (books) {
 
 export async function saveBook(form){
   form.append("profile", getProfileId());
-  form.append("title", form.get("file").name);
+  form.append("title", form.get("file_path").name);
   form.append("pages", 0);
   try {
     const response = await apiService.postFile("books/", form, "POST");
@@ -308,6 +320,7 @@ export async function fetchPredictions(){
   const profileId = getProfileId();
   try {
     const response = await apiService.get(`trainedmodels/${profileId}/predictions/`);
+    console.log(response)
     if(response.message) return [];
     
     response.forEach(item => {
@@ -334,8 +347,11 @@ export async function getPrediction(predictionId){
 }
 
 export async function updateWordStatus(wordId, status, predictionId){
+  const data = {
+    "word_text": wordId,
+  }
   try {
-    const response = await apiService.postUpdate(`trainedmodels/update-word-status/${wordId}/`, JSON.stringify({"status":status, "prediction":predictionId}), "PUT");
+    const response = await apiService.postUpdate(`progress/update-word-progress/`, JSON.stringify(data), "PUT");
     console.log(response);
     return response;
   } catch (error) {
@@ -352,19 +368,18 @@ export async function fetchWords() {
     // Initialize arrays for known and unknown words
     const knownWords = [];
     const unknownWords = [];
-
     // Iterate through the data and categorize words as known or unknown
     response.forEach(item => {
       
-      if (item.status === 'known') {
+      if (item.is_known) {
         const wordData = {
-          word: item.word.entry,
+          word: item.word,
           learned_at: parseDate(item.created_at)
         };
         knownWords.push(wordData);
       } else {
         const wordData = {
-          word: item.word.entry,
+          word: item.word,
           added_at: parseDate(item.created_at)
         };
         unknownWords.push(wordData);

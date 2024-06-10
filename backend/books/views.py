@@ -24,7 +24,7 @@ class BookViewSet(mixins.CreateModelMixin,
     def create(self, request, *args, **kwargs):
         try:
             # Access the uploaded file
-            file = request.FILES.get('file')
+            file = request.FILES.get('file_path')
             if not file:
                 return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
             # Extract number of pages from the PDF file

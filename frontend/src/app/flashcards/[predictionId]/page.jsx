@@ -22,7 +22,7 @@ export default function FlashcardPage({ params }) {
           try {
             return {
               word,
-              definitions: parseAndTransformDefinitions(definitions),
+              definitions: definitions,
             };
           } catch (e) {
             console.error(`Error parsing definitions for word "${word}":`, e);

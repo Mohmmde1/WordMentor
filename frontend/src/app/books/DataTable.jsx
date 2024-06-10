@@ -68,7 +68,7 @@ export function DataTable({
           // Retrieve uploaded file
           const file = event.target.files[0];
           const form = new FormData();
-          form.append("file", file);
+          form.append("file_path", file);
           await saveBook(form).then((response) => {
             console.log(response);
           });
