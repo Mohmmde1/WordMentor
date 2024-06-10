@@ -224,9 +224,11 @@ export async function getStatus () {
 
 export async function fetchBooks () {
   const profileId = getProfileId ();
+  if(!profileId) return []
   try {
     const response = await apiService.get (`books/by-profile/${profileId}`);
     console.log (`response: ${response}`);
+  
     response.forEach(item => {
       item.created_at = parseDate(item.created_at);
       item.updated_at = parseDate(item.updated_at);

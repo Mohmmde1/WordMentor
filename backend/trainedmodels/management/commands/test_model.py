@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
-
+from django.conf import settings
 class Command(BaseCommand):
     help = 'Train models using BERT and PDF data'
 
@@ -42,7 +42,8 @@ class Command(BaseCommand):
                     text += page.extract_text()
             return text
 
-        pdf_path = '/Users/mohammedalnashrei/projects/WordMentor/backend/media/books/bookC34dayang.pdf'
+        pdf_relative_path = "media/books/Team1-ProblemSolving7.pdf"
+        pdf_path = settings.BASE_DIR / pdf_relative_path
         from_page = 1
         to_page = 5
         start_time = time.time()
