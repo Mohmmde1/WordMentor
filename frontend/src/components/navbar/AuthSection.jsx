@@ -19,7 +19,6 @@ export function AuthSection() {
         if (userId) {
           setIsAuthenticated(true);
           const data = await fetchProfile();
-          console.log(data);
           setProfile(data);
           setIsAssessed(data.has_taken_assessment);
         }
@@ -29,7 +28,7 @@ export function AuthSection() {
     };
 
     checkAuth();
-  }, []); // Run only once after the initial render
+  }, []); 
 
   return (
     <NavigationMenuList>

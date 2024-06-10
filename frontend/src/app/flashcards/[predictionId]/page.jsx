@@ -2,8 +2,6 @@
 import { getPrediction } from '@/lib/actions';
 import { useEffect, useState } from 'react';
 import Flashcard from '@/components/Flashcard';
-import { parseAndTransformDefinitions } from '@/lib/utils';
-import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -39,7 +37,7 @@ export default function FlashcardPage({ params }) {
         console.error('Error fetching prediction:', error);
         setError('Failed to fetch prediction data.');
       });
-  }, [predictionId]);
+  }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
