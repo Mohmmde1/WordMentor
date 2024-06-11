@@ -20,8 +20,8 @@ class WordProgressViewSet(ModelViewSet):
     """
     queryset = UserWordProgress.objects.all()
     serializer_class = UserWordProgressSerializer
-    permission_classes = [IsAuthenticated, IsOwner]  # Use a list to define permission classes
-
+    permission_classes = [IsAuthenticated, IsOwner]
+    
     def get_queryset(self):
         """
         This method restricts the queryset to only the words owned by the current user.

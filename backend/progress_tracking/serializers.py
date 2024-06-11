@@ -7,15 +7,12 @@ from .models import UserWordProgress
 
 
 class UserWordProgressSerializer(serializers.ModelSerializer):
-    word_meaning = serializers.SerializerMethodField()
     word = serializers.SerializerMethodField()
     class Meta:
         model = UserWordProgress    
-        fields = "__all__"
+        fields = ['created_at', 'word', 'is_known']
     
     def get_word(self, obj):
         return obj.word_meaning.word.word
 
-    def get_word_meaning(self, obj):
-        return obj.word_meaning.definition
         
