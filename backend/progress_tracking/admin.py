@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import WordProgress, UserWordProgress
+from .models import UserWordProgress
 
-admin.site.register(WordProgress)
 admin.site.register(UserWordProgress)

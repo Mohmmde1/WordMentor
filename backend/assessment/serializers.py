@@ -1,10 +1,6 @@
 from rest_framework import serializers
-from .models import Assessment, UserAssessment
+from .models import UserAssessment
 
-class AssessmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = "__all__"
-        model = Assessment
 
 class UserAssessmentSerializer(serializers.ModelSerializer):
     class Meta:

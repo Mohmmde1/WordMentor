@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 
 from .serializers import UserProfileSerializer
-from .models import Profile, UserProfile
+from .models import  UserProfile
 
 logger = logging.getLogger(__name__)
 class ProfileViewSet(mixins.RetrieveModelMixin,
@@ -36,7 +36,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
             profile = UserProfile.objects.get(user_id=user_id)
             serializer = self.get_serializer(profile)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Profile.DoesNotExist:
+        except UserProfile.DoesNotExist:
             return Response({"error": "Profile not found for the given user ID"}, status=status.HTTP_404_NOT_FOUND)
 
    

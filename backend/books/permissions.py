@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from settings.models import Profile
+from settings.models import UserProfile
 
 class IsOwner(permissions.BasePermission):
     """
@@ -8,7 +8,7 @@ class IsOwner(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        if type(obj) == Profile:
+        if type(obj) == UserProfile:
             # Check if the request user is the owner of the profile associated with the book
             return obj.user == request.user
 

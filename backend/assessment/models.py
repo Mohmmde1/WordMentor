@@ -1,9 +1,7 @@
 from django.db import models
 
 from core.models import BaseModel
-from word.models import Word
-class Assessment(BaseModel):
-    pass
+
 
 class UserAssessment(BaseModel):
     profile = models.ForeignKey('settings.UserProfile', on_delete=models.CASCADE)

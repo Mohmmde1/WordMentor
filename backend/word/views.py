@@ -7,7 +7,6 @@ from rest_framework.decorators import action
 from assessment.models import WordAssessment
 from .models import Word, WordMeaning
 from .serializers import WordMeaningSerializer, WordAssessmentListSerializer
-from .wdapi_integration import create_word_objects
 
 logger = logging.getLogger(__name__)
 class WordViewSet(mixins.RetrieveModelMixin,

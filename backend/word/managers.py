@@ -1,7 +1,7 @@
 import json
 import logging
 from django.db import models
-from .wdapi_integration import create_word_objects  # Make sure this module fetches data from an external API
+from .wdapi_integration import create_word_objects  
 from .models import Word
 
 logger = logging.getLogger(__name__)

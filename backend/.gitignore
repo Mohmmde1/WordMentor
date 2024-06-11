@@ -103,3 +103,6 @@ cache_dir/
 
 #nltk data
 nltk_data/
+
+# data
+data/data.json
