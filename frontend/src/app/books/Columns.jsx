@@ -120,7 +120,7 @@ export const columns = [
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <a
-                  href={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${book.file}`}
+                  href={`${process.env.NEXT_PUBLIC_BACKEND_HOST}/${book.file_path}`}
                   target="_blank"
                 >
                   View book
