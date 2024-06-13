@@ -8,7 +8,7 @@ export default function Statistics({
     unknownWordsChange = 0,
     progress = 0,
     progressChange = 0,
-    activeSessions = 0,
+    sessions = 0,
     sessionsChange = 0
 }) {
     return (
@@ -55,11 +55,11 @@ export default function Statistics({
             </Card>
             <Card x-chunk="learning-01-chunk-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+                    <CardTitle className="text-sm font-medium">Sessions</CardTitle>
                     <Clock className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{activeSessions}</div>
+                    <div className="text-2xl font-bold">{sessions}</div>
                     <p className="text-xs text-muted-foreground">
                         {sessionsChange >= 0 ? `+${sessionsChange}` : sessionsChange} since last session
                     </p>

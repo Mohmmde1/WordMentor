@@ -372,34 +372,6 @@ export async function updateWordStatus (wordId, status, predictionId) {
   }
 }
 
-export async function fetchWords () {
-  try {
-    const response = await apiService.get ('progress/');
-
-    // Initialize arrays for known and unknown words
-    const knownWords = [];
-    const unknownWords = [];
-    // Iterate through the data and categorize words as known or unknown
-    response.forEach (item => {
-      const wordData = {
-        word: item.word,
-        added_at: parseDate (item.created_at),
-      };
-      if (item.is_known) {
-        knownWords.push (wordData);
-      } else {
-        unknownWords.push (wordData);
-      }
-    });
-
-    // Return the categorized words
-    return {knownWords, unknownWords};
-  } catch (error) {
-    console.error ('Error fetching words:', error);
-    throw error; // Re-throw the error to be caught by the caller
-  }
-}
-
 export async function fetchKnownWords() {
   try {
     const response = await apiService.get('progress/known-words');
@@ -433,5 +405,25 @@ export async function fetchUnKnownWords() {
   } catch (error) {
     console.error('Error fetching words:', error);
     throw error; // Re-throw the error to be caught by the caller
+  }
+}
+
+export async function fetchStatistics() {
+  try {
+    const response = await apiService.get('progress/statistics');
+    return {
+      knownWordsCount: response.known_words_count,
+      knownWordsChange: response.known_words_change,
+      unknownWordsCount: response.unknown_words_count,
+      unknownWordsChange: response.unknown_words_change,
+      progress: response.progress,
+      progressChange: response.progress_change,
+      sessions: response.predictions_count,
+      sessionsChange: response.predictions_change
+
+    };
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
+    throw error;
   }
 }

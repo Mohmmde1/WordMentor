@@ -1,15 +1,27 @@
-
-import {fetchWords} from '@/lib/actions';
-
+import {fetchStatistics} from '@/lib/actions';
 import LearningStatistics from '../components/Statistics';
 
-
 export default async function StatisticsSuspense () {
-
-  const {knownWords, unknownWords} = await fetchWords ();
-  return <LearningStatistics
-  noKnown={knownWords.length}
-  noUnknown={unknownWords.length}
-/>;
-  
+  const {
+    knownWordsCount,
+    knownWordsChange,
+    unknownWordsCount,
+    unknownWordsChange,
+    progress,
+    progressChange,
+    sessions,
+    sessionsChange
+  } = await fetchStatistics ();
+  return (
+    <LearningStatistics
+      noKnown={knownWordsCount}
+      noUnknown={unknownWordsCount}
+      progress={progress}
+      knownWordsChange={knownWordsChange}
+      unknownWordsChange={unknownWordsChange}
+      progressChange={progressChange}
+      sessions={sessions}
+      sessionsChange={sessionsChange}
+    />
+  );
 }

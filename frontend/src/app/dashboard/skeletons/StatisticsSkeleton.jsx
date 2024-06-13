@@ -6,7 +6,7 @@ const cardData = [
     { id: 'learning-01-chunk-0', title: 'Known Words', icon: CheckCircle },
     { id: 'learning-01-chunk-1', title: 'Unknown Words', icon: Book },
     { id: 'learning-01-chunk-2', title: 'Progress', icon: TrendingUp },
-    { id: 'learning-01-chunk-3', title: 'Active Sessions', icon: Clock }
+    { id: 'learning-01-chunk-3', title: 'Sessions', icon: Clock }
 ];
 
 export default function StatisticsSkeleton() {
