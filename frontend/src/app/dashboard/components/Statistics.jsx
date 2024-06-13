@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Book, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 
-export default function LearningStatistics({
+export default function Statistics({
     noKnown = 0,
     noUnknown = 0,
     knownWordsChange = 0,
