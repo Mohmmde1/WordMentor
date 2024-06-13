@@ -8,8 +8,7 @@ import setSessionCookies, {
 } from '@/lib/helpers';
 import {getUserId, getProfileId} from '@/lib/helpers';
 import {revalidatePath} from 'next/cache';
-import { parseDate } from './utils';
-
+import {parseDate} from './utils';
 
 export async function checkUser () {
   try {
@@ -159,19 +158,19 @@ export async function updateProfile (formData) {
   }
 }
 
-export async function fetchAssessmentWords() {
+export async function fetchAssessmentWords () {
   try {
-    const words = await apiService.get('word/assessment');
+    const words = await apiService.get ('word/assessment');
 
     // Ensure the data is in the correct format: { id: number, word: string }
-    const standardizedWords = words.map((word) => ({
+    const standardizedWords = words.map (word => ({
       id: word.id,
-      entry: word.word, 
+      entry: word.word,
     }));
 
     return standardizedWords;
   } catch (error) {
-    console.error('Error fetching assessment words:', error);
+    console.error ('Error fetching assessment words:', error);
     throw error;
   }
 }
@@ -191,10 +190,10 @@ export async function submitAssessment (selected, unselected) {
       'POST'
     );
 
-    if(responseAssessment.error){
-      throw new Error(responseAssessment.error);
+    if (responseAssessment.error) {
+      throw new Error (responseAssessment.error);
     }
-    
+
     const responseModel = await apiService.postUpdate (
       'trainedmodels/train/',
       JSON.stringify ({
@@ -218,20 +217,18 @@ export async function getStatus () {
     console.error ('Error fetching status:', error);
     throw error;
   }
-
 }
-
 
 export async function fetchBooks () {
   const profileId = getProfileId ();
-  if(!profileId) return []
+  if (!profileId) return [];
   try {
     const response = await apiService.get (`books/by-profile/${profileId}`);
     console.log (`response: ${response}`);
-  
-    response.forEach(item => {
-      item.created_at = parseDate(item.created_at);
-      item.updated_at = parseDate(item.updated_at);
+
+    response.forEach (item => {
+      item.created_at = parseDate (item.created_at);
+      item.updated_at = parseDate (item.updated_at);
     });
     return response;
   } catch (error) {
@@ -261,136 +258,144 @@ export async function deleteBooks (books) {
   }
 }
 
-export async function saveBook(form){
-  form.append("profile", getProfileId());
-  form.append("title", form.get("file_path").name);
-  form.append("pages", 0);
+export async function saveBook (form) {
+  form.append ('profile', getProfileId ());
+  form.append ('title', form.get ('file_path').name);
+  form.append ('pages', 0);
   try {
-    const response = await apiService.postFile("books/", form, "POST");
-    console.log(response);
+    const response = await apiService.postFile ('books/', form, 'POST');
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error ('Error uploading file:', error);
     throw error;
   }
 }
 
-export async function extract_unknown_words(form){
+export async function extract_unknown_words (form) {
   try {
     const data = {
       book_id: form.book_id,
       from_page: form.from_page,
-      to_page: form.to_page
-    }
-    const response = await apiService.postUpdate("trainedmodels/predict/", JSON.stringify(data), "POST");
-    console.log(response);
+      to_page: form.to_page,
+    };
+    const response = await apiService.postUpdate (
+      'trainedmodels/predict/',
+      JSON.stringify (data),
+      'POST'
+    );
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error ('Error uploading file:', error);
     throw error;
   }
 }
 
-export async function addToKnownWords(word){
-  const form = new FormData();
-  form.append("word", word);
-  
-  const profileId = getProfileId();
-  try {
+export async function addToKnownWords (word) {
+  const form = new FormData ();
+  form.append ('word', word);
 
-    const response = await apiService.postFile(`profile/${profileId}/remove-word/`, form, "POST");
-    console.log(response);
+  const profileId = getProfileId ();
+  try {
+    const response = await apiService.postFile (
+      `profile/${profileId}/remove-word/`,
+      form,
+      'POST'
+    );
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error ('Error uploading file:', error);
     throw error;
   }
 }
 
-export async function getLastPrediction(){
+export async function getLastPrediction () {
   try {
-    const response = await apiService.get("trainedmodels/predict/last-prediction/");
-    console.log(response);
+    const response = await apiService.get (
+      'trainedmodels/predict/last-prediction/'
+    );
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error ('Error uploading file:', error);
     throw error;
   }
 }
 
-export async function fetchPredictions(){
+export async function fetchPredictions () {
   try {
-    const response = await apiService.get(`trainedmodels/predict/`);
-    console.log(response)
-    if(response.message) return [];
-    
-    response.forEach(item => {
-      item.created_at = parseDate(item.created_at);
+    const response = await apiService.get (`trainedmodels/predict/`);
+    console.log (response);
+    if (response.message) return [];
+
+    response.forEach (item => {
+      item.created_at = parseDate (item.created_at);
     });
-    console.log(response);
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error ('Error fetching books:', error);
     throw error;
   }
 }
 
-export async function getPrediction(predictionId){
+export async function getPrediction (predictionId) {
   try {
-
-    const response = await apiService.get(`trainedmodels/predict/${predictionId}/`);
-    console.log(response);
+    const response = await apiService.get (
+      `trainedmodels/predict/${predictionId}/`
+    );
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error ('Error fetching books:', error);
     throw error;
   }
 }
 
-export async function updateWordStatus(wordId, status, predictionId){
+export async function updateWordStatus (wordId, status, predictionId) {
   const data = {
-    "word_text": wordId,
-  }
+    word_text: wordId,
+  };
   try {
-    const response = await apiService.postUpdate(`progress/update-word-progress/`, JSON.stringify(data), "PUT");
-    console.log(response);
+    const response = await apiService.postUpdate (
+      `progress/update-word-progress/`,
+      JSON.stringify (data),
+      'PUT'
+    );
+    console.log (response);
     return response;
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error ('Error fetching books:', error);
     throw error;
   }
 }
 
-export async function fetchWords() {
+export async function fetchWords () {
   try {
-    const response = await apiService.get('progress/');
-
+    const response = await apiService.get ('progress/');
 
     // Initialize arrays for known and unknown words
     const knownWords = [];
     const unknownWords = [];
     // Iterate through the data and categorize words as known or unknown
-    response.forEach(item => {
-      
+    response.forEach (item => {
+      const wordData = {
+        word: item.word,
+        added_at: parseDate (item.created_at),
+      };
       if (item.is_known) {
-        const wordData = {
-          word: item.word,
-          learned_at: parseDate(item.created_at)
-        };
-        knownWords.push(wordData);
+        knownWords.push (wordData);
       } else {
-        const wordData = {
-          word: item.word,
-          added_at: parseDate(item.created_at)
-        };
-        unknownWords.push(wordData);
+        unknownWords.push (wordData);
       }
     });
 
     // Return the categorized words
-    return { knownWords, unknownWords };
+    return {knownWords, unknownWords};
   } catch (error) {
-    console.error('Error fetching words:', error);
+    console.error ('Error fetching words:', error);
     throw error; // Re-throw the error to be caught by the caller
   }
 }

@@ -1,0 +1,62 @@
+import {ScrollArea} from '@/components/ui/scroll-area';
+import ListingSkeleton from '../../skeletons/ListingSkeleton';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import KnownListingSuspense from '../../suspenses/words-list/KnownListingSuspense';
+import UnknownListingSuspense from '../../suspenses/words-list/UnknownListingSuspense'
+import {Suspense} from 'react';
+
+export default function WordsListing() {
+  return (
+    <Tabs defaultValue="known-words">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="known-words">Known Words</TabsTrigger>
+        <TabsTrigger value="unknown-words">Unknown Words</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="known-words">
+        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+          <CardHeader className="flex flex-row items-center">
+            <div className="grid gap-2">
+              <CardTitle>Known Words</CardTitle>
+              <CardDescription>Words you already know.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
+              <Suspense fallback={<ListingSkeleton />}>
+
+                <KnownListingSuspense />
+              </Suspense>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="unknown-words">
+        <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+          <CardHeader className="flex flex-row items-center">
+            <div className="grid gap-2">
+              <CardTitle>Unknown Words</CardTitle>
+              <CardDescription>Words you need to learn.</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+          <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
+            <Suspense fallback={<ListingSkeleton />}>
+
+              <UnknownListingSuspense />
+            </Suspense>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
+  );
+}
