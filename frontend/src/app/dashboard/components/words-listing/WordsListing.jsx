@@ -1,3 +1,5 @@
+import {Suspense} from 'react';
+
 import {ScrollArea} from '@/components/ui/scroll-area';
 import ListingSkeleton from '../../skeletons/ListingSkeleton';
 import {
@@ -8,11 +10,14 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import KnownListingSuspense from '../../suspenses/words-list/KnownListingSuspense';
-import UnknownListingSuspense from '../../suspenses/words-list/UnknownListingSuspense'
-import {Suspense} from 'react';
+import {TableHead, TableHeader, Table, TableRow} from '@/components/ui/table';
 
-export default function WordsListing() {
+import KnownListingSuspense
+  from '../../suspenses/words-list/KnownListingSuspense';
+import UnknownListingSuspense
+  from '../../suspenses/words-list/UnknownListingSuspense';
+
+export default function WordsListing () {
   return (
     <Tabs defaultValue="known-words">
       <TabsList className="grid w-full grid-cols-2">
@@ -30,10 +35,18 @@ export default function WordsListing() {
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
-              <Suspense fallback={<ListingSkeleton />}>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Word</TableHead>
+                    <TableHead className="text-center">Added At</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <Suspense fallback={<ListingSkeleton />}>
 
-                <KnownListingSuspense />
-              </Suspense>
+                  <KnownListingSuspense />
+                </Suspense>
+              </Table>
             </ScrollArea>
           </CardContent>
         </Card>
@@ -48,11 +61,19 @@ export default function WordsListing() {
             </div>
           </CardHeader>
           <CardContent>
-          <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
-            <Suspense fallback={<ListingSkeleton />}>
+            <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Word</TableHead>
+                    <TableHead className="text-center">Added At</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <Suspense fallback={<ListingSkeleton />}>
 
-              <UnknownListingSuspense />
-            </Suspense>
+                  <UnknownListingSuspense />
+                </Suspense>
+              </Table>
             </ScrollArea>
           </CardContent>
         </Card>

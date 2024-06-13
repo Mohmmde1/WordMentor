@@ -1,9 +1,6 @@
 import {
-  Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from '@/components/ui/table';
 
@@ -23,21 +20,11 @@ export default function ListingSkeleton () {
     ));
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>
-            <Skeleton className="h-4 w-[50px]" />
-          </TableHead>
-          <TableHead className="text-center">
-            <Skeleton className="h-4 w-[100px]" />
-          </TableHead>
-        </TableRow>
-      </TableHeader>
+    
       <TableBody>
         {renderSkeletonRows (6)}
         {' '}
       </TableBody>
-    </Table>
+
   );
 }

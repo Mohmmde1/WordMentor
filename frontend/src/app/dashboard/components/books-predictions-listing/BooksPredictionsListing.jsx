@@ -1,11 +1,6 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import {Suspense} from 'react';
+
+import {Table, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {ArrowUpRight} from 'lucide-react';
 import Link from 'next/link';
 
@@ -16,13 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import BooksSuspense from '../../suspenses/books-predictions-list/BooksSuspense';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {Button} from '@/components/ui/button';
 import {ScrollArea} from '@/components/ui/scroll-area';
-import {Suspense} from 'react';
+
+import BooksSuspense
+  from '../../suspenses/books-predictions-list/BooksSuspense';
 import ListingSkeleton from '../../skeletons/ListingSkeleton';
-import PredictionsListingsSuspense from '../../suspenses/books-predictions-list/PredictionsSuspense';
+import PredictionsListingsSuspense
+  from '../../suspenses/books-predictions-list/PredictionsSuspense';
+
 export default function BooksPredictionsListing () {
   return (
     <Tabs defaultValue="books">
@@ -48,19 +46,19 @@ export default function BooksPredictionsListing () {
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
-              <Suspense fallback={<ListingSkeleton />}>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Book</TableHead>
-                      <TableHead className="text-center">Pages</TableHead>
-                    </TableRow>
-                  </TableHeader>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Book</TableHead>
+                    <TableHead className="text-center">Pages</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <Suspense fallback={<ListingSkeleton />}>
 
                   <BooksSuspense />
 
-                </Table>
-              </Suspense>
+                </Suspense>
+              </Table>
             </ScrollArea>
           </CardContent>
         </Card>
@@ -83,19 +81,19 @@ export default function BooksPredictionsListing () {
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[80vh] sm:h-[400px] w-full p-4">
-              <Suspense fallback={<ListingSkeleton />}>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Sessions</TableHead>
-                      <TableHead className="text-center">
-                        No Predicated Words
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Sessions</TableHead>
+                    <TableHead className="text-center">
+                      No Predicated Words
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <Suspense fallback={<ListingSkeleton />}>
                   <PredictionsListingsSuspense />
-                </Table>
-              </Suspense>
+                </Suspense>
+              </Table>
             </ScrollArea>
           </CardContent>
         </Card>
