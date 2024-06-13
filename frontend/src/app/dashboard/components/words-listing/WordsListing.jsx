@@ -12,10 +12,9 @@ import {
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {TableHead, TableHeader, Table, TableRow} from '@/components/ui/table';
 
-import KnownListingSuspense
-  from '../../suspenses/words-list/KnownListingSuspense';
-import UnknownListingSuspense
-  from '../../suspenses/words-list/UnknownListingSuspense';
+
+import WordsListingSuspense
+  from '../../suspenses/words-list/WordsListingSuspense';
 
 export default function WordsListing () {
   return (
@@ -44,7 +43,7 @@ export default function WordsListing () {
                 </TableHeader>
                 <Suspense fallback={<ListingSkeleton />}>
 
-                  <KnownListingSuspense />
+                  <WordsListingSuspense type={"known"} />
                 </Suspense>
               </Table>
             </ScrollArea>
@@ -71,7 +70,7 @@ export default function WordsListing () {
                 </TableHeader>
                 <Suspense fallback={<ListingSkeleton />}>
 
-                  <UnknownListingSuspense />
+                <WordsListingSuspense type={"unknown"} />
                 </Suspense>
               </Table>
             </ScrollArea>
