@@ -5,7 +5,7 @@ import { NavigationMenuItem, NavigationMenuList } from '@/components/ui/navigati
 import Badges from '@/components/navbar/Badges';
 import ProfileDropdown from '@/components/navbar/NavDropdown';
 import AuthTabs from '@/components/navbar/AuthTabs';
-import { checkUser, fetchProfile } from '@/lib/actions';
+import { checkUser, fetchProfile, checkAssessmentStatus } from '@/lib/actions';
 
 export function AuthSection() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,7 +20,8 @@ export function AuthSection() {
           setIsAuthenticated(true);
           const data = await fetchProfile();
           setProfile(data);
-          setIsAssessed(data.has_taken_assessment);
+          const assessmentStatus = await checkAssessmentStatus();
+          setIsAssessed(assessmentStatus);
         }
       } catch (error) {
         console.error('Error checking authentication:', error);

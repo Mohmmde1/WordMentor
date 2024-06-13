@@ -21,13 +21,13 @@ export async function checkUser () {
   }
 }
 
-export async function checkAssessmentStatus () {
+export async function checkAssessmentStatus() {
   try {
-    const assessmentStatus = getAssessmentStatus ();
-    if (assessmentStatus) return assessmentStatus;
-    else return undefined;
+    const response = await apiService.get('assessment/assessment-status');
+    const assessmentStatus = response.assessment_exists;
+    return assessmentStatus ? assessmentStatus : undefined;
   } catch (error) {
-    console.error ('Error checking assessment status:', error.message);
+    console.error('Error checking assessment status:', error.message);
     throw error;
   }
 }
