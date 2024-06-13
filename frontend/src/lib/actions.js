@@ -399,3 +399,39 @@ export async function fetchWords () {
     throw error; // Re-throw the error to be caught by the caller
   }
 }
+
+export async function fetchKnownWords() {
+  try {
+    const response = await apiService.get('progress/known-words');
+    console.log(response)
+    // Initialize an array to store the processed words
+    const knownWords = response.map(item => ({
+      word: item.word,
+      added_at: parseDate(item.created_at),
+    }));
+
+    // Return the categorized words
+    return knownWords;
+  } catch (error) {
+    console.error('Error fetching words:', error);
+    throw error; // Re-throw the error to be caught by the caller
+  }
+}
+
+export async function fetchUnKnownWords() {
+  try {
+    const response = await apiService.get('progress/unknown-words');
+    console.log(response)
+    // Initialize an array to store the processed words
+    const unknownWords = response.map(item => ({
+      word: item.word,
+      added_at: parseDate(item.created_at),
+    }));
+
+    // Return the categorized words
+    return unknownWords;
+  } catch (error) {
+    console.error('Error fetching words:', error);
+    throw error; // Re-throw the error to be caught by the caller
+  }
+}
