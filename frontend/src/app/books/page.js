@@ -1,6 +1,6 @@
 import {Badge} from '@/components/ui/badge';
-import {columns} from './Columns';
-import {DataTable} from './DataTable';
+import {columns} from './_components/Columns';
+import {DataTable} from './_components/DataTable';
 
 import {
   HoverCard,
@@ -28,16 +28,16 @@ export default async function Page () {
   const status = await getStatus ();
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container  py-10">
       <div className="space-y-1.5 mb-4">
-          {/* Back link */}
-          <Link
-            href={`/dashboard`}
-            className="flex items-center gap-2 text-lg font-semibold custom-transition"
-          >
-            <ArrowLeft /> Back
-          </Link>
-        </div>
+        {/* Back link */}
+        <Link
+          href={`/dashboard`}
+          className="flex items-center gap-2 text-lg font-semibold custom-transition"
+        >
+          <ArrowLeft /> Back
+        </Link>
+      </div>
       <Card>
         <div className="flex justify-between">
 
@@ -47,18 +47,18 @@ export default async function Page () {
             {status === 'completed'
               ? <HoverCard>
                   <HoverCardTrigger>
-                    <Badge>Model is Ready</Badge>
+                    <Badge>Ready to Go</Badge>
                   </HoverCardTrigger>
                   <HoverCardContent>
-                    Model is ready to predict unknown words. You can select the book and pages to predict the unknown words.
+                    Your personalized assistant is now ready to predict unknown words. You can select the book and pages to get started.
                   </HoverCardContent>
                 </HoverCard>
               : <HoverCard>
                   <HoverCardTrigger>
-                    <Badge>Model Not Ready</Badge>
+                    <Badge>Preparing Your Experience</Badge>
                   </HoverCardTrigger>
                   <HoverCardContent>
-                    Model is not ready to predict unknown words. Please wait for the model to be ready.
+                    We are setting up your personalized assistant. This may take a few moments. Thank you for your patience.
                   </HoverCardContent>
                 </HoverCard>}
 
