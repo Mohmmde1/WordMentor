@@ -103,3 +103,25 @@ class WordProgressViewSet(ModelViewSet):
             'predictions_count': current_predictions_counts,
             'predictions_change': predictions_change
         }, status=200)
+
+    @action(detail=False, methods=['put'], url_path='update-words-status')
+    def update_words_status(self, request):
+        """
+        Update the words status to known.
+        """
+        try:
+            data = request.data.get('learnedWords', [])
+            if not data:
+                return Response({"error": "No data has been submitted"}, status=404)
+
+            queryset = self.get_queryset()
+            updated_count = queryset.filter(
+                word_meaning__word__word__in=data).update(is_known=True)
+            
+            if updated_count == 0:
+                return Response({"error": "No matching words found"}, status=404)
+
+            return Response({"message": "Word status updated successfully"}, status=200)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

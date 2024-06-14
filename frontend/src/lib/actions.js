@@ -21,13 +21,13 @@ export async function checkUser () {
   }
 }
 
-export async function checkAssessmentStatus() {
+export async function checkAssessmentStatus () {
   try {
-    const response = await apiService.get('assessment/assessment-status');
+    const response = await apiService.get ('assessment/assessment-status');
     const assessmentStatus = response.assessment_exists;
     return assessmentStatus ? assessmentStatus : undefined;
   } catch (error) {
-    console.error('Error checking assessment status:', error.message);
+    console.error ('Error checking assessment status:', error.message);
     throw error;
   }
 }
@@ -372,45 +372,45 @@ export async function updateWordStatus (wordId, status, predictionId) {
   }
 }
 
-export async function fetchKnownWords() {
+export async function fetchKnownWords () {
   try {
-    const response = await apiService.get('progress/known-words');
-    console.log(response)
+    const response = await apiService.get ('progress/known-words');
+    console.log (response);
     // Initialize an array to store the processed words
-    const knownWords = response.map(item => ({
+    const knownWords = response.map (item => ({
       word: item.word,
-      added_at: parseDate(item.created_at),
+      added_at: parseDate (item.created_at),
     }));
 
     // Return the categorized words
     return knownWords;
   } catch (error) {
-    console.error('Error fetching words:', error);
+    console.error ('Error fetching words:', error);
     throw error; // Re-throw the error to be caught by the caller
   }
 }
 
-export async function fetchUnKnownWords() {
+export async function fetchUnKnownWords () {
   try {
-    const response = await apiService.get('progress/unknown-words');
-    console.log(response)
+    const response = await apiService.get ('progress/unknown-words');
+    console.log (response);
     // Initialize an array to store the processed words
-    const unknownWords = response.map(item => ({
+    const unknownWords = response.map (item => ({
       word: item.word,
-      added_at: parseDate(item.created_at),
+      added_at: parseDate (item.created_at),
     }));
 
     // Return the categorized words
     return unknownWords;
   } catch (error) {
-    console.error('Error fetching words:', error);
+    console.error ('Error fetching words:', error);
     throw error; // Re-throw the error to be caught by the caller
   }
 }
 
-export async function fetchStatistics() {
+export async function fetchStatistics () {
   try {
-    const response = await apiService.get('progress/statistics');
+    const response = await apiService.get ('progress/statistics');
     return {
       knownWordsCount: response.known_words_count,
       knownWordsChange: response.known_words_change,
@@ -419,11 +419,28 @@ export async function fetchStatistics() {
       progress: response.progress,
       progressChange: response.progress_change,
       sessions: response.predictions_count,
-      sessionsChange: response.predictions_change
-
+      sessionsChange: response.predictions_change,
     };
   } catch (error) {
-    console.error('Error fetching statistics:', error);
+    console.error ('Error fetching statistics:', error);
     throw error;
+  }
+}
+
+export async function updateWordsStatus (learnedWordList) {
+  try {
+    const data = JSON.stringify ({learnedWords: learnedWordList});
+    const response = await apiService.postUpdate("progress/update-words-status/", data, "PUT")
+
+    if (response) {
+      // Handle successful submission (e.g., show a success message)
+      console.log ('Learned words submitted successfully');
+      return response;
+    } else {
+      // Handle errors (e.g., show an error message)
+      console.error ('Failed to submit learned words');
+    }
+  } catch (error) {
+    console.error ('An error occurred while submitting learned words:', error);
   }
 }

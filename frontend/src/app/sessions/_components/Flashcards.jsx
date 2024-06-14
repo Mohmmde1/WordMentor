@@ -2,8 +2,11 @@
 import {useState} from 'react';
 import Flashcard from '@/app/sessions/_components/Flashcard';
 import {Button} from '@/components/ui/button';
-
+import {updateWordsStatus} from '@/lib/actions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 export default function Flashcards({prediction, flashcards}) {
+  const router = useRouter();
   const [learnedWords, setLearnedWords] = useState ({});
 
   const handleLearnedWord = (word, optionalState = null) => {
@@ -11,6 +14,21 @@ export default function Flashcards({prediction, flashcards}) {
       ...prevLearnedWords,
       [word]: optionalState !== null ? optionalState : !prevLearnedWords[word],
     }));
+  };
+
+  const handleSubmitLearnedWords = async () => {
+    const learnedWordList = Object.keys (learnedWords).filter (
+      word => learnedWords[word]
+    );
+    try {
+      const response = updateWordsStatus (learnedWordList);
+      if(response){
+        toast("Words have been successuflly updated")
+        router.push("/")
+      }
+    } catch (error) {
+      console.error ('Error Submitting Learned Words: ', error);
+    }
   };
 
   return (
@@ -53,6 +71,13 @@ export default function Flashcards({prediction, flashcards}) {
           ))}
         </ul>
       </section>
+
+      {/* Submit Button */}
+      <div className="mt-8 flex justify-center">
+        <Button onClick={handleSubmitLearnedWords}>
+          Submit Learned Words
+        </Button>
+      </div>
     </div>
   );
 }
