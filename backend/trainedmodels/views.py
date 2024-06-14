@@ -49,16 +49,16 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             profile = UserProfile.objects.get(id=profile_id)
             labeled_data = profile.extract_data()
             path = f"{profile.user.username}_model"
-            print(labeled_data, path)
+            
             # Start the fine-tuning task asynchronously
-            task = fine_tune_bert(labeled_data, path)
-            UserTrainedModel.objects.create(
+            user_trained_model = UserTrainedModel.objects.create(
                 profile=profile,
                 file_path=path,
                 name=f"{profile.user.username}_model",
                 version="1.0",
                 description="Fine-tuned BERT model",
             )
+            task = fine_tune_bert(labeled_data, user_trained_model)
 
             logger.info(
                 f"Fine-tuning task started for profile ID {profile_id}")
@@ -83,14 +83,15 @@ class FineTuneViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         Returns:
             Response: A response with the task ID, status, and result.
         """
-        path = f"{request.user.username}_model"
         try:
+            user_trained_model = UserTrainedModel.objects.get(profile__user=request.user)
             # check folder if it has file with name profile.user.username_model
-            ready = check_status(path=path)
-            if ready:
+            if user_trained_model.is_ready:
                 return Response({"status": "completed"}, status=status.HTTP_200_OK)
             else:
                 return Response({"status": "pending"}, status=status.HTTP_200_OK)
+        except UserTrainedModel.DoesNotExist:
+            return Response({"status": "did not started"}, status=status.HTTP_200_OK) 
         except Exception as e:
             logger.error(
                 f"An error occurred while checking task status: {str(e)}")

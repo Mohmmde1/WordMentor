@@ -15,7 +15,7 @@ cache_dir = os.path.join(settings.BASE_DIR, 'cache_dir')
 tokenizer_cache = os.path.join(cache_dir, 'tokenizer')
 model_cache = os.path.join(cache_dir, 'model')
 
-def fine_tune_bert(labeled_data, path, epochs=3, batch_size=8, learning_rate=1e-5):
+def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5):
     """
     Fine-tunes a BERT model for sequence classification on the provided labeled data.
 
@@ -69,9 +69,11 @@ def fine_tune_bert(labeled_data, path, epochs=3, batch_size=8, learning_rate=1e-
             logger.info(f"Epoch {epoch + 1}/{epochs}, Loss: {total_loss:.4f}")
 
         # Save the fine-tuned model
-        fine_tuned_model_path = os.path.join(settings.BASE_DIR, "fine_tuned_models", path)
+        fine_tuned_model_path = os.path.join(settings.BASE_DIR, "fine_tuned_models", user_trained_model.file_path)
         os.makedirs(os.path.dirname(fine_tuned_model_path), exist_ok=True)
         model.save_pretrained(fine_tuned_model_path)
+        user_trained_model.is_ready=True
+        user_trained_model.save()
         logger.info(f"Model fine-tuned and saved at {fine_tuned_model_path}")
 
     except Exception as e:

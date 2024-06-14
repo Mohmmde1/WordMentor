@@ -23,4 +23,4 @@ class UserWordAssessmentMapping(BaseModel):
     word_assessment = models.ForeignKey('assessment.WordAssessment', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"UserWordAssessment {self.assessment.__str__} {self.word_assessment.__str__}"
+        return f"UserWordAssessment {self.assessment.__str__()} {self.word_assessment.__str__()}"
