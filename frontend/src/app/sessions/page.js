@@ -1,8 +1,6 @@
 import {format} from 'date-fns';
 import {fetchPredictions} from '@/lib/actions'; 
-import Collections from './_components/Collections';
-import Link from "next/link";
-import {ArrowLeft} from 'lucide-react';
+import Sessions from './_components/Sessions';
 export default async function Page() {
   const input = await fetchPredictions();
 
@@ -23,17 +21,8 @@ export default async function Page() {
   return (
     <div className="px-4 py-8 md:px-6 lg:px-8 mb-12 space-y-5">
 
-      <div className="space-y-1.5">
-          {/* Back link */}
-          <Link
-            href={`/dashboard`}
-            className="flex items-center gap-2 text-lg font-semibold custom-transition"
-          >
-            <ArrowLeft /> Back
-          </Link>
-        </div>
 
-      <Collections predictions={predictions} />
+      <Sessions predictions={predictions} />
     </div>
   );
 }

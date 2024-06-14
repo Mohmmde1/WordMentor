@@ -54,13 +54,13 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
         <DropdownMenuItem
           asChild
           className={
-            pathname === '/flashcards'
+            pathname === '/sessions'
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline'
           }
         >
 
-          <Link href="/flashcards">
+          <Link href="/sessions">
             <PercentDiamondIcon className="mr-2 h-4 w-4" />
 
             <span>Sessions</span>

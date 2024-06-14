@@ -90,7 +90,7 @@ export default function Collections({predictions}) {
                 <span className="text-gray-500 dark:text-gray-400">
                   {prediction.noFlashcards} flashcards
                 </span>
-                <a href={`/flashcards/${prediction.id}`}>
+                <a href={`/sessions/${prediction.id}`}>
                   <ChevronRightIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                 </a>
               </div>
