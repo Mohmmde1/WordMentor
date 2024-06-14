@@ -1,5 +1,5 @@
 import {fetchStatistics} from '@/lib/actions';
-import LearningStatistics from '../components/Statistics';
+import LearningStatistics from '../_components/Statistics';
 
 export default async function StatisticsSuspense () {
   const {

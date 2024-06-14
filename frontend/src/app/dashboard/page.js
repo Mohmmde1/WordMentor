@@ -1,8 +1,8 @@
 import {Suspense} from 'react';
-import StatisticsSkeleton from './skeletons/StatisticsSkeleton';
-import StatisticsSuspense from './suspenses/StatisticsSuspense';
-import BooksPredictionsListing from './components/books-predictions-listing/BooksPredictionsListing';
-import WordsListing from './components/words-listing/WordsListing';
+import StatisticsSkeleton from './_skeletons/StatisticsSkeleton';
+import StatisticsSuspense from './_suspenses/StatisticsSuspense';
+import BooksPredictionsListing from './_components/books-predictions-listing/BooksPredictionsListing';
+import WordsListing from './_components/words-listing/WordsListing';
 
 export default async function Page () {
   return (

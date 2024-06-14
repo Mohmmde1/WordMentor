@@ -1,10 +1,10 @@
 'use client';
-import ProfileAvtar from '@/app/settings/ProfileAvtar';
-import ProfileFormSkeleton from '@/app/settings/Skeleton';
+import ProfileAvtar from '@/app/settings/_components/ProfileAvtar';
+import ProfileFormSkeleton from '@/app/settings/_skeletons/Skeleton';
 
 import {useState, useEffect} from 'react';
 import {Separator} from '@/components/ui/separator';
-import {ProfileForm} from '@/components/forms/profile';
+import {ProfileForm} from '@/app/settings/_components/profile';
 import {fetchProfile, checkUser} from '@/lib/actions';
 
 export default function SettingsProfilePage () {

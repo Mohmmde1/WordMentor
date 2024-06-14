@@ -2,9 +2,9 @@ import {Inter} from 'next/font/google';
 import {Toaster} from '@/components/ui/sonner';
 
 import './globals.css';
-import MainFooter from '@/components/Footer';
-import {MainNav} from '@/components/navbar/Navbar';
-import {ThemeProvider} from '@/components/ThemeProvider';
+import MainFooter from '@/app/_components/Footer';
+import {MainNav} from '@/app/_components/navbar/Navbar';
+import {ThemeProvider} from '@/app/_components/ThemeProvider';
 
 const inter = Inter ({subsets: ['latin']});
 

@@ -16,10 +16,10 @@ import {Button} from '@/components/ui/button';
 import {ScrollArea} from '@/components/ui/scroll-area';
 
 import BooksSuspense
-  from '../../suspenses/books-predictions-list/BooksSuspense';
-import ListingSkeleton from '../../skeletons/ListingSkeleton';
+  from '../../_suspenses/books-predictions-list/BooksSuspense';
+import ListingSkeleton from '../../_skeletons/ListingSkeleton';
 import PredictionsListingsSuspense
-  from '../../suspenses/books-predictions-list/PredictionsSuspense';
+  from '../../_suspenses/books-predictions-list/PredictionsSuspense';
 
 export default function BooksPredictionsListing () {
   return (

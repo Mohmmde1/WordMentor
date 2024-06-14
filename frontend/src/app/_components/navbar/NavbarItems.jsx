@@ -9,7 +9,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { AuthSection } from "@/components/navbar/AuthSection";
+import { AuthSection } from "@/app/_components/navbar/AuthSection";
 
 export function NavigationItems() {
   return (

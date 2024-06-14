@@ -2,8 +2,8 @@
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import CarouselPlugin from './CarouselHome';
-import FAQAccordion from './FAQAccordion';
+import CarouselPlugin from './_components/CarouselHome';
+import FAQAccordion from './_components/FAQAccordion';
 
 export default function Page() {
   return (

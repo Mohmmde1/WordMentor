@@ -1,7 +1,7 @@
 'use client'
 import { getPrediction } from '@/lib/actions';
 import { useEffect, useState } from 'react';
-import Flashcard from '@/components/Flashcard';
+import Flashcard from '@/app/flashcards/_components/Flashcard';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 

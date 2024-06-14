@@ -23,7 +23,6 @@ const Predictions = () => {
     const fetchWords = async () => {
       try {
         const response = await getLastPrediction();
-        console.log (response);
         const fetched_words = response.unknown_words;
         setPredictionId (response.id);
         setUnknownWords (fetched_words);

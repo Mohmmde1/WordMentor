@@ -6,8 +6,8 @@ import {
   Dialog,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import LoginForm from '@/components/forms/auth/LoginForm';
-import SignupForm from '@/components/forms/auth/SignupForm';
+import LoginForm from '@/app/_components/forms/auth/LoginForm';
+import SignupForm from '@/app/_components/forms/auth/SignupForm';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 
 const AuthTabs = ({setIsAuthenticated}) => {

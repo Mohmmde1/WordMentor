@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { ModeToggle } from '@/components/navbar/Toggle';
+import { ModeToggle } from '@/app/_components/navbar/Toggle';
 import { NavigationMenuItem, NavigationMenuList } from '@/components/ui/navigation-menu';
-import Badges from '@/components/navbar/Badges';
-import ProfileDropdown from '@/components/navbar/NavDropdown';
-import AuthTabs from '@/components/navbar/AuthTabs';
+import Badges from '@/app/_components/navbar/Badges';
+import ProfileDropdown from '@/app/_components/navbar/NavDropdown';
+import AuthTabs from '@/app/_components/navbar/AuthTabs';
 import { checkUser, fetchProfile, checkAssessmentStatus } from '@/lib/actions';
 
 export function AuthSection() {

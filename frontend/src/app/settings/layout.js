@@ -1,6 +1,6 @@
 "use client"
 import { Separator } from "@/components/ui/separator";
-import SidebarNav from "@/app/settings/SidebarNav";
+import SidebarNav from "@/app/settings/_components/SidebarNav";
 
 const sidebarNavItems = [
   {

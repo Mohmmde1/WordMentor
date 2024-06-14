@@ -1,7 +1,7 @@
 
 import {fetchBooks} from '@/lib/actions';
 
-import Listing from '../../components/books-predictions-listing/Listing';
+import Listing from '../../_components/books-predictions-listing/Listing';
 
 
 export default async function BooksListingsSuspense () {

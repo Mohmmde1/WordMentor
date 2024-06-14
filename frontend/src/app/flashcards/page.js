@@ -1,6 +1,6 @@
 import {format} from 'date-fns';
 import {fetchPredictions} from '@/lib/actions'; 
-import Collections from './collections';
+import Collections from './_components/Collections';
 import Link from "next/link";
 import {ArrowLeft} from 'lucide-react';
 export default async function Page() {

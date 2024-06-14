@@ -1,7 +1,7 @@
 import {Suspense} from 'react';
 
 import {ScrollArea} from '@/components/ui/scroll-area';
-import ListingSkeleton from '../../skeletons/ListingSkeleton';
+import ListingSkeleton from '../../_skeletons/ListingSkeleton';
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {TableHead, TableHeader, Table, TableRow} from '@/components/ui/table';
 
 
 import WordsListingSuspense
-  from '../../suspenses/words-list/WordsListingSuspense';
+  from '../../_suspenses/words-list/WordsListingSuspense';
 
 export default function WordsListing () {
   return (
