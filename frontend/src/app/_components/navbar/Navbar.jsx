@@ -1,9 +1,14 @@
-'use client'
+
 import Link from "next/link";
 import { NavigationItems } from "@/app/_components/navbar/NavbarItems";
 import { Icons } from "@/components/icons";
+import { checkUser, fetchProfile, checkAssessmentStatus } from '@/lib/actions';
 
-export function MainNav() {
+export async function MainNav() {
+  const isAuthenticated = await checkUser();
+  const isAssessed = isAuthenticated ? await checkAssessmentStatus() : false;
+  const profile = isAuthenticated? await fetchProfile() : null;
+
   return (
     <nav className="bg-gray-800 shadow-lg sticky top-0 z-50  text-white">
       <div className="container mx-auto px-4">
@@ -16,7 +21,7 @@ export function MainNav() {
           
           {/* Navigation Items */}
 
-            <NavigationItems />
+            <NavigationItems isAuthenticated={isAuthenticated} isAssessed={isAssessed} profile={profile}/>
 
         </div>
       </div>

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const ProfileDropdown = ({profile, setIsAuthenticated}) => {
+const ProfileDropdown = ({profile}) => {
   const pathname = usePathname ();
   const router = useRouter ();
   return (
@@ -86,7 +86,6 @@ const ProfileDropdown = ({profile, setIsAuthenticated}) => {
             onClick={async () => {
               try {
                 await logout (); 
-                setIsAuthenticated (false); // Update the authentication state
                 router.push ('/'); // Redirect to the home page
               } catch (error) {
                 console.error ('Error during logout:', error);

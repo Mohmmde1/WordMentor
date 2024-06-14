@@ -30,7 +30,7 @@ const signupFormSchema = z.object ({
     .min (8, {message: 'Password must be at least 8 characters'}),
 });
 
-const SignupForm = ({setIsAuthenticated}) => {
+const SignupForm = () => {
   const form = useForm ({
     resolver: zodResolver (signupFormSchema),
     mode: 'onChange',
@@ -39,7 +39,7 @@ const SignupForm = ({setIsAuthenticated}) => {
   const onSubmit = async formData => {
     try {
       await signup (formData);
-      setIsAuthenticated (true);
+
       toast ('Signup Successfully!');
     } catch (error) {
       // Handle signup error

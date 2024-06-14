@@ -11,7 +11,7 @@ import {
 
 import { AuthSection } from "@/app/_components/navbar/AuthSection";
 
-export function NavigationItems() {
+export function NavigationItems({profile, isAssessed, isAuthenticated}) {
   return (
     <NavigationMenu className="max-w-full  flex justify-between">
       <NavigationMenuList>
@@ -21,7 +21,7 @@ export function NavigationItems() {
             </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
-      <AuthSection />
+      <AuthSection isAuthenticated={isAuthenticated} isAssessed={isAssessed} profile={profile} />
     </NavigationMenu>
   );
 }

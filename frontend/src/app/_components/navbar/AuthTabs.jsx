@@ -10,7 +10,7 @@ import LoginForm from '@/app/_components/forms/auth/LoginForm';
 import SignupForm from '@/app/_components/forms/auth/SignupForm';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 
-const AuthTabs = ({setIsAuthenticated}) => {
+const AuthTabs = () => {
   return (
     <Dialog>
       <DialogTrigger>Guest</DialogTrigger>
@@ -28,10 +28,10 @@ const AuthTabs = ({setIsAuthenticated}) => {
             </TabsList>
           </div>
           <TabsContent value="login">
-            <LoginForm setIsAuthenticated={setIsAuthenticated} />
+            <LoginForm  />
           </TabsContent>
           <TabsContent value="signup">
-            <SignupForm setIsAuthenticated={setIsAuthenticated}/>
+            <SignupForm />
           </TabsContent>
         </Tabs>
       </DialogContent>
