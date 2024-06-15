@@ -296,9 +296,9 @@ class PredictionViewSet(viewsets.ViewSet):
         start_time = time.time()
         try:
             tokenizer = BertTokenizer.from_pretrained(
-                'bert-base-uncased', cache_dir=os.path.join(settings.BASE_DIR, 'cache_dir', 'tokenizer'))
+                'bert-base-uncased', cache_dir=os.path.join(settings.BASE_DIR, 'data', 'cache_dir', 'tokenizer'))
             model = BertForSequenceClassification.from_pretrained(
-                os.path.join(settings.BASE_DIR, 'fine_tuned_models', trained_model.file_path))
+                os.path.join(settings.BASE_DIR, 'data', 'fine_tuned_models', trained_model.file_path))
             model.eval()
 
             extracted_text = extract_text_from_pdf(pdf_path, from_page, to_page)

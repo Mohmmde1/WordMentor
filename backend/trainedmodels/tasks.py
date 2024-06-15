@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Set cache directories
-cache_dir = os.path.join(settings.BASE_DIR, 'cache_dir')
+cache_dir = os.path.join(settings.BASE_DIR, 'data', 'cache_dir')
 tokenizer_cache = os.path.join(cache_dir, 'tokenizer')
 model_cache = os.path.join(cache_dir, 'model')
 
@@ -69,7 +69,7 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
             logger.info(f"Epoch {epoch + 1}/{epochs}, Loss: {total_loss:.4f}")
 
         # Save the fine-tuned model
-        fine_tuned_model_path = os.path.join(settings.BASE_DIR, "fine_tuned_models", user_trained_model.file_path)
+        fine_tuned_model_path = os.path.join(settings.BASE_DIR, "data", "fine_tuned_models", user_trained_model.file_path)
         os.makedirs(os.path.dirname(fine_tuned_model_path), exist_ok=True)
         model.save_pretrained(fine_tuned_model_path)
         user_trained_model.is_ready=True
@@ -90,5 +90,5 @@ def check_status(path):
     Returns:
         bool: True if the model exists, False otherwise.
     """
-    fine_tuned_model_path = os.path.join(settings.BASE_DIR, "fine_tuned_models", path)
+    fine_tuned_model_path = os.path.join(settings.BASE_DIR, "data", "fine_tuned_models", path)
     return os.path.exists(fine_tuned_model_path)

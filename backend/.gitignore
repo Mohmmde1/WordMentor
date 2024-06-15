@@ -98,11 +98,11 @@ media/
 wordmentor_firebase.json
 
 # Models
-fine_tuned_models/
-cache_dir/
+data/fine_tuned_models/
+data/cache_dir/
 
 #nltk data
-nltk_data/
+data/nltk_data/
 
 # data
 data/data.json
