@@ -21,6 +21,9 @@ transformers = "*"
 dj-database-url = "*"
 nltk = "*"
 drf-yasg = "*"
+pandas = "*"
+scikit-learn = "*"
+tqdm = "*"
 
 [dev-packages]
 django-extensions = "*"
