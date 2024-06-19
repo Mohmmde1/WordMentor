@@ -10,6 +10,7 @@ from word.models import Word, WordMeaning
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
 from .models import UserAssessment, WordAssessment, UserWordAssessmentMapping
+from assessment.serializers import UserAssessmentSerializer
 
 class AssessmentViewSetTest(TestCase):
     
@@ -130,3 +131,51 @@ class AssessmentModelsTestCase(TestCase):
 
         self.assertEqual(str(mapping1), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word1.word}")
         self.assertEqual(str(mapping2), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word2.word}")
+
+
+class UserAssessmentSerializerTestCase(TestCase):
+    def setUp(self):
+        # Create a user and user profile
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass')
+        self.user_profile = UserProfile.objects.create(user=self.user)
+
+        # Create a UserAssessment instance
+        self.user_assessment = UserAssessment.objects.create(profile=self.user_profile)
+
+        # Serializer data
+        self.serializer_data = {
+            'profile': self.user_profile.id,
+        }
+
+    def test_contains_expected_fields(self):
+        serializer = UserAssessmentSerializer(instance=self.user_assessment)
+        data = serializer.data
+        self.assertCountEqual(data.keys(), ['id', 'created_at', 'updated_at', 'profile'])
+
+    def test_serialization(self):
+        serializer = UserAssessmentSerializer(instance=self.user_assessment)
+        self.assertEqual(serializer.data['profile'], self.user_profile.id)
+
+    def test_deserialization(self):
+        serializer = UserAssessmentSerializer(data=self.serializer_data)
+        self.assertTrue(serializer.is_valid())
+        user_assessment = serializer.save()
+        self.assertEqual(user_assessment.profile, self.user_profile)
+
+    def test_invalid_data(self):
+        invalid_data = {
+            'profile': None,  # profile is required
+        }
+        serializer = UserAssessmentSerializer(data=invalid_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), set(['profile']))
+
+    def test_update(self):
+        updated_data = {
+            'profile': self.user_profile.id,
+        }
+        serializer = UserAssessmentSerializer(instance=self.user_assessment, data=updated_data)
+        self.assertTrue(serializer.is_valid())
+        updated_assessment = serializer.save()
+        self.assertEqual(updated_assessment.profile, self.user_profile)
+
