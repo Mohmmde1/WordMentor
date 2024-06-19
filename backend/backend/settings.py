@@ -177,6 +177,7 @@ if MODE == "docker":
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    'IS_RUNNING_TESTS':False
 }
 
 X_RAPID_API_KEY = os.environ.get("X_RAPID_API_KEY")
