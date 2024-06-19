@@ -24,6 +24,8 @@ drf-yasg = "*"
 pandas = "*"
 scikit-learn = "*"
 tqdm = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [dev-packages]
 django-extensions = "*"

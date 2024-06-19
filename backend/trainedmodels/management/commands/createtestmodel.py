@@ -116,7 +116,7 @@ def fine_tune_bert(labeled_data, path, epochs=3, batch_size=8, learning_rate=1e-
 
         # Save metrics to CSV file
         metrics_df = pd.DataFrame(metrics)
-        metrics_csv_path = os.path.join(settings.BASE_DIR, 'data', 'results', 'training_metrics.csv')
+        metrics_csv_path = os.path.join(settings.BASE_DIR, 'data', 'results', path, 'training_metrics.csv')
         os.makedirs(os.path.dirname(metrics_csv_path), exist_ok=True)
         metrics_df.to_csv(metrics_csv_path, index=False)
         

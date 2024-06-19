@@ -86,7 +86,7 @@ class Command(BaseCommand):
                 'probability_not_known': probs[:, 0].tolist()
             }
             df = pd.DataFrame(results)
-            csv_output_path = os.path.join(settings.BASE_DIR, 'data', 'results', f'{options['model_path']}_predictions.csv')
+            csv_output_path = os.path.join(settings.BASE_DIR, 'data', 'results', options['model_path'], 'predictions.csv')
             os.makedirs(os.path.dirname(csv_output_path), exist_ok=True)
             df.to_csv(csv_output_path, index=False)
 
