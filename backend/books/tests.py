@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from unittest.mock import patch, MagicMock
 from io import BytesIO
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from wordmentor_auth.models import User
 from settings.models import UserProfile
@@ -126,3 +126,81 @@ class UserBookModelTest(TestCase):
 
         # Check the string representation of the UserBook instance
         self.assertEqual(str(user_book), 'Test Book')
+
+class UserBookSerializerTestCase(TestCase):
+
+    def setUp(self):
+        # Create a user and user profile
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass')
+        self.user_profile = UserProfile.objects.create(user=self.user)
+
+        # Create a mock file using SimpleUploadedFile
+        self.mock_file = SimpleUploadedFile('test.pdf', b'%PDF-1.4')
+
+        # Create a UserBook instance
+        self.user_book = UserBook.objects.create(
+            file_path=self.mock_file,
+            pages=10,
+            title='Test Book',
+            profile=self.user_profile
+        )
+
+        # Serializer data
+        self.serializer_data = {
+            'file_path': self.mock_file,
+            'pages': 10,
+            'title': 'Test Book',
+            'profile': self.user_profile.id
+        }
+
+    def test_contains_expected_fields(self):
+        serializer = UserBookSerializer(instance=self.user_book)
+        data = serializer.data
+        self.assertCountEqual(data.keys(), ['id', 'created_at', 'updated_at', 'file_path', 'pages', 'title', 'profile'])
+
+    def test_serialization(self):
+        serializer = UserBookSerializer(instance=self.user_book)
+
+        # Check if 'file_path' is in the serialized data
+        self.assertIn('file_path', serializer.data)
+        # Use regex to match the file path pattern
+        self.assertTrue(re.match(r'/media/books/test.*\.pdf', serializer.data['file_path']), f"file_path is {serializer.data['file_path']}")
+
+        self.assertEqual(serializer.data['pages'], 10)
+        self.assertEqual(serializer.data['title'], 'Test Book')
+        self.assertEqual(serializer.data['profile'], self.user_profile.id)
+
+    def test_deserialization(self):
+        serializer = UserBookSerializer(data=self.serializer_data)
+        self.assertTrue(serializer.is_valid())
+        user_book = serializer.save()
+        self.assertTrue( re.match(r'books/test.*\.pdf', user_book.file_path.name,))
+        self.assertEqual(user_book.pages, 10)
+        self.assertEqual(user_book.title, 'Test Book')
+        self.assertEqual(user_book.profile, self.user_profile)
+
+    def test_invalid_data(self):
+        invalid_data = {
+            'file_path': None,  # file_path is required
+            'pages': -1,  
+            'title': '', # invalid title value
+            'profile': None  # profile is required
+        }
+        serializer = UserBookSerializer(data=invalid_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), {'file_path', 'title', 'profile'})
+
+    def test_update(self):
+        updated_data = {
+            'file_path': self.mock_file,
+            'pages': 20,
+            'title': 'Updated Test Book',
+            'profile': self.user_profile.id
+        }
+        serializer = UserBookSerializer(instance=self.user_book, data=updated_data)
+        self.assertTrue(serializer.is_valid())
+        updated_book = serializer.save()
+        self.assertTrue( re.match(r'books/test.*\.pdf', updated_book.file_path.name))
+        self.assertEqual(updated_book.pages, 20)
+        self.assertEqual(updated_book.title, 'Updated Test Book')
+        self.assertEqual(updated_book.profile, self.user_profile)
