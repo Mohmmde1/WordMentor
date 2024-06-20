@@ -1,6 +1,7 @@
 from io import BytesIO
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from books.models import UserBook
 from settings.models import UserProfile
 from word.models import WordMeaning, Word
 from progress_tracking.models import UserWordProgress
@@ -8,6 +9,14 @@ from progress_tracking.serializers import UserWordProgressSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.dateparse import parse_datetime
+from unittest.mock import MagicMock, patch
+from datetime import timedelta
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
+from trainedmodels.models import BookPrediction
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 User = get_user_model()
 
@@ -124,3 +133,110 @@ class UserWordProgressSerializerTestCase(TestCase):
         serializer = UserWordProgressSerializer(data=invalid_data)
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), set(['is_known']))
+
+
+
+class WordProgressViewSetTestCase(APITestCase):
+
+    def setUp(self):
+        # Create a user and user profile
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpass')
+        self.user_profile = UserProfile.objects.create(user=self.user)
+
+        # Create a word and word meaning
+        self.word = Word.objects.create(word='test')
+        self.word_meaning = WordMeaning.objects.get_or_fetch(word=self.word)
+
+        # Create a UserWordProgress instance
+        self.user_word_progress = UserWordProgress.objects.create(
+            is_known=True,
+            word_meaning=self.word_meaning,
+            profile=self.user_profile
+        )
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+
+    def test_update_word_progress_success(self):
+        url = reverse('word_progress-update-word-progress')
+        data = {'word_text': 'test'}
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Word progress for "test" updated successfully')
+
+    def test_update_word_progress_no_word_text(self):
+        url = reverse('word_progress-update-word-progress')
+        response = self.client.put(url, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['error'], 'Word text is required')
+
+    def test_update_word_progress_no_matching_words(self):
+        url = reverse('word_progress-update-word-progress')
+        data = {'word_text': 'nonexistentword'}
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'No matching words found')
+
+    def test_known_words(self):
+        url = reverse('word_progress-known-words')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['word'], 'test')
+
+    def test_unknown_words(self):
+
+        self.user_word_progress.is_known = False
+        self.user_word_progress.save()
+
+        url = reverse('word_progress-unknown-words')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['word'], 'test')
+
+
+
+    def test_statistics(self):
+            url = reverse('word_progress-statistics')
+            response = self.client.get(url) 
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertIn('known_words_count', response.data)
+            self.assertIn('known_words_change', response.data)
+            self.assertIn('unknown_words_count', response.data)
+            self.assertIn('unknown_words_change', response.data)
+            self.assertIn('progress', response.data)
+            self.assertIn('progress_change', response.data)
+            self.assertIn('predictions_count', response.data)
+            self.assertIn('predictions_change', response.data)
+
+
+    def test_update_words_status(self):
+
+        url = reverse('word_progress-update-words-status')
+        data = {'learnedWords': ['test']}
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['message'], 'Word status updated successfully')
+
+    def test_update_words_status_no_data(self):
+        url = reverse('word_progress-update-words-status')
+        response = self.client.put(url, {}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'No data has been submitted')
+
+    def test_update_words_status_no_matching_words(self):
+
+        url = reverse('word_progress-update-words-status')
+        data = {'learnedWords': ['nonexistentword']}
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['error'], 'No matching words found')
+        
