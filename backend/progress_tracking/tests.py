@@ -1,7 +1,6 @@
 from io import BytesIO
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from books.models import UserBook
 from settings.models import UserProfile
 from word.models import WordMeaning, Word
 from progress_tracking.models import UserWordProgress
@@ -9,14 +8,9 @@ from progress_tracking.serializers import UserWordProgressSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.utils.dateparse import parse_datetime
-from unittest.mock import MagicMock, patch
-from datetime import timedelta
 from django.urls import reverse
-from django.utils import timezone
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
-from trainedmodels.models import BookPrediction
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 User = get_user_model()
 
@@ -135,7 +129,6 @@ class UserWordProgressSerializerTestCase(TestCase):
         self.assertEqual(set(serializer.errors.keys()), set(['is_known']))
 
 
-
 class WordProgressViewSetTestCase(APITestCase):
 
     def setUp(self):
@@ -198,8 +191,6 @@ class WordProgressViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['word'], 'test')
-
-
 
     def test_statistics(self):
             url = reverse('word_progress-statistics')
