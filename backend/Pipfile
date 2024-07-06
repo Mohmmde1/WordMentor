@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django-debug-toolbar = "*"
 django = "*"
 psycopg2-binary = "*"
 djangorestframework = "*"
@@ -14,7 +13,6 @@ django-allauth = "*"
 dj-rest-auth = "*"
 pillow = "*"
 python-dotenv = "*"
-firebase-admin = "*"
 pypdf2 = "*"
 torch = "*"
 transformers = "*"
@@ -29,10 +27,6 @@ seaborn = "*"
 numpy = "*"
 
 [dev-packages]
-django-extensions = "*"
-graphviz = "*"
-pygraphviz = "*"
-coverage = "*"
 
 [requires]
 python_version = "3.12"

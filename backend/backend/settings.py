@@ -11,9 +11,6 @@ load_dotenv()
 
 MODE = os.environ.get('MODE')
 
-# Get hostname and IPs for Docker mode
-if MODE == "docker":
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Paths
 DOTENV = os.path.join(BASE_DIR, '.env')
-FIREBASE_PATH = os.path.join(BASE_DIR, 'wordmentor_firebase.json')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -44,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_yasg',
-    'debug_toolbar',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -55,7 +50,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'django_extensions',
     'settings',
     'word',
     'assessment',
@@ -66,7 +60,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -130,13 +123,20 @@ LOGGING = {
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
-DATABASE_URL = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR}/db.sqlite3')
-if MODE and MODE.lower() == 'docker':
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL),
-    }
-else:
-    DATABASES = {
+# DATABASE_URL = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR}/db.sqlite3')
+# if MODE and MODE.lower() == 'docker':
+#     DATABASES = {
+#         'default': dj_database_url.parse(DATABASE_URL),
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
@@ -171,14 +171,7 @@ STATIC_URL = 'static/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Internal IPs for Docker
-if MODE == "docker":
-    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1']
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
-    'IS_RUNNING_TESTS':False
-}
 
 X_RAPID_API_KEY = os.environ.get("X_RAPID_API_KEY")
 
