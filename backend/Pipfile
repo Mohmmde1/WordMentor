@@ -26,11 +26,13 @@ scikit-learn = "*"
 tqdm = "*"
 matplotlib = "*"
 seaborn = "*"
+numpy = "*"
 
 [dev-packages]
 django-extensions = "*"
 graphviz = "*"
 pygraphviz = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.12"

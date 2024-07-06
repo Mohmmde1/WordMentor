@@ -60,8 +60,8 @@ const Predictions = () => {
       const updatePromises = knownWords.map(word => updateWordStatus(word, "known", predictionId));
       await Promise.all(updatePromises);
   
-      // Navigate to the flashcards page after all updates are done
-      router.push(`/flashcards/${predictionId}`);
+      // Navigate to the sessions page after all updates are done
+      router.push(`/sessions/${predictionId}`);
     } catch (error) {
       console.error('Error generating flashcards:', error);
     } finally {

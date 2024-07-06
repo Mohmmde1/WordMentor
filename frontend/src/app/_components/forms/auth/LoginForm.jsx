@@ -24,7 +24,7 @@ const loginFormSchema = z.object ({
     .min (8, {message: 'Password must be at least 8 characters'}),
 });
 
-const LoginForm = () => {
+const LoginForm = ({setIsAuthenticated}) => {
   const router = useRouter();
   const form = useForm ({
     resolver: zodResolver (loginFormSchema),
@@ -33,9 +33,15 @@ const LoginForm = () => {
 
   const onSubmit = async formData => {
     try {
-      await login (formData);
+      const response = await login (formData);
+      if(response.access) {
+      setIsAuthenticated (true);
       toast ('Login Successfully!');
       router.push ('/dashboard'); // Redirect to the home page
+      }else {
+        console.log(response);
+        toast (response.non_field_errors[0]);
+      }
     } catch (error) {
       // Handle login error
     }

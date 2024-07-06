@@ -16,10 +16,11 @@ import {
 } from '@/components/ui/form';
 
 import {signup} from '@/lib/actions';
+import { useRouter } from 'next/navigation';
 
 const signupFormSchema = z.object ({
-  firstname: z.string ().min(1),
-  lastname: z.string ().min(1),
+  firstname: z.string ().min (1),
+  lastname: z.string ().min (1),
   email: z.string ().email ({message: 'Invalid email address'}).min (1),
   username: z.string ().min (1),
   password1: z
@@ -31,20 +32,46 @@ const signupFormSchema = z.object ({
 });
 
 const SignupForm = () => {
+  const router = useRouter();
   const form = useForm ({
     resolver: zodResolver (signupFormSchema),
     mode: 'onChange',
   });
 
-  const onSubmit = async formData => {
+  const onSubmit = async (formData) => {
     try {
-      await signup (formData);
-
-      toast ('Signup Successfully!');
+      const response = await signup(formData);
+      if (response.access) {
+        toast('Signup Successfully!');
+        router.push('/assessment');
+      } else {
+        if (response.username || response.password1 || response.email) {
+          // Extract and display error messages
+          const errorMessages = [];
+  
+          if (response.username) {
+            errorMessages.push(`Username: ${response.username.join(', ')}`);
+          }
+          if (response.password1) {
+            errorMessages.push(`Password: ${response.password1.join(', ')}`);
+          }
+  
+          if (response.email){
+            errorMessages.push(`Email: ${response.email}`);
+          }
+  
+          toast(errorMessages.join(' '));
+        } else {
+          toast('An unexpected error occurred.');
+        }
+      }
     } catch (error) {
-      // Handle signup error
+      console.error('Error occurred during signing up:', error);
+      toast('Signup failed. Please try again.');
     }
   };
+  
+  ;
 
   return (
     <Form {...form}>

@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {deleteBook} from '@/lib/actions';
 import Selection from './Selection';
+import Image from 'next/image';
 
 export const columns = [
   {
@@ -29,17 +30,17 @@ export const columns = [
     header: ({table}) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected () ||
-            (table.getIsSomePageRowsSelected () && 'indeterminate')
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
-        onCheckedChange={value => table.toggleAllPageRowsSelected (!!value)}
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
     ),
     cell: ({row}) => (
       <Checkbox
-        checked={row.getIsSelected ()}
-        onCheckedChange={value => row.toggleSelected (!!value)}
+        checked={row.getIsSelected()}
+        onCheckedChange={value => row.toggleSelected(!!value)}
         aria-label="Select row"
       />
     ),
@@ -47,16 +48,33 @@ export const columns = [
     enableHiding: false,
   },
   {
+    accessorKey: '3d_picture',
+    header: () => null,  // Hide the header
+    cell: ({row}) => {
+      const book = row.original;
+      return <Image src="/3d-book2.png" alt={`${book.title} 3D`} width="50" height="50" />;
+    },
+    enableSorting: false, // Disable sorting for this column if needed
+  },
+  {
     accessorKey: 'title',
     header: ({column}) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Title
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
+      );
+    },
+    cell: ({row}) => {
+      const book = row.original;
+      return (
+        <div className="flex items-center">
+          {book.title}
+        </div>
       );
     },
   },
@@ -66,7 +84,7 @@ export const columns = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="text-left"
         >
           Pages
@@ -82,14 +100,13 @@ export const columns = [
       );
     },
   },
-
   {
     accessorKey: 'created_at',
     header: ({column}) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting (column.getIsSorted () === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Uploaded At
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -113,7 +130,7 @@ export const columns = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText (book.id)}
+                onClick={() => navigator.clipboard.writeText(book.id)}
               >
                 Copy book ID
               </DropdownMenuItem>
@@ -125,20 +142,16 @@ export const columns = [
                 >
                   View book
                 </a>
-
               </DropdownMenuItem>
-
               <DialogTrigger>
                 <DropdownMenuItem>
-
                   Select Pages
                 </DropdownMenuItem>
               </DialogTrigger>
-
               <DropdownMenuItem
                 onClick={async () => {
-                  await deleteBook (book.id);
-                  console.log ('Delete book');
+                  await deleteBook(book.id);
+                  console.log('Delete book');
                 }}
               >
                 Delete book
@@ -152,7 +165,7 @@ export const columns = [
             <DialogDescription>
               Select the pages you want to parse
             </DialogDescription>
-            <Selection noPages={book.pages} bookId={book.id}/>
+            <Selection noPages={book.pages} bookId={book.id} />
           </DialogContent>
         </Dialog>
       );
