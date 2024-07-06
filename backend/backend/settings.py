@@ -1,15 +1,15 @@
 import os
 from pathlib import Path
 from datetime import timedelta
-import dj_database_url
 import logging
-import socket
 from dotenv import load_dotenv
+import logging
+logger = logging.getLogger(__name__)
+
+
 
 # Load environment variables from .env file
 load_dotenv()
-
-MODE = os.environ.get('MODE')
 
 
 logger = logging.getLogger(__name__)
@@ -24,12 +24,13 @@ DOTENV = os.path.join(BASE_DIR, '.env')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-ba-$pse%or=e6*6t%t=8i=c&wc5o4!dt2*sh%j7gt3+xy-r441')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'django-insecure-ba-$pse%or=e6*6t%t=8i=c&wc5o4!dt2*sh%j7gt3+xy-r441')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -122,27 +123,15 @@ LOGGING = {
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database
-# DATABASE_URL = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR}/db.sqlite3')
-# if MODE and MODE.lower() == 'docker':
-#     DATABASES = {
-#         'default': dj_database_url.parse(DATABASE_URL),
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
 
+
+logger.debug(f"DATABASES configuration: {DEBUG}")
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
-
+}
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -170,7 +159,6 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 
 X_RAPID_API_KEY = os.environ.get("X_RAPID_API_KEY")

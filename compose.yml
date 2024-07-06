@@ -1,21 +1,19 @@
+version: '3.8'
+
 services:
 
   backend:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
-    command:  python3 manage.py runserver 0.0.0.0:8000
+    command: ["sh", "/app/entrypoint.sh"]
     volumes:
-      - ./backend:/app/backend
+      - ./backend:/app
     ports:
       - "8000:8000"
     env_file:
       - ./backend/.env
-    environment:
-      - MODE=docker
     
-   
-
   frontend:
     build:
       context: ./frontend
@@ -25,8 +23,10 @@ services:
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
-    environment:
-      - NODE_ENV=development
+    env_file:
+      - ./frontend/.env
     depends_on:
       - backend
-  
+
+volumes:
+  db-data:

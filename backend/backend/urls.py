@@ -44,7 +44,6 @@ api = 'api/v1/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
 ]
 urlpatterns += [
     path(api + 'auth/', include("wordmentor_auth.urls")),
