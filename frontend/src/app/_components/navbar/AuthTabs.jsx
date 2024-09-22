@@ -1,3 +1,4 @@
+'use client'
 import {
   DialogContent,
   DialogDescription,
@@ -10,7 +11,7 @@ import LoginForm from '@/app/_components/forms/auth/LoginForm';
 import SignupForm from '@/app/_components/forms/auth/SignupForm';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 
-const AuthTabs = () => {
+const AuthTabs = ({setIsAuthenticated}) => {
   return (
     <Dialog>
       <DialogTrigger>Guest</DialogTrigger>
@@ -28,10 +29,10 @@ const AuthTabs = () => {
             </TabsList>
           </div>
           <TabsContent value="login">
-            <LoginForm  />
+            <LoginForm  setIsAuthenticated={setIsAuthenticated}/>
           </TabsContent>
           <TabsContent value="signup">
-            <SignupForm />
+            <SignupForm setIsAuthenticated={setIsAuthenticated}/>
           </TabsContent>
         </Tabs>
       </DialogContent>

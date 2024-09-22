@@ -27,15 +27,15 @@ const Badges = ({isAssessed}) => {
           </HoverCard>
         : <HoverCard>
             <HoverCardTrigger>
-              <Link href="/assessment">
 
-                <Badge className="inline-flex items-center w-30 h-5 px-2 py-1  text-white bg-gradient-to-l from-blue-400 to-blue-800 border-stone-300">
-                  <FlaskConicalOff size={16} />
-                  <span className="ml-1">
-                    Assess
-                  </span>
-                </Badge>
+            <Badge className="inline-flex items-center w-30 h-5 px-2 py-1  text-white bg-gradient-to-l from-blue-400 to-blue-800 border-stone-300">
+              <FlaskConicalOff size={16} />
+              <Link href="/assessment">
+                <span className="ml-1">
+                  Assess
+                </span>
               </Link>
+            </Badge>
             </HoverCardTrigger><HoverCardContent>
               Take the assessment to get your badge.
             </HoverCardContent>

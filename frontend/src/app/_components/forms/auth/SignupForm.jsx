@@ -31,7 +31,7 @@ const signupFormSchema = z.object ({
     .min (8, {message: 'Password must be at least 8 characters'}),
 });
 
-const SignupForm = () => {
+const SignupForm = ({setIsAuthenticated}) => {
   const router = useRouter();
   const form = useForm ({
     resolver: zodResolver (signupFormSchema),
@@ -43,6 +43,7 @@ const SignupForm = () => {
       const response = await signup(formData);
       if (response.access) {
         toast('Signup Successfully!');
+        setIsAuthenticated(true);
         router.push('/assessment');
       } else {
         if (response.username || response.password1 || response.email) {
