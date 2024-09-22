@@ -5,9 +5,6 @@ import { Icons } from "@/components/icons";
 import { checkUser, fetchProfile, checkAssessmentStatus } from '@/lib/actions';
 
 export async function MainNav() {
-  const isAuthenticated = await checkUser();
-  const isAssessed = isAuthenticated ? await checkAssessmentStatus() : false;
-  const profile = isAuthenticated? await fetchProfile() : null;
 
   return (
     <nav className="bg-gray-800 shadow-lg sticky top-0 z-50  text-white">
@@ -21,7 +18,7 @@ export async function MainNav() {
           
           {/* Navigation Items */}
 
-            <NavigationItems isAuthenticated={isAuthenticated} isAssessed={isAssessed} profile={profile}/>
+            <NavigationItems />
 
         </div>
       </div>
