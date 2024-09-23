@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'trainedmodels',
     'progress_tracking',
     'core',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

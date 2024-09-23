@@ -24,6 +24,7 @@ tqdm = "*"
 matplotlib = "*"
 seaborn = "*"
 numpy = "*"
+django-extensions = "*"
 
 [dev-packages]
 
