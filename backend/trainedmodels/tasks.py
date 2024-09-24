@@ -69,12 +69,12 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
             logger.info(f"Epoch {epoch + 1}/{epochs}, Loss: {total_loss:.4f}")
 
         # Save the fine-tuned model
-        fine_tuned_model_path = os.path.join(settings.BASE_DIR, "data", "fine_tuned_models", user_trained_model.file_path)
-        os.makedirs(os.path.dirname(fine_tuned_model_path), exist_ok=True)
-        model.save_pretrained(fine_tuned_model_path)
+        full_path = user_trained_model.get_user_model_full_path()
+        user_trained_model.store_user_model()
+        model.save_pretrained(full_path)
         user_trained_model.is_ready=True
         user_trained_model.save()
-        logger.info(f"Model fine-tuned and saved at {fine_tuned_model_path}")
+        logger.info(f"Model fine-tuned and saved at {full_path}")
 
     except Exception as e:
         logger.error(f"An error occurred during fine-tuning: {str(e)}")

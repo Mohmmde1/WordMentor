@@ -29,8 +29,10 @@ class Command(BaseCommand):
 
             # Deleting UserTrainedModel
             try:
-                trained_model_count, _ = UserTrainedModel.objects.filter(profile=profile).delete()
-                self.stdout.write(self.style.SUCCESS(f"Deleted {trained_model_count} UserTrainedModel records."))
+                user_trained_model = UserTrainedModel.objects.get(profile=profile)
+                user_trained_model.delete_user_model()
+                user_trained_model.delete()
+                self.stdout.write(self.style.SUCCESS(f"Deleted {user_trained_model} UserTrainedModel records."))
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Error deleting UserTrainedModel: {str(e)}"))
 
