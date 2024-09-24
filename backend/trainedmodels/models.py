@@ -42,10 +42,8 @@ class UserTrainedModel(BaseModel):
                 try:
                     # Remove the entire directory and its contents
                     shutil.rmtree(folder_full_path)
-                    # Optional: Log the deletion
                     logger.info(f"Deleted folder: {folder_full_path}")
                 except Exception as e:
-                    # Optional: Log the exception for troubleshooting
                     logger.error(f"Error while deleting folder: {e}")
             elif os.path.exists(folder_full_path):
                 # If it's a file, delete the file
