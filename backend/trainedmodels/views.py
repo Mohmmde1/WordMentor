@@ -260,7 +260,7 @@ class PredictionViewSet(viewsets.ViewSet):
     def _extract_unknown_words(self, pdf_path, from_page, to_page, user):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-        nltk_data_path = os.path.join(settings.BASE_DIR, 'nltk_data')
+        nltk_data_path = os.path.join(settings.BASE_DIR, 'data', 'nltk_data')
         os.makedirs(nltk_data_path, exist_ok=True)
         nltk.data.path.append(nltk_data_path)
 
