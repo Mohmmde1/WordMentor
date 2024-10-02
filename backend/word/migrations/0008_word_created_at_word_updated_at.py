@@ -7,19 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('word', '0007_delete_wordnet_remove_word_author_and_more'),
+        ("word", "0007_delete_wordnet_remove_word_author_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='word',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="word",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='word',
-            name='updated_at',
+            model_name="word",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

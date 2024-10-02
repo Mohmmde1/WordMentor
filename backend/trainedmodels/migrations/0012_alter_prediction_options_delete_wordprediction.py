@@ -6,15 +6,21 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('trainedmodels', '0011_alter_prediction_options_remove_prediction_words_and_more'),
+        (
+            "trainedmodels",
+            "0011_alter_prediction_options_remove_prediction_words_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='prediction',
-            options={'verbose_name': 'Prediction', 'verbose_name_plural': 'Predictions'},
+            name="prediction",
+            options={
+                "verbose_name": "Prediction",
+                "verbose_name_plural": "Predictions",
+            },
         ),
         migrations.DeleteModel(
-            name='WordPrediction',
+            name="WordPrediction",
         ),
     ]

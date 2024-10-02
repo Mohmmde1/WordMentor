@@ -7,24 +7,44 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('progress_tracking', '0005_delete_wordprediction'),
-        ('settings', '0013_userprofile'),
-        ('word', '0009_wordmeaning'),
+        ("progress_tracking", "0005_delete_wordprediction"),
+        ("settings", "0013_userprofile"),
+        ("word", "0009_wordmeaning"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserWordProgress',
+            name="UserWordProgress",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_known', models.BooleanField(default=False)),
-                ('profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='settings.userprofile')),
-                ('word_meaning', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='word.wordmeaning')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_known", models.BooleanField(default=False)),
+                (
+                    "profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="settings.userprofile",
+                    ),
+                ),
+                (
+                    "word_meaning",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="word.wordmeaning",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

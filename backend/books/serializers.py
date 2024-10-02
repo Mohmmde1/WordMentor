@@ -6,4 +6,4 @@ from .models import UserBook
 class UserBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBook
-        fields = '__all__'
+        fields = "__all__"

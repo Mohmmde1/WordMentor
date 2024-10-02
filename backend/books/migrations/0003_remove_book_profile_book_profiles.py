@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('settings', '0005_profile_has_taken_assessment'),
-        ('books', '0002_book_profile'),
+        ("settings", "0005_profile_has_taken_assessment"),
+        ("books", "0002_book_profile"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='book',
-            name='profile',
+            model_name="book",
+            name="profile",
         ),
         migrations.AddField(
-            model_name='book',
-            name='profiles',
-            field=models.ManyToManyField(to='settings.profile'),
+            model_name="book",
+            name="profiles",
+            field=models.ManyToManyField(to="settings.profile"),
         ),
     ]

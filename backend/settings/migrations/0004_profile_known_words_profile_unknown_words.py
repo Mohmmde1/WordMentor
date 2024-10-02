@@ -6,19 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('word', '0001_initial'),
-        ('settings', '0003_profile_slug'),
+        ("word", "0001_initial"),
+        ("settings", "0003_profile_slug"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='known_words',
-            field=models.ManyToManyField(blank=True, related_name='profiles_known', to='word.word'),
+            model_name="profile",
+            name="known_words",
+            field=models.ManyToManyField(
+                blank=True, related_name="profiles_known", to="word.word"
+            ),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='unknown_words',
-            field=models.ManyToManyField(blank=True, related_name='profiles_unknown', to='word.word'),
+            model_name="profile",
+            name="unknown_words",
+            field=models.ManyToManyField(
+                blank=True, related_name="profiles_unknown", to="word.word"
+            ),
         ),
     ]

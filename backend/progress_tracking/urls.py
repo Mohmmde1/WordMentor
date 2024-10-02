@@ -4,9 +4,6 @@ from .views import WordProgressViewSet
 
 router = DefaultRouter()
 
-router.register(r'', WordProgressViewSet, basename='word_progress')
+router.register(r"", WordProgressViewSet, basename="word_progress")
 
 urlpatterns = router.urls
-
-
-

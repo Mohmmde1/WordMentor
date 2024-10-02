@@ -7,9 +7,9 @@ from wordmentor_auth.models import User
 
 
 class UserProfile(models.Model):
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     slug = models.SlugField(unique=True)
-    user = models.OneToOneField('wordmentor_auth.User', on_delete=models.CASCADE)
+    user = models.OneToOneField("wordmentor_auth.User", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -30,6 +30,7 @@ class UserProfile(models.Model):
         """
         try:
             from progress_tracking.models import UserAssessment
+
             return UserAssessment.objects.filter(profile=self).exists()
         except Exception as e:
             # Log error if needed
@@ -40,11 +41,13 @@ class UserProfile(models.Model):
         Method to generate a dictionary of labeled words for the ML model.
         """
         from progress_tracking.models import UserWordProgress
-        
+
         unknown_words = UserWordProgress.objects.filter(
-            profile=self, is_known=False).values_list('word_meaning__word__word', flat=True)
+            profile=self, is_known=False
+        ).values_list("word_meaning__word__word", flat=True)
         known_words = UserWordProgress.objects.filter(
-            profile=self, is_known=True).values_list('word_meaning__word__word', flat=True)
+            profile=self, is_known=True
+        ).values_list("word_meaning__word__word", flat=True)
 
         # Create a dictionary with the words as keys and their labels as values
         labeled_data = {word: 1 for word in known_words}

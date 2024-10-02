@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('settings', '0004_profile_known_words_profile_unknown_words'),
+        ("settings", "0004_profile_known_words_profile_unknown_words"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='has_taken_assessment',
+            model_name="profile",
+            name="has_taken_assessment",
             field=models.BooleanField(default=False),
         ),
     ]

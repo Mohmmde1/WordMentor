@@ -7,31 +7,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('progress_tracking', '0003_alter_wordprogress_status'),
-        ('trainedmodels', '0010_remove_prediction_trained_model_and_more'),
+        ("progress_tracking", "0003_alter_wordprogress_status"),
+        ("trainedmodels", "0010_remove_prediction_trained_model_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='prediction',
+            name="prediction",
             options={},
         ),
         migrations.RemoveField(
-            model_name='prediction',
-            name='words',
+            model_name="prediction",
+            name="words",
         ),
         migrations.CreateModel(
-            name='WordPrediction',
+            name="WordPrediction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('prediction', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='word_predictions', to='trainedmodels.prediction')),
-                ('word', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='word_progress_predictions', to='progress_tracking.wordprogress')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "prediction",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="word_predictions",
+                        to="trainedmodels.prediction",
+                    ),
+                ),
+                (
+                    "word",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="word_progress_predictions",
+                        to="progress_tracking.wordprogress",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Prediction',
-                'verbose_name_plural': 'Predictions',
+                "verbose_name": "Prediction",
+                "verbose_name_plural": "Predictions",
             },
         ),
     ]

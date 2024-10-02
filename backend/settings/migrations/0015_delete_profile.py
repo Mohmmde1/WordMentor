@@ -6,14 +6,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('books', '0009_delete_book'),
-        ('progress_tracking', '0007_delete_wordprogress'),
-        ('settings', '0014_alter_userprofile_avatar'),
-        ('trainedmodels', '0017_remove_wordprediction_prediction_and_more'),
+        ("books", "0009_delete_book"),
+        ("progress_tracking", "0007_delete_wordprogress"),
+        ("settings", "0014_alter_userprofile_avatar"),
+        ("trainedmodels", "0017_remove_wordprediction_prediction_and_more"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='Profile',
+            name="Profile",
         ),
     ]

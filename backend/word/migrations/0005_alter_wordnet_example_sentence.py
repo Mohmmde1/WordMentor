@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('word', '0004_wordnet'),
+        ("word", "0004_wordnet"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='wordnet',
-            name='example_sentence',
-            field=models.TextField(default=''),
+            model_name="wordnet",
+            name="example_sentence",
+            field=models.TextField(default=""),
         ),
     ]

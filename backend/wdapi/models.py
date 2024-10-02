@@ -13,8 +13,9 @@ class BaseTwinwordData:
             raise AttributeError(
                 f"{key} is not in data, please make sure this is a detail response."
             )
+
     def __str__(self):
-            return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}"
+        return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}"
 
     @property
     def author(self):
@@ -71,7 +72,7 @@ class WdDefinition(BaseTwinwordData):
         return self.data["meaning"]
 
     def __str__(self):
-            return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, IPA: {self.ipa}, Meaning: {self.meaning}"
+        return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, IPA: {self.ipa}, Meaning: {self.meaning}"
 
 
 class WdDifficulty(BaseTwinwordData):
@@ -83,4 +84,4 @@ class WdDifficulty(BaseTwinwordData):
         return int(self.data["ten_degree"])
 
     def __str__(self):
-           return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, Ten Degree: {self.ten_degree}"
+        return f"Entry: {self.entry}, Author: {self.author}, Email: {self.email}, Result Code: {self.result_code}, Result Message: {self.result_msg}, Version: {self.version}, Ten Degree: {self.ten_degree}"

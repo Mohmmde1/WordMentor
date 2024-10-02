@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 WD_API_URL = "https://twinword-word-graph-dictionary.p.rapidapi.com/"
 
+
 class WdApiClient:
     def __init__(self, api_key):
         self.api_key = api_key
@@ -17,9 +18,7 @@ class WdApiClient:
         headers = {
             "X-RapidAPI-Key": self.api_key,
         }
-        params = {
-            "entry": word
-        }
+        params = {"entry": word}
 
         try:
             response = requests.get(endpoint, headers=headers, params=params)
@@ -35,9 +34,7 @@ class WdApiClient:
         headers = {
             "X-RapidAPI-Key": self.api_key,
         }
-        params = {
-            "entry": word
-        }
+        params = {"entry": word}
 
         try:
             response = requests.get(endpoint, headers=headers, params=params)

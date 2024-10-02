@@ -9,6 +9,7 @@ class Word(BaseModel):
     def __str__(self):
         return self.word
 
+
 from .managers import WordMeaningManager
 
 

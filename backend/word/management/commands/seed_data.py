@@ -18,7 +18,7 @@ def fetch_data_from_firestore():
     words = []
     try:
         print("Fetching entries from firebase...")
-        collection_ref = db.collection('words')
+        collection_ref = db.collection("words")
         docs = collection_ref.get()
         for doc in docs:
             # Extract fields from document
@@ -34,21 +34,22 @@ def fetch_data_from_firestore():
         return words
 
     except Exception as e:
-        print(f'Error fetching data: {e}')
+        print(f"Error fetching data: {e}")
+
 
 class Command(BaseCommand):
-    help = 'Seeds the database with initial data'
+    help = "Seeds the database with initial data"
 
     def handle(self, *args, **kwargs):
         word_entries = fetch_data_from_firestore()
         word_objects = create_word_objects(word_entries)
 
         if word_objects:
-            bulk_objects = [
-                Word(**word_object) for word_object in word_objects
-            ]
+            bulk_objects = [Word(**word_object) for word_object in word_objects]
             Word.objects.bulk_create(bulk_objects, ignore_conflicts=True)
 
-            self.stdout.write(self.style.SUCCESS('Successfully seeded data for all entries'))
+            self.stdout.write(
+                self.style.SUCCESS("Successfully seeded data for all entries")
+            )
         else:
-            self.stdout.write(self.style.WARNING('Failed to seed data'))
+            self.stdout.write(self.style.WARNING("Failed to seed data"))

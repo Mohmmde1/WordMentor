@@ -32,6 +32,7 @@ class WordMentorUserManager(UserManager):
 
         return self._create_user(email, username, password, **extra_fields)
 
+
 class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(_("username"), max_length=150, unique=True)
@@ -39,7 +40,7 @@ class User(AbstractUser):
     objects = WordMentorUserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ["username"]
 
     def __str__(self):
         return self.email

@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wordmentor_auth', '0003_user_username'),
+        ("wordmentor_auth", "0003_user_username"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='deleted_at',
+            model_name="user",
+            name="deleted_at",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='restored_at',
+            model_name="user",
+            name="restored_at",
         ),
     ]

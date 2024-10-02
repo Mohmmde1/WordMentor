@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('trainedmodels', '0003_remove_trainedmodel_description'),
+        ("trainedmodels", "0003_remove_trainedmodel_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='trainedmodel',
-            name='description',
-            field=models.TextField(default=''),
+            model_name="trainedmodel",
+            name="description",
+            field=models.TextField(default=""),
             preserve_default=False,
         ),
     ]

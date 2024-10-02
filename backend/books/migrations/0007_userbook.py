@@ -7,24 +7,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('books', '0006_remove_book_deleted_at'),
-        ('settings', '0013_userprofile'),
+        ("books", "0006_remove_book_deleted_at"),
+        ("settings", "0013_userprofile"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserBook',
+            name="UserBook",
             fields=[
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('book_id', models.AutoField(primary_key=True, serialize=False)),
-                ('file_path', models.FileField(upload_to='books/')),
-                ('pages', models.IntegerField()),
-                ('title', models.CharField(max_length=255)),
-                ('profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='settings.userprofile')),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("book_id", models.AutoField(primary_key=True, serialize=False)),
+                ("file_path", models.FileField(upload_to="books/")),
+                ("pages", models.IntegerField()),
+                ("title", models.CharField(max_length=255)),
+                (
+                    "profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="settings.userprofile",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

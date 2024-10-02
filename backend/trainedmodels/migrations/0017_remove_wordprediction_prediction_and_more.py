@@ -6,26 +6,25 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('trainedmodels', '0016_bookprediction_usertrainedmodel_and_more'),
+        ("trainedmodels", "0016_bookprediction_usertrainedmodel_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='wordprediction',
-            name='prediction',
+            model_name="wordprediction",
+            name="prediction",
         ),
         migrations.RemoveField(
-            model_name='trainedmodel',
-            name='profile',
-        ),
-
-        migrations.DeleteModel(
-            name='Prediction',
+            model_name="trainedmodel",
+            name="profile",
         ),
         migrations.DeleteModel(
-            name='TrainedModel',
+            name="Prediction",
         ),
         migrations.DeleteModel(
-            name='WordPrediction',
+            name="TrainedModel",
+        ),
+        migrations.DeleteModel(
+            name="WordPrediction",
         ),
     ]

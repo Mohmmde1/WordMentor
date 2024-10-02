@@ -13,5 +13,4 @@ class IsOwner(permissions.BasePermission):
             # Check if the request user is the owner of the profile associated with the book
             return obj.user == request.user
 
-        
         return super().has_object_permission(request, view, obj)

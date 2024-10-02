@@ -6,16 +6,19 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('trainedmodels', '0013_alter_prediction_options_wordprediction'),
+        ("trainedmodels", "0013_alter_prediction_options_wordprediction"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='prediction',
-            options={'verbose_name': 'Prediction', 'verbose_name_plural': 'Predictions'},
+            name="prediction",
+            options={
+                "verbose_name": "Prediction",
+                "verbose_name_plural": "Predictions",
+            },
         ),
         migrations.AlterModelOptions(
-            name='wordprediction',
+            name="wordprediction",
             options={},
         ),
     ]

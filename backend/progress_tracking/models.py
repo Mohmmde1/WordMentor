@@ -12,4 +12,3 @@ class UserWordProgress(BaseModel):
 
     def __str__(self):
         return f"WordProgress's {self.profile.user.first_name}"
-    

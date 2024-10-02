@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('progress_tracking', '0001_initial'),
+        ("progress_tracking", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='wordprogress',
-            name='status',
-            field=models.CharField(choices=[('known', 'KNOWN'), ('unknown', 'UNKNOWN')], default='unknown', max_length=20),
+            model_name="wordprogress",
+            name="status",
+            field=models.CharField(
+                choices=[("known", "KNOWN"), ("unknown", "UNKNOWN")],
+                default="unknown",
+                max_length=20,
+            ),
         ),
     ]

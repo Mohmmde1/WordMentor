@@ -7,19 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('settings', '0005_profile_has_taken_assessment'),
-        ('books', '0003_remove_book_profile_book_profiles'),
+        ("settings", "0005_profile_has_taken_assessment"),
+        ("books", "0003_remove_book_profile_book_profiles"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='book',
-            name='profiles',
+            model_name="book",
+            name="profiles",
         ),
         migrations.AddField(
-            model_name='book',
-            name='profile',
-            field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, related_name='books', to='settings.profile'),
+            model_name="book",
+            name="profile",
+            field=models.ForeignKey(
+                default="",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="books",
+                to="settings.profile",
+            ),
             preserve_default=False,
         ),
     ]

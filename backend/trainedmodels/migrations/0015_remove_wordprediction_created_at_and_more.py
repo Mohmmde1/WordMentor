@@ -7,31 +7,39 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('progress_tracking', '0005_delete_wordprediction'),
-        ('trainedmodels', '0014_alter_prediction_options_and_more'),
+        ("progress_tracking", "0005_delete_wordprediction"),
+        ("trainedmodels", "0014_alter_prediction_options_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='wordprediction',
-            name='created_at',
+            model_name="wordprediction",
+            name="created_at",
         ),
         migrations.RemoveField(
-            model_name='wordprediction',
-            name='id',
+            model_name="wordprediction",
+            name="id",
         ),
         migrations.RemoveField(
-            model_name='wordprediction',
-            name='progress_word',
+            model_name="wordprediction",
+            name="progress_word",
         ),
         migrations.RemoveField(
-            model_name='wordprediction',
-            name='updated_at',
+            model_name="wordprediction",
+            name="updated_at",
         ),
         migrations.AddField(
-            model_name='wordprediction',
-            name='wordprogress_ptr',
-            field=models.OneToOneField(auto_created=True, default=1, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='progress_tracking.wordprogress'),
+            model_name="wordprediction",
+            name="wordprogress_ptr",
+            field=models.OneToOneField(
+                auto_created=True,
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                parent_link=True,
+                primary_key=True,
+                serialize=False,
+                to="progress_tracking.wordprogress",
+            ),
             preserve_default=False,
         ),
     ]

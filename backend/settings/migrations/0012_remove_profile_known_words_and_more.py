@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('settings', '0011_profile_assessment'),
+        ("settings", "0011_profile_assessment"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='profile',
-            name='known_words',
+            model_name="profile",
+            name="known_words",
         ),
         migrations.RemoveField(
-            model_name='profile',
-            name='unknown_words',
+            model_name="profile",
+            name="unknown_words",
         ),
     ]

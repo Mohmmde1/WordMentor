@@ -7,18 +7,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('word', '0008_word_created_at_word_updated_at'),
+        ("word", "0008_word_created_at_word_updated_at"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='WordMeaning',
+            name="WordMeaning",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('definition', models.TextField()),
-                ('part_of_speech', models.CharField(max_length=50)),
-                ('example_sentence', models.TextField()),
-                ('word', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='word.word')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("definition", models.TextField()),
+                ("part_of_speech", models.CharField(max_length=50)),
+                ("example_sentence", models.TextField()),
+                (
+                    "word",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="word.word"
+                    ),
+                ),
             ],
         ),
     ]

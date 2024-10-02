@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5):
+def fine_tune_bert(
+    labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5
+):
     """
     Fine-tunes a BERT model for sequence classification on the provided labeled data.
 
@@ -26,22 +28,33 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
     try:
         # Load pre-trained BERT tokenizer
         logger.info("Loading pre-trained BERT tokenizer...")
-        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', cache_dir=settings.TOKENIZER_DIR)
+        tokenizer = BertTokenizer.from_pretrained(
+            "bert-base-uncased", cache_dir=settings.TOKENIZER_DIR
+        )
 
         # Load pre-trained BERT model for sequence classification
         logger.info("Loading pre-trained BERT model for sequence classification...")
-        model = BertForSequenceClassification.from_pretrained('bert-base-uncased', cache_dir=settings.MODEL_DIR)
+        model = BertForSequenceClassification.from_pretrained(
+            "bert-base-uncased", cache_dir=settings.MODEL_DIR
+        )
 
         # Tokenize input texts
         logger.info("Tokenizing input texts...")
-        tokenized_texts = tokenizer(list(labeled_data.keys()), return_tensors="pt", padding=True, truncation=True)
+        tokenized_texts = tokenizer(
+            list(labeled_data.keys()),
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+        )
 
         # Prepare labels
         labels = torch.tensor(list(labeled_data.values()))
 
         # Create TensorDataset
         logger.info("Creating TensorDataset...")
-        dataset = TensorDataset(tokenized_texts['input_ids'], tokenized_texts['attention_mask'], labels)
+        dataset = TensorDataset(
+            tokenized_texts["input_ids"], tokenized_texts["attention_mask"], labels
+        )
 
         # Create DataLoader
         logger.info("Creating DataLoader...")
@@ -58,7 +71,11 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
             for batch in dataloader:
                 input_ids, attention_mask, batch_labels = batch
                 optimizer.zero_grad()
-                outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=batch_labels)
+                outputs = model(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    labels=batch_labels,
+                )
                 loss = outputs.loss
                 loss.backward()
                 optimizer.step()
@@ -69,13 +86,14 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
         full_path = user_trained_model.get_user_model_full_path()
         user_trained_model.store_user_model()
         model.save_pretrained(full_path)
-        user_trained_model.is_ready=True
+        user_trained_model.is_ready = True
         user_trained_model.save()
         logger.info(f"Model fine-tuned and saved at {full_path}")
 
     except Exception as e:
         logger.error(f"An error occurred during fine-tuning: {str(e)}")
         raise
+
 
 def check_status(path):
     """
@@ -87,5 +105,7 @@ def check_status(path):
     Returns:
         bool: True if the model exists, False otherwise.
     """
-    fine_tuned_model_path = os.path.join(settings.BASE_DIR, "data", "fine_tuned_models", path)
+    fine_tuned_model_path = os.path.join(
+        settings.BASE_DIR, "data", "fine_tuned_models", path
+    )
     return os.path.exists(fine_tuned_model_path)

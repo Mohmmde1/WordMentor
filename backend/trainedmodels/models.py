@@ -14,6 +14,7 @@ from settings.models import UserProfile
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+
 class UserTrainedModel(BaseModel):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -28,10 +29,10 @@ class UserTrainedModel(BaseModel):
     def get_user_model_full_path(self):
         if self.file_path:
             return os.path.join(
-            settings.BASE_DIR, "media", "fine_tuned_models", self.file_path
-        )
+                settings.BASE_DIR, "media", "fine_tuned_models", self.file_path
+            )
         return ""
-    
+
     def delete_user_model(self):
         """delete method to remove the folder from the filesystem."""
         if self.file_path:
@@ -50,11 +51,9 @@ class UserTrainedModel(BaseModel):
                 os.remove(folder_full_path)
                 logger.info(f"Deleted file: {folder_full_path}")
 
-
     def store_user_model(self):
         # Save the fine-tuned model
         os.makedirs(os.path.dirname(self.get_user_model_full_path()), exist_ok=True)
-
 
 
 class BookPrediction(BaseModel):

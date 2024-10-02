@@ -13,7 +13,6 @@ def download_nltk_resources(resources):
     os.makedirs(settings.NLTK_DIR, exist_ok=True)
     nltk.data.path.append(settings.NLTK_DIR)
 
-
     for resource in resources:
         try:
             nltk.data.find(f"{resource}")
@@ -23,4 +22,3 @@ def download_nltk_resources(resources):
             logger.info(f"Resource have been successfully downloaded: {resource}")
         except:
             logger.debug(f"Failed to download: {resource}!")
-        

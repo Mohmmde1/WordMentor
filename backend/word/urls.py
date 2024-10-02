@@ -4,6 +4,6 @@ from .views import WordViewSet
 
 router = DefaultRouter()
 
-router.register(r'', WordViewSet, basename="word")
+router.register(r"", WordViewSet, basename="word")
 
 urlpatterns = router.urls

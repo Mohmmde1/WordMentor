@@ -8,6 +8,7 @@ from .wdapi_integration import create_word_objects
 
 logger = logging.getLogger(__name__)
 
+
 class WordMeaningManager(models.Manager):
     def get_or_fetch(self, word):
         # Determine if the input is a Word object or a string
@@ -27,6 +28,7 @@ class WordMeaningManager(models.Manager):
 
     def _fetch_from_wordnet_or_api(self, word_text):
         from nltk.corpus import wordnet as wn
+
         synsets = wn.synsets(word_text)
         if synsets:
             synset = synsets[0]  # Take the first synset for simplicity
@@ -34,9 +36,14 @@ class WordMeaningManager(models.Manager):
             part_of_speech = synset.pos()
             examples = synset.examples()
             example_sentence = examples[0] if examples else ""
-            return self._create_word_meaning(word_text, definition, part_of_speech, example_sentence)
+            return self._create_word_meaning(
+                word_text, definition, part_of_speech, example_sentence
+            )
         else:
-            logger.warning("Word with entry '%s' not found in WordNet, trying external API", word_text)
+            logger.warning(
+                "Word with entry '%s' not found in WordNet, trying external API",
+                word_text,
+            )
             return self._fetch_from_external_api(word_text)
 
     def _fetch_from_external_api(self, word_text):
@@ -48,40 +55,49 @@ class WordMeaningManager(models.Manager):
                 word_meaning_instance = self.create(
                     word=word_obj,
                     definition=self._extract_meaning(word_data.get("meaning")),
-                    part_of_speech=word_data.get("part_of_speech", "") ,
+                    part_of_speech=word_data.get("part_of_speech", ""),
                     example_sentence=word_data.get("example_sentence", ""),
                 )
                 return word_meaning_instance
             else:
                 logger.error("External API call failed for word '%s'", word_text)
-                raise self.model.DoesNotExist(f"Word with entry '{word_text}' not found in database and external API call failed")
+                raise self.model.DoesNotExist(
+                    f"Word with entry '{word_text}' not found in database and external API call failed"
+                )
         except Exception as e:
-            logger.error("Failed to fetch from external API and create WordMeaning object for '%s': %s", word_text, str(e))
-            raise self.model.DoesNotExist(f"Failed to create WordMeaning object for '{word_text}'")
-    
+            logger.error(
+                "Failed to fetch from external API and create WordMeaning object for '%s': %s",
+                word_text,
+                str(e),
+            )
+            raise self.model.DoesNotExist(
+                f"Failed to create WordMeaning object for '{word_text}'"
+            )
+
     def _extract_meaning(self, meaning_str):
         """Extracts and combines meanings from the JSON response."""
         try:
             if not meaning_str:
                 return ""  # Return empty string if meaning_str is empty
-            
+
             if isinstance(meaning_str, dict):
                 meaning_dict = meaning_str
             else:
                 # Convert the string to a dictionary with strict=False to handle non-standard JSON
-                meaning_dict = json.loads(meaning_str.replace("'", "\""), strict=False)
-            
+                meaning_dict = json.loads(meaning_str.replace("'", '"'), strict=False)
+
             # Extract definitions for each part of speech
             meanings = [meaning for pos, meaning in meaning_dict.items() if meaning]
-            
+
             # Combine the meanings into a single string
             return "\n".join(meanings)
         except (json.JSONDecodeError, AttributeError) as e:
             logger.error("Failed to decode meaning string: %s", str(e))
             return ""
 
-
-    def _create_word_meaning(self, word_text, definition, part_of_speech, example_sentence):
+    def _create_word_meaning(
+        self, word_text, definition, part_of_speech, example_sentence
+    ):
         try:
             word_obj, _ = Word.objects.get_or_create(word=word_text)
             word_meaning_instance = self.create(
@@ -92,5 +108,9 @@ class WordMeaningManager(models.Manager):
             )
             return word_meaning_instance
         except Exception as e:
-            logger.error("Failed to create WordMeaning object for '%s': %s", word_text, str(e))
-            raise self.model.DoesNotExist(f"Failed to create WordMeaning object for '{word_text}'")
+            logger.error(
+                "Failed to create WordMeaning object for '%s': %s", word_text, str(e)
+            )
+            raise self.model.DoesNotExist(
+                f"Failed to create WordMeaning object for '{word_text}'"
+            )

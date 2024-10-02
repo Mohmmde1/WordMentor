@@ -7,22 +7,44 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('progress_tracking', '0003_alter_wordprogress_status'),
-        ('trainedmodels', '0012_alter_prediction_options_delete_wordprediction'),
+        ("progress_tracking", "0003_alter_wordprogress_status"),
+        ("trainedmodels", "0012_alter_prediction_options_delete_wordprediction"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='WordPrediction',
+            name="WordPrediction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('prediction', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='word_predictions', to='trainedmodels.prediction')),
-                ('word', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='word_progress_predictions', to='progress_tracking.wordprogress')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "prediction",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="word_predictions",
+                        to="trainedmodels.prediction",
+                    ),
+                ),
+                (
+                    "word",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="word_progress_predictions",
+                        to="progress_tracking.wordprogress",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

@@ -6,69 +6,69 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('word', '0006_alter_wordnet_example_sentence'),
+        ("word", "0006_alter_wordnet_example_sentence"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='WordNet',
+            name="WordNet",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='author',
+            model_name="word",
+            name="author",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='created_at',
+            model_name="word",
+            name="created_at",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='email',
+            model_name="word",
+            name="email",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='entry',
+            model_name="word",
+            name="entry",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='ipa',
+            model_name="word",
+            name="ipa",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='meaning',
+            model_name="word",
+            name="meaning",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='request',
+            model_name="word",
+            name="request",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='response',
+            model_name="word",
+            name="response",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='result_code',
+            model_name="word",
+            name="result_code",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='result_msg',
+            model_name="word",
+            name="result_msg",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='ten_degree',
+            model_name="word",
+            name="ten_degree",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='updated_at',
+            model_name="word",
+            name="updated_at",
         ),
         migrations.RemoveField(
-            model_name='word',
-            name='version',
+            model_name="word",
+            name="version",
         ),
         migrations.AddField(
-            model_name='word',
-            name='word',
-            field=models.CharField(default='1', max_length=255),
+            model_name="word",
+            name="word",
+            field=models.CharField(default="1", max_length=255),
             preserve_default=False,
         ),
     ]

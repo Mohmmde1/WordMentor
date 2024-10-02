@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wordmentor_auth', '0001_initial'),
+        ("wordmentor_auth", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='deleted_at',
+            model_name="user",
+            name="deleted_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='restored_at',
+            model_name="user",
+            name="restored_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

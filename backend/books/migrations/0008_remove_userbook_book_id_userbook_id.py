@@ -6,18 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('books', '0007_userbook'),
+        ("books", "0007_userbook"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userbook',
-            name='book_id',
+            model_name="userbook",
+            name="book_id",
         ),
         migrations.AddField(
-            model_name='userbook',
-            name='id',
-            field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+            model_name="userbook",
+            name="id",
+            field=models.BigAutoField(
+                auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+            ),
             preserve_default=False,
         ),
     ]
