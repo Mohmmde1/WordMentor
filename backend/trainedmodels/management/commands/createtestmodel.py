@@ -1,16 +1,17 @@
+import argparse
 import logging
 import os
 import time
-import torch
+
 import pandas as pd
-from torch.utils.data import DataLoader, TensorDataset
-from transformers import BertTokenizer, BertForSequenceClassification
+import torch
 from django.conf import settings
-from torch.optim import AdamW
-from sklearn.metrics import accuracy_score
 from django.core.management.base import BaseCommand
+from sklearn.metrics import accuracy_score
+from torch.optim import AdamW
+from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
-import argparse
+from transformers import BertForSequenceClassification, BertTokenizer
 
 # Configure logging
 logger = logging.getLogger(__name__)

@@ -1,16 +1,17 @@
 from datetime import timedelta
-from django.utils import timezone
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
-from rest_framework.response import Response
+
 from django.db.models import F
+from django.utils import timezone
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from trainedmodels.models import BookPrediction
 
 from .models import UserWordProgress
-from .serializers import UserWordProgressSerializer
 from .permissions import IsOwner
+from .serializers import UserWordProgressSerializer
 
 
 class WordProgressViewSet(ModelViewSet):

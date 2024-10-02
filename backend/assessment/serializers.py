@@ -1,11 +1,14 @@
 import logging
-from rest_framework import serializers
-from django.shortcuts import get_object_or_404
+
 from django.db import IntegrityError, transaction
-from word.models import Word, WordMeaning
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
-from .models import UserAssessment, WordAssessment, UserWordAssessmentMapping
+from word.models import Word, WordMeaning
+
+from .models import UserAssessment, UserWordAssessmentMapping, WordAssessment
 
 logger = logging.getLogger(__name__)
 

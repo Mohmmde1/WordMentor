@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 from settings.models import UserProfile
 
+
 class IsOwner(permissions.BasePermission):
     """
     Custom permission to only allow the user who owns the profile to access the book.

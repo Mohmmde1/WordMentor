@@ -3,6 +3,7 @@ from django.db import models
 from core.models import BaseModel
 from settings.models import UserProfile
 
+
 class UserBook(BaseModel):
     file_path = models.FileField(upload_to='books/')
     pages = models.IntegerField()

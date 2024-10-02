@@ -1,11 +1,13 @@
-import csv
-import random
-import os
-from django.core.management.base import BaseCommand
-from django.conf import settings
-import pandas as pd
-from tqdm import tqdm
 import argparse
+import csv
+import os
+import random
+
+import pandas as pd
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from tqdm import tqdm
+
 
 class Command(BaseCommand):
     help = 'Generate files with known/not known status and calculate results'

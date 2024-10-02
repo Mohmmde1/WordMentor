@@ -1,16 +1,18 @@
 from io import BytesIO
-from django.test import TestCase
+
 from django.contrib.auth import get_user_model
-from settings.models import UserProfile
-from word.models import WordMeaning, Word
+from django.test import TestCase
+from django.urls import reverse
+from django.utils.dateparse import parse_datetime
+from rest_framework import status
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
+from rest_framework.test import APIClient, APITestCase
+
 from progress_tracking.models import UserWordProgress
 from progress_tracking.serializers import UserWordProgressSerializer
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from django.utils.dateparse import parse_datetime
-from django.urls import reverse
-from rest_framework.test import APITestCase, APIClient
-from rest_framework import status
+from settings.models import UserProfile
+from word.models import Word, WordMeaning
 
 User = get_user_model()
 

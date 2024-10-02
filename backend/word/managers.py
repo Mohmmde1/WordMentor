@@ -1,8 +1,10 @@
 import json
 import logging
+
 from django.db import models
-from .wdapi_integration import create_word_objects  
+
 from .models import Word
+from .wdapi_integration import create_word_objects
 
 logger = logging.getLogger(__name__)
 

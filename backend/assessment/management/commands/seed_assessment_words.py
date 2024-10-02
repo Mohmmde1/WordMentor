@@ -1,11 +1,12 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
-from django.db import transaction
-from word.models import Word
-from assessment.models import WordAssessment
-
 import csv
 import logging
+
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
+
+from assessment.models import WordAssessment
+from word.models import Word
 
 logger = logging.getLogger(__name__)
 

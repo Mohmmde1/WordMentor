@@ -1,6 +1,8 @@
 import requests
 from django.core.management.base import BaseCommand
+
 from word.models import Word
+
 
 class Command(BaseCommand):
     help = 'Seeds the database with additional data from a remote service for each word entry'

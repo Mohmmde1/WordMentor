@@ -1,10 +1,11 @@
-import os
 import logging
+import os
+
 import torch
-from torch.utils.data import DataLoader, TensorDataset
-from transformers import BertTokenizer, BertForSequenceClassification
 from django.conf import settings
 from torch.optim import AdamW
+from torch.utils.data import DataLoader, TensorDataset
+from transformers import BertForSequenceClassification, BertTokenizer
 
 # Configure logging
 logger = logging.getLogger(__name__)

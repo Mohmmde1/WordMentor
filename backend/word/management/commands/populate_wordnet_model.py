@@ -1,8 +1,10 @@
+import logging
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from word.models import WordNet, Word
 from nltk.corpus import wordnet as wn
-import logging
+
+from word.models import Word, WordNet
 
 logger = logging.getLogger(__name__)
 

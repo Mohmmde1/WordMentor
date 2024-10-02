@@ -1,14 +1,14 @@
+import logging
 import os
 import shutil
-import logging
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
-from core.models import BaseModel
-from settings.models import UserProfile
-from progress_tracking.models import UserWordProgress
 from books.models import UserBook
+from core.models import BaseModel
+from progress_tracking.models import UserWordProgress
+from settings.models import UserProfile
 
 # Configure logging
 logger = logging.getLogger(__name__)

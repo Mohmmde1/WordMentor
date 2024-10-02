@@ -1,4 +1,5 @@
 from django.db import models
+
 from core.models import BaseModel
 
 
@@ -9,6 +10,7 @@ class Word(BaseModel):
         return self.word
 
 from .managers import WordMeaningManager
+
 
 class WordMeaning(models.Model):
     definition = models.TextField()

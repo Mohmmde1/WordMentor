@@ -1,11 +1,11 @@
+import firebase_admin
+from django.conf import settings
 from django.core.management.base import BaseCommand
+from firebase_admin import credentials, firestore
+
 from word.models import Word
 from word.wdapi_integration import create_word_objects
-from django.conf import settings
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 
 # Fetch data from Firestore collection
 def fetch_data_from_firestore():

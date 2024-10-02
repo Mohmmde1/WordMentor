@@ -1,12 +1,15 @@
 import logging
-from rest_framework import mixins, viewsets, status
-from rest_framework.response import Response
+
+from PyPDF2 import PdfReader
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
+
 from settings.models import UserProfile
-from PyPDF2 import PdfReader
-from .permissions import IsOwner
+
 from .models import UserBook
+from .permissions import IsOwner
 from .serializers import UserBookSerializer
 
 logger = logging.getLogger(__name__)

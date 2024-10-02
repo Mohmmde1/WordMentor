@@ -1,14 +1,16 @@
 import os
 import time
+
 import nltk
-import torch
 import pandas as pd
-from PyPDF2 import PdfReader
-from transformers import BertTokenizer, BertForSequenceClassification
-from django.core.management.base import BaseCommand
+import torch
 from django.conf import settings
+from django.core.management.base import BaseCommand
 from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
+from PyPDF2 import PdfReader
+from transformers import BertForSequenceClassification, BertTokenizer
+
 
 class Command(BaseCommand):
     help = 'Process a PDF book and classify words using a BERT model'

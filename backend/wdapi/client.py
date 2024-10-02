@@ -1,9 +1,8 @@
 import logging
+
 import requests
 
 from .models import WdDefinition, WdDifficulty
-
-
 
 logger = logging.getLogger(__name__)
 

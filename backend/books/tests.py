@@ -1,16 +1,18 @@
 import re
+from io import BytesIO
+from unittest.mock import MagicMock, patch
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
-from unittest.mock import patch, MagicMock
-from io import BytesIO
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from django.core.files.uploadedfile import SimpleUploadedFile
-from wordmentor_auth.models import User
-from settings.models import UserProfile
+from rest_framework.test import APIClient
+
 from books.models import UserBook
 from books.serializers import UserBookSerializer
+from settings.models import UserProfile
+from wordmentor_auth.models import User
 
 
 class BookViewSetTestCase(TestCase):

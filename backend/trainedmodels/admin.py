@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import UserTrainedModel, BookPrediction, WordPredictionMapping
+
+from .models import BookPrediction, UserTrainedModel, WordPredictionMapping
 
 admin.site.register(UserTrainedModel)
 admin.site.register(BookPrediction)

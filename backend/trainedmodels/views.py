@@ -1,27 +1,27 @@
+import logging
 import os
 import time
 
 import torch
-import logging
-from PyPDF2 import PdfReader
-from transformers import BertTokenizer, BertForSequenceClassification
+from django.conf import settings
+from django.shortcuts import get_object_or_404
 from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
-
-from rest_framework import mixins, viewsets, status
-from rest_framework.response import Response
+from PyPDF2 import PdfReader
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
-from django.conf import settings
-from word.models import WordMeaning
-from progress_tracking.models import UserWordProgress
-from books.models import UserBook
-from settings.models import UserProfile
+from rest_framework.response import Response
+from transformers import BertForSequenceClassification, BertTokenizer
 
-from .services import download_nltk_resources
-from .models import UserTrainedModel, WordPredictionMapping, BookPrediction
-from .tasks import fine_tune_bert, check_status
+from books.models import UserBook
+from progress_tracking.models import UserWordProgress
+from settings.models import UserProfile
+from word.models import WordMeaning
+
+from .models import BookPrediction, UserTrainedModel, WordPredictionMapping
 from .serializers import FineTuneSerializer, PDFUploadSerializer
+from .services import download_nltk_resources
+from .tasks import check_status, fine_tune_bert
 
 # Configure logging
 logger = logging.getLogger(__name__)

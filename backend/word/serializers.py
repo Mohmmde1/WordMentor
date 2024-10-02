@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from .models import WordMeaning
+
 from assessment.models import WordAssessment
+
+from .models import WordMeaning
+
 
 class WordAssessmentListSerializer(serializers.ModelSerializer):
     word = serializers.SerializerMethodField()

@@ -1,11 +1,14 @@
 from django.core.management.base import BaseCommand
-from django.shortcuts import get_object_or_404
 from django.db import transaction
-from settings.models import UserProfile
+from django.shortcuts import get_object_or_404
+
+from assessment.models import (UserAssessment, UserWordAssessmentMapping,
+                               WordAssessment)
 from progress_tracking.models import UserWordProgress
-from assessment.models import UserAssessment, WordAssessment, UserWordAssessmentMapping
-from word.models import Word, WordMeaning
+from settings.models import UserProfile
 from trainedmodels.models import UserTrainedModel
+from word.models import Word, WordMeaning
+
 
 class Command(BaseCommand):
     help = 'Deletes all user-related data for a specific user'

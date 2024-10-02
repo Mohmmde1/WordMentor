@@ -1,20 +1,19 @@
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework.test import APIClient
-from rest_framework import status
-
 from unittest.mock import patch
 
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.test import APIClient
 
-from wordmentor_auth.models import User
-from word.models import Word
+from assessment.serializers import UserAssessmentSerializer
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
-from .models import UserAssessment, WordAssessment, UserWordAssessmentMapping
-from assessment.serializers import UserAssessmentSerializer
+from word.models import Word
+from wordmentor_auth.models import User
 
+from .models import UserAssessment, UserWordAssessmentMapping, WordAssessment
 
-from rest_framework.exceptions import ErrorDetail
 
 class AssessmentViewSetTest(TestCase):
 

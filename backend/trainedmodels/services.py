@@ -1,8 +1,8 @@
+import logging
 import os
 import ssl
-import nltk
-import logging
 
+import nltk
 from django.conf import settings
 
 logger = logging.getLogger(__name__)

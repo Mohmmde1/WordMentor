@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from wordmentor_auth.models import User
 from django.utils.translation import gettext_lazy as _
+
+from wordmentor_auth.models import User
 
 
 class WordMentorUserAdmin(UserAdmin):

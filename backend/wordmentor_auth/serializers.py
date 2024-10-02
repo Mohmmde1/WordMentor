@@ -1,11 +1,13 @@
 import logging
+
+from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.db import transaction
 from django.forms import ValidationError
 from rest_framework import serializers
-from dj_rest_auth.registration.serializers import RegisterSerializer
+
+from settings.models import UserProfile
 
 from .models import User
-from settings.models import UserProfile
 
 logger = logging.getLogger(__name__)
 

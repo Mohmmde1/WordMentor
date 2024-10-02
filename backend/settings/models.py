@@ -1,10 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
+
 from assessment.models import UserAssessment
-
-from wordmentor_auth.models import User
 from core.models import BaseModel
-
+from wordmentor_auth.models import User
 
 
 class UserProfile(models.Model):
