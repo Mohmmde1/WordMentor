@@ -60,11 +60,13 @@ INSTALLED_APPS = [
     'progress_tracking',
     'core',
     'django_extensions',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -229,3 +231,16 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+DATA_DIR = BASE_DIR / "data"
+NLTK_DIR = DATA_DIR / "nltk_data"
+CACHE_DIR = DATA_DIR / "cache_dir"
+MODEL_DIR = CACHE_DIR / "model"
+TOKENIZER_DIR = CACHE_DIR / "tokenizer"
+USER_MODEL_DIR = MEDIA_ROOT / "fine_tuned_models"
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

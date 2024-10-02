@@ -1,25 +1,27 @@
 import os
 import time
-from django.shortcuts import get_object_or_404
-import nltk
-import ssl
+
 import torch
+import logging
 from PyPDF2 import PdfReader
 from transformers import BertTokenizer, BertForSequenceClassification
+from nltk.corpus import stopwords, words
+from nltk.tokenize import word_tokenize
+
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
 from django.conf import settings
-from nltk.corpus import stopwords, words
-from nltk.tokenize import word_tokenize
 from word.models import WordMeaning
 from progress_tracking.models import UserWordProgress
 from books.models import UserBook
-from .models import UserTrainedModel, WordPredictionMapping, BookPrediction
 from settings.models import UserProfile
+
+from .services import download_nltk_resources
+from .models import UserTrainedModel, WordPredictionMapping, BookPrediction
 from .tasks import fine_tune_bert, check_status
 from .serializers import FineTuneSerializer, PDFUploadSerializer
-import logging
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -152,6 +154,7 @@ class PredictionViewSet(viewsets.ViewSet):
         Returns:
             Response: A response with the tokenized text.
         """
+        download_nltk_resources(['punkt_tab'])
         serializer = PDFUploadSerializer(data=request.data)
         if serializer.is_valid():
             from_page = serializer.validated_data['from_page']
@@ -258,19 +261,13 @@ class PredictionViewSet(viewsets.ViewSet):
             return Response({"error": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def _extract_unknown_words(self, pdf_path, from_page, to_page, user):
-        ssl._create_default_https_context = ssl._create_unverified_context
 
-        nltk_data_path = os.path.join(settings.BASE_DIR, 'data', 'nltk_data')
-        os.makedirs(nltk_data_path, exist_ok=True)
-        nltk.data.path.append(nltk_data_path)
-
+        resources = ['corpora/stopwords.zip', 'tokenizers/punkt.zip', 'corpora/words.zip']
+        download_nltk_resources(resources)
+        
         profile = UserProfile.objects.get(user=user)
         trained_model = UserTrainedModel.objects.get(profile=profile)
-
-        nltk.download('stopwords', download_dir=nltk_data_path)
-        nltk.download('punkt', download_dir=nltk_data_path)
-        nltk.download('words', download_dir=nltk_data_path)
-
+        
         valid_words = set(words.words())
         known_words = set(UserWordProgress.objects.filter(profile=profile, is_known=True)
                           .values_list('word_meaning__word__word', flat=True))
@@ -296,9 +293,9 @@ class PredictionViewSet(viewsets.ViewSet):
         start_time = time.time()
         try:
             tokenizer = BertTokenizer.from_pretrained(
-                'bert-base-uncased', cache_dir=os.path.join(settings.BASE_DIR, 'data', 'cache_dir', 'tokenizer'))
+                'bert-base-uncased', cache_dir=settings.TOKENIZER_DIR)
             model = BertForSequenceClassification.from_pretrained(
-                os.path.join(settings.BASE_DIR, 'data', 'fine_tuned_models', trained_model.file_path))
+                os.path.join(settings.USER_MODEL_DIR, trained_model.file_path))
             model.eval()
 
             extracted_text = extract_text_from_pdf(pdf_path, from_page, to_page)

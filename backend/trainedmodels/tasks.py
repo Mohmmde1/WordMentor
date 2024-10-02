@@ -10,10 +10,6 @@ from torch.optim import AdamW
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Set cache directories
-cache_dir = os.path.join(settings.BASE_DIR, 'data', 'cache_dir')
-tokenizer_cache = os.path.join(cache_dir, 'tokenizer')
-model_cache = os.path.join(cache_dir, 'model')
 
 def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5):
     """
@@ -29,11 +25,11 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
     try:
         # Load pre-trained BERT tokenizer
         logger.info("Loading pre-trained BERT tokenizer...")
-        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', cache_dir=tokenizer_cache)
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', cache_dir=settings.TOKENIZER_DIR)
 
         # Load pre-trained BERT model for sequence classification
         logger.info("Loading pre-trained BERT model for sequence classification...")
-        model = BertForSequenceClassification.from_pretrained('bert-base-uncased', cache_dir=model_cache)
+        model = BertForSequenceClassification.from_pretrained('bert-base-uncased', cache_dir=settings.MODEL_DIR)
 
         # Tokenize input texts
         logger.info("Tokenizing input texts...")
