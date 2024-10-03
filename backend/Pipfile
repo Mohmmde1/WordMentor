@@ -25,6 +25,7 @@ matplotlib = "*"
 seaborn = "*"
 numpy = "*"
 django-extensions = "*"
+ruff = "*"
 
 [dev-packages]
 
