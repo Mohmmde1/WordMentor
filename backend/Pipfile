@@ -26,6 +26,7 @@ seaborn = "*"
 numpy = "*"
 django-extensions = "*"
 ruff = "*"
+pyclean = "*"
 
 [dev-packages]
 
