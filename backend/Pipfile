@@ -27,6 +27,7 @@ numpy = "*"
 django-extensions = "*"
 ruff = "*"
 pyclean = "*"
+pre-commit = "*"
 
 [dev-packages]
 
