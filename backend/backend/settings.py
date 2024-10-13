@@ -33,25 +33,35 @@ DEBUG = 'True'
 
 ALLOWED_HOSTS = ['*']
 
-# Application definition
-INSTALLED_APPS = [
+
+# Django built-in apps
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+]
+
+# Third-party apps
+THIRD_PARTY_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'wordmentor_auth',
     'dj_rest_auth',
-    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'django_extensions',
+]
+
+# Custom apps
+CUSTOM_APPS = [
+    'wordmentor_auth',
     'settings',
     'word',
     'assessment',
@@ -59,8 +69,11 @@ INSTALLED_APPS = [
     'trainedmodels',
     'progress_tracking',
     'core',
-    'django_extensions',
 ]
+
+# Combining all apps
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
