@@ -114,3 +114,6 @@ data/test
 data/results
 
 anlays_wordmentor.ipynb
+
+# pyenv
+.python-version
