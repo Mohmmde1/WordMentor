@@ -1,10 +1,9 @@
 import logging
 from rest_framework import serializers
-from django.shortcuts import get_object_or_404
 from django.db import IntegrityError, transaction
+from core.services import get_profile
 from word.models import Word, WordMeaning
 from progress_tracking.models import UserWordProgress
-from settings.models import UserProfile
 from .models import UserAssessment, WordAssessment, UserWordAssessmentMapping
 
 logger = logging.getLogger(__name__)
@@ -46,8 +45,7 @@ class UserAssessmentSerializer(serializers.Serializer):
         ])
 
     def create(self, validated_data):
-        user = self.context["request"].user
-        profile = get_object_or_404(UserProfile, user=user)
+        profile = get_profile(self.context)
         selected_words = validated_data.get("selected_words", [])
         unselected_words = validated_data.get("unselected_words", [])
 

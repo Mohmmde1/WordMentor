@@ -20,28 +20,6 @@ class BookViewSet(mixins.CreateModelMixin,
     serializer_class = UserBookSerializer
     permission_classes = [IsOwner]
 
-    def create(self, request, *args, **kwargs):
-        try:
-            # Access the uploaded file
-            file = request.FILES.get('file_path')
-            if not file:
-                logger.warning("No file uploaded")
-                return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
-            # Extract number of pages from the PDF file
-            reader = PdfReader(file)
-            num_pages = len(reader.pages)
-            if num_pages <= 0:
-                logger.warning("No pages found in the uploaded PDF file")
-                return Response({"error": "No pages found in the uploaded PDF file"}, status=status.HTTP_400_BAD_REQUEST)
-            # Add number of pages to request data
-            request.data['pages'] = num_pages
-            logger.info(f"PDF file uploaded with {num_pages} pages")
-            # Call the parent create method to save the book
-            return super().create(request, *args, **kwargs)
-        except Exception as e:
-            logger.error(f"Error while creating book: {str(e)}", exc_info=True)
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
     @action(detail=False, methods=['get'], url_path='by-profile/(?P<profile_id>[^/.]+)')
     def get_books_by_profile(self, request, profile_id, *args, **kwargs):
         try:
