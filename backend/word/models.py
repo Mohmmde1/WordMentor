@@ -2,14 +2,15 @@ from django.db import models
 
 from core.models import BaseModel
 
-from .managers import WordMeaningManager
-
 
 class Word(BaseModel):
     word = models.CharField(max_length=255)
 
     def __str__(self):
         return self.word
+
+
+from .managers import WordMeaningManager  # noqa: E402 avoid circular error
 
 
 class WordMeaning(models.Model):
