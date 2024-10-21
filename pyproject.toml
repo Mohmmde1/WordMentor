@@ -73,3 +73,4 @@ src = [
 [tool.ruff.lint.per-file-ignores]
 "*/tests/*" = ["T201", "T203"]
 "*/management/*" = ["T201", "T203"]
+"*/migrations/*" = ["E501"]

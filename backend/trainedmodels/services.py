@@ -1,9 +1,11 @@
+import logging
 import os
 import ssl
-import nltk
-import logging
 
 from django.conf import settings
+
+import nltk
+
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +15,6 @@ def download_nltk_resources(resources):
     os.makedirs(settings.NLTK_DIR, exist_ok=True)
     nltk.data.path.append(settings.NLTK_DIR)
 
-
     for resource in resources:
         try:
             nltk.data.find(f"{resource}")
@@ -21,6 +22,5 @@ def download_nltk_resources(resources):
         except LookupError:
             nltk.download(resource, download_dir=settings.NLTK_DIR)
             logger.info(f"Resource have been successfully downloaded: {resource}")
-        except:
-            logger.debug(f"Failed to download: {resource}!")
-        
+        except Exception as e:  # Catch all other exceptions and log them
+            logger.error(f"Failed to download resource {resource}. Error: {e}")

@@ -1,5 +1,6 @@
-from wordmentor_auth.serializers import UserSerializer
 from rest_framework import serializers
+
+from wordmentor_auth.serializers import UserSerializer
 
 from .models import UserProfile
 
@@ -11,7 +12,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'user', 'avatar', 'slug', 'avatar_url', 'has_taken_assessment'] 
+        fields = ['id', 'user', 'avatar', 'slug', 'avatar_url', 'has_taken_assessment']
 
     def get_avatar_url(self, obj):
         """
@@ -20,6 +21,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if obj.avatar:
             return obj.avatar.url
         return None
-    
-
-    

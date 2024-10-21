@@ -1,23 +1,22 @@
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework.test import APIClient
-from rest_framework import status
-
 from unittest.mock import patch
 
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.test import APIClient
 
-from wordmentor_auth.models import User
-from word.models import Word
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
-from .models import UserAssessment, WordAssessment, UserWordAssessmentMapping
+from word.models import Word
+from wordmentor_auth.models import User
+
 from assessment.serializers import UserAssessmentSerializer
 
+from .models import UserAssessment, UserWordAssessmentMapping, WordAssessment
 
-from rest_framework.exceptions import ErrorDetail
 
 class AssessmentViewSetTest(TestCase):
-
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='testuser', email='testuser@gmail.com', password='testpassword')
@@ -28,7 +27,6 @@ class AssessmentViewSetTest(TestCase):
         self.word3 = Word.objects.create(word='ball')
         self.word4 = Word.objects.create(word='car')
         self.url = reverse("assessment-list")
-
 
     @patch('django.shortcuts.get_object_or_404')
     def test_create_assessment_success(self, mock_get_object_or_404):
@@ -84,17 +82,22 @@ class AssessmentModelsTestCase(TestCase):
 
     def test_user_word_assessment_mapping_creation(self):
         # Create UserWordAssessmentMapping
-        mapping1 = UserWordAssessmentMapping.objects.create(assessment=self.user_assessment, word_assessment=self.word_assessment1)
-        mapping2 = UserWordAssessmentMapping.objects.create(assessment=self.user_assessment, word_assessment=self.word_assessment2)
+        mapping1 = UserWordAssessmentMapping.objects.create(
+            assessment=self.user_assessment, word_assessment=self.word_assessment1
+        )
+        mapping2 = UserWordAssessmentMapping.objects.create(
+            assessment=self.user_assessment, word_assessment=self.word_assessment2
+        )
 
-        self.assertEqual(str(mapping1), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word1.word}")
-        self.assertEqual(str(mapping2), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word2.word}")
-
-
+        self.assertEqual(
+            str(mapping1), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word1.word}"
+        )
+        self.assertEqual(
+            str(mapping2), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word2.word}"
+        )
 
 
 class UserAssessmentSerializerTestCase(TestCase):
-
     def setUp(self):
         """Sets up the test data required for all tests."""
         self.user = User.objects.create(username='testuser', email='testuser@gmail.com', password='testpassword')
@@ -111,29 +114,34 @@ class UserAssessmentSerializerTestCase(TestCase):
     def test_invalid_empty_data(self):
         """Tests validation error when no data is provided."""
         serializer = self.create_serializer(data={})
-        
+
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), {'selected_words', 'unselected_words'})
         self.assertEqual(serializer.errors['selected_words'][0], ErrorDetail('This field is required.', code='required'))
-        self.assertEqual(serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required'))
+        self.assertEqual(
+            serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required')
+        )
 
     def test_invalid_empty_selected_unselected_words(self):
         """Tests validation error when selected_words and unselected_words are empty."""
         data = {"selected_words": [], "unselected_words": []}
         serializer = self.create_serializer(data=data)
-        
+
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), {'non_field_errors'})
-        self.assertEqual(serializer.errors['non_field_errors'][0], ErrorDetail('Both selected_words and unselected_words are required.', code='invalid'))
+        self.assertEqual(
+            serializer.errors['non_field_errors'][0],
+            ErrorDetail('Both selected_words and unselected_words are required.', code='invalid'),
+        )
 
     def test_valid_data(self):
         """Tests valid data case for successful validation."""
         selected_words = [self.word1.id, self.word2.id]
         unselected_words = [self.word3.id, self.word4.id]
         data = {"selected_words": selected_words, "unselected_words": unselected_words}
-        
+
         serializer = self.create_serializer(data=data)
-        
+
         self.assertTrue(serializer.is_valid())
         validated_data = serializer.validated_data
         self.assertEqual(validated_data['selected_words'], selected_words)
@@ -143,16 +151,18 @@ class UserAssessmentSerializerTestCase(TestCase):
         """Tests validation error when only selected_words are provided."""
         data = {"selected_words": [self.word1.id, self.word2.id]}
         serializer = self.create_serializer(data=data)
-        
+
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), {'unselected_words'})
-        self.assertEqual(serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required'))
+        self.assertEqual(
+            serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required')
+        )
 
     def test_partial_data_missing_selected_words(self):
         """Tests validation error when only unselected_words are provided."""
         data = {"unselected_words": [self.word3.id, self.word4.id]}
         serializer = self.create_serializer(data=data)
-        
+
         self.assertFalse(serializer.is_valid())
         self.assertEqual(set(serializer.errors.keys()), {'selected_words'})
         self.assertEqual(serializer.errors['selected_words'][0], ErrorDetail('This field is required.', code='required'))

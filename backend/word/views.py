@@ -1,16 +1,19 @@
 import logging
-from rest_framework.response import Response
-from rest_framework import mixins, viewsets, status
-from django.core.exceptions import ValidationError
+
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from assessment.models import WordAssessment
+
 from .models import Word, WordMeaning
-from .serializers import WordMeaningSerializer, WordAssessmentListSerializer
+from .serializers import WordAssessmentListSerializer, WordMeaningSerializer
+
 
 logger = logging.getLogger(__name__)
-class WordViewSet(mixins.RetrieveModelMixin,
-                   viewsets.GenericViewSet):
+
+
+class WordViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     A simple ViewSet for retrieving word details.
     """
@@ -32,11 +35,12 @@ class WordViewSet(mixins.RetrieveModelMixin,
 
         except Word.DoesNotExist:
             logger.error("Word with entry '%s' not found in database and API call failed", word_entry)
-            return Response({"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": f"Failed to retrieve details for '{word_entry}'"}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
             logger.error("An error occurred while retrieving word details for '%s': %s", word_entry, str(e))
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
     @action(detail=False, methods=['GET'], url_path='assessment')
     def get_assessment_words(self, request):

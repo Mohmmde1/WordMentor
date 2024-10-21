@@ -1,10 +1,13 @@
-import os
 import logging
-import torch
-from torch.utils.data import DataLoader, TensorDataset
-from transformers import BertTokenizer, BertForSequenceClassification
+import os
+
 from django.conf import settings
+
+import torch
 from torch.optim import AdamW
+from torch.utils.data import DataLoader, TensorDataset
+from transformers import BertForSequenceClassification, BertTokenizer
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -68,13 +71,14 @@ def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, lea
         full_path = user_trained_model.get_user_model_full_path()
         user_trained_model.store_user_model()
         model.save_pretrained(full_path)
-        user_trained_model.is_ready=True
+        user_trained_model.is_ready = True
         user_trained_model.save()
         logger.info(f"Model fine-tuned and saved at {full_path}")
 
     except Exception as e:
         logger.error(f"An error occurred during fine-tuning: {str(e)}")
         raise
+
 
 def check_status(path):
     """

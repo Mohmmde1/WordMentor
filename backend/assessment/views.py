@@ -1,12 +1,12 @@
 import logging
 
-from rest_framework import mixins, viewsets, status
-from rest_framework.response import Response
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-
+from rest_framework.response import Response
 
 from .models import UserAssessment
 from .serializers import UserAssessmentSerializer
+
 
 logger = logging.getLogger(__name__)
 

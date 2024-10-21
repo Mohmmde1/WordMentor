@@ -1,6 +1,9 @@
-import requests
 from django.core.management.base import BaseCommand
+
+import requests
+
 from word.models import Word
+
 
 class Command(BaseCommand):
     help = 'Seeds the database with additional data from a remote service for each word entry'
@@ -15,10 +18,8 @@ class Command(BaseCommand):
         if not token:
             self.stdout.write(self.style.ERROR("Failed to obtain authentication token."))
             return
-        
-        headers = {
-            'Authorization': f'Bearer {token}'
-        }
+
+        headers = {'Authorization': f'Bearer {token}'}
 
         # Fetch words from the local database
         words = Word.objects.all()
@@ -32,13 +33,14 @@ class Command(BaseCommand):
                 # word.save()
                 self.stdout.write(self.style.SUCCESS(f"Updated word: with entry: {word.entry}"))
             else:
-                self.stdout.write(self.style.ERROR(f"Failed to fetch data for word entry: {word.entry}. Status code: {response.status_code}"))
+                self.stdout.write(
+                    self.style.ERROR(
+                        f"Failed to fetch data for word entry: {word.entry}. Status code: {response.status_code}"
+                    )
+                )
 
     def login_and_get_token(self):
-        data = {
-            'email': self.EMAIL,
-            'password': self.PASSWORD
-        }
+        data = {'email': self.EMAIL, 'password': self.PASSWORD}
         response = requests.post(self.LOGIN_URL, data=data)
         if response.status_code == 200:
             return response.json().get('access')  # Assuming the JWT token is returned as 'access'

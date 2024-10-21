@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
-from django.shortcuts import get_object_or_404
 from django.db import transaction
-from settings.models import UserProfile
-from progress_tracking.models import UserWordProgress
-from assessment.models import UserAssessment, WordAssessment, UserWordAssessmentMapping
-from word.models import Word, WordMeaning
+from django.shortcuts import get_object_or_404
+
+from assessment.models import UserAssessment, UserWordAssessmentMapping
 from trainedmodels.models import UserTrainedModel
+
+from progress_tracking.models import UserWordProgress
+from settings.models import UserProfile
+
 
 class Command(BaseCommand):
     help = 'Deletes all user-related data for a specific user'
@@ -43,17 +45,22 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Error deleting UserAssessment: {str(e)}"))
 
-
             # Deleting UserWordAssessmentMapping
             try:
-                user_word_assessment_mapping_count, _ = UserWordAssessmentMapping.objects.filter(assessment__profile=profile).delete()
-                self.stdout.write(self.style.SUCCESS(f"Deleted {user_word_assessment_mapping_count} UserWordAssessmentMapping records."))
+                user_word_assessment_mapping_count, _ = UserWordAssessmentMapping.objects.filter(
+                    assessment__profile=profile
+                ).delete()
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Deleted {user_word_assessment_mapping_count} UserWordAssessmentMapping records."
+                    )
+                )
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Error deleting UserWordAssessmentMapping: {str(e)}"))
 
             # If needed, cascade other deletions, depending on your models
 
             self.stdout.write(self.style.SUCCESS(f"Successfully deleted all data related to user with ID {user_id}."))
-        
+
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error occurred: {str(e)}"))

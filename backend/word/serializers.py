@@ -1,15 +1,20 @@
 from rest_framework import serializers
-from .models import WordMeaning
+
 from assessment.models import WordAssessment
+
+from .models import WordMeaning
+
 
 class WordAssessmentListSerializer(serializers.ModelSerializer):
     word = serializers.SerializerMethodField()
+
     class Meta:
         model = WordAssessment
         fields = ['id', 'word']
-        
+
     def get_word(self, obj):
         return obj.word.word
+
 
 class WordMeaningSerializer(serializers.ModelSerializer):
     word = serializers.SerializerMethodField()

@@ -1,21 +1,21 @@
 import logging
-from rest_framework import mixins, viewsets, status
-from rest_framework.response import Response
+
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
+
 from settings.models import UserProfile
-from PyPDF2 import PdfReader
-from .permissions import IsOwner
+
 from .models import UserBook
+from .permissions import IsOwner
 from .serializers import UserBookSerializer
+
 
 logger = logging.getLogger(__name__)
 
-class BookViewSet(mixins.CreateModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin,
-                  viewsets.GenericViewSet):
 
+class BookViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = UserBook.objects.all()
     serializer_class = UserBookSerializer
     permission_classes = [IsOwner]
@@ -34,7 +34,9 @@ class BookViewSet(mixins.CreateModelMixin,
             return Response({"error": "Profile not found for the given profile ID"}, status=status.HTTP_404_NOT_FOUND)
         except PermissionDenied:
             logger.warning(f"Permission denied for profile ID {profile_id}")
-            return Response({"error": "You do not have permission to access this profile"}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "You do not have permission to access this profile"}, status=status.HTTP_403_FORBIDDEN
+            )
         except Exception as e:
             logger.error(f"Error while retrieving books for profile ID {profile_id}: {str(e)}", exc_info=True)
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

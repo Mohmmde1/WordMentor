@@ -1,4 +1,5 @@
 from django.db import models
+
 from core.models import BaseModel
 from settings.models import UserProfile
 from word.models import WordMeaning
@@ -11,4 +12,3 @@ class UserWordProgress(BaseModel):
 
     def __str__(self):
         return f"WordProgress's {self.profile.user.first_name}"
-    

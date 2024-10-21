@@ -1,11 +1,13 @@
 import csv
-import random
 import os
-from django.core.management.base import BaseCommand
+import random
+
 from django.conf import settings
+from django.core.management.base import BaseCommand
+
 import pandas as pd
 from tqdm import tqdm
-import argparse
+
 
 class Command(BaseCommand):
     help = 'Generate files with known/not known status and calculate results'
@@ -15,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         num_files = kwargs['num_files']
-        
+
         # Define the paths
         input_file_path = os.path.join(settings.BASE_DIR, 'data', 'assessment_words.csv')
         base_dir = os.path.join(settings.BASE_DIR, 'data/test')
@@ -30,7 +32,17 @@ class Command(BaseCommand):
         # Prepare the results file
         with open(results_file_path, mode='w', newline='') as results_file:
             results_writer = csv.writer(results_file)
-            results_writer.writerow(['File', 'Total Words', 'Known Words', 'Not Known Words', 'Avg Difficulty (Known)', 'Avg Difficulty (Not Known)', 'Overall Score (%)'])
+            results_writer.writerow(
+                [
+                    'File',
+                    'Total Words',
+                    'Known Words',
+                    'Not Known Words',
+                    'Avg Difficulty (Known)',
+                    'Avg Difficulty (Not Known)',
+                    'Overall Score (%)',
+                ]
+            )
 
             # Define different strategies for selecting known words
             known_selection_strategies = [
@@ -38,9 +50,9 @@ class Command(BaseCommand):
                 {'name': 'First 50', 'known_count': 50},
                 {'name': 'First 78', 'known_count': 78},
                 {'name': 'Random 50%', 'known_fraction': 0.5},
-                {'name': 'Random 80%', 'known_fraction': 0.8}
+                {'name': 'Random 80%', 'known_fraction': 0.8},
             ]
-            
+
             # Create new files with different known/not known statuses
             for i in tqdm(range(num_files), desc='Generating files', unit='file'):
                 df_copy = df.copy()
@@ -50,7 +62,9 @@ class Command(BaseCommand):
 
                 if 'known_count' in strategy:
                     # Select the first 'known_count' rows as known
-                    df_copy['known'] = ['known' if idx < strategy['known_count'] else 'not known' for idx in df_copy.index]
+                    df_copy['known'] = [
+                        'known' if idx < strategy['known_count'] else 'not known' for idx in df_copy.index
+                    ]
                 elif 'known_fraction' in strategy:
                     # Randomly select a fraction of rows as known
                     num_known = int(strategy['known_fraction'] * len(df_copy))
@@ -67,19 +81,29 @@ class Command(BaseCommand):
                 average_difficulty_known = df_copy[df_copy['known'] == 'known']['difficulty_level'].mean()
                 average_difficulty_not_known = df_copy[df_copy['known'] == 'not known']['difficulty_level'].mean()
 
-               # Calculate overall score
+                # Calculate overall score
                 overall_score = 0
                 denominator = 0
                 for level in range(1, 11):  # Difficulty levels from 1 to 10
-                    count_known_level = df_copy[(df_copy['known'] == 'known') & (df_copy['difficulty_level'] == level)].shape[0]
+                    count_known_level = df_copy[
+                        (df_copy['known'] == 'known') & (df_copy['difficulty_level'] == level)
+                    ].shape[0]
                     overall_score += level * count_known_level
                     denominator += level * 10
 
-                overall_score =  (overall_score / denominator) * 100
-                
+                overall_score = (overall_score / denominator) * 100
 
                 # Append the results to the CSV file
-                results_writer.writerow([output_file_path, total_words, known_words, not_known_words, average_difficulty_known, average_difficulty_not_known, overall_score])
+                results_writer.writerow(
+                    [
+                        output_file_path,
+                        total_words,
+                        known_words,
+                        not_known_words,
+                        average_difficulty_known,
+                        average_difficulty_not_known,
+                        overall_score,
+                    ]
+                )
 
         self.stdout.write(self.style.SUCCESS(f'{num_files} files generated successfully!'))
-

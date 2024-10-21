@@ -1,10 +1,15 @@
-from django.core.management.base import BaseCommand
-from django.db import transaction
-from word.models import WordNet, Word
-from nltk.corpus import wordnet as wn
 import logging
 
+from django.core.management.base import BaseCommand
+from django.db import transaction
+
+from nltk.corpus import wordnet as wn
+
+from word.models import Word, WordNet
+
+
 logger = logging.getLogger(__name__)
+
 
 class Command(BaseCommand):
     help = 'Populates the WordNet model with data from WordNet'
@@ -28,7 +33,7 @@ class Command(BaseCommand):
                     # Create WordNet instance within an atomic transaction
                     with transaction.atomic():
                         # Create a new WordNet entry
-                        wordnet_instance = WordNet.objects.create(
+                        WordNet.objects.create(
                             word=word,
                             definition=definition,
                             part_of_speech=part_of_speech,

@@ -1,19 +1,18 @@
 import logging
-from django.shortcuts import render
 
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 
-
+from .models import UserProfile
 from .serializers import UserProfileSerializer
-from .models import  UserProfile
+
 
 logger = logging.getLogger(__name__)
-class ProfileViewSet(mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   viewsets.GenericViewSet):
+
+
+class ProfileViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
     parser_classes = (MultiPartParser, FormParser)
@@ -38,5 +37,3 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
             return Response(serializer.data, status=status.HTTP_200_OK)
         except UserProfile.DoesNotExist:
             return Response({"error": "Profile not found for the given user ID"}, status=status.HTTP_404_NOT_FOUND)
-
-   

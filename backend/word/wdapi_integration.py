@@ -1,7 +1,7 @@
 import logging
-from re import DEBUG
 
 from wdapi.django_client import get_client_from_settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ def create_word_objects(word_entries):
                     "result_code": word_definition.result_code,
                     "result_msg": word_definition.result_msg,
                     "version": word_definition.version,
-                    "ten_degree": word_difficulty.ten_degree
+                    "ten_degree": word_difficulty.ten_degree,
                 }
                 word_objects.append(word_data)
             else:
@@ -46,10 +46,12 @@ def create_word_objects(word_entries):
                     "result_code": word_definition.result_code,
                     "result_msg": word_definition.result_msg,
                     "version": word_definition.version,
-                    "ten_degree": "0"
+                    "ten_degree": "0",
                 }
                 word_objects.append(word_data)
-                logger.error("Failed to fetch data for '%s' from the Twinword API. Result message is not 200.", word_entry)
+                logger.error(
+                    "Failed to fetch data for '%s' from the Twinword API. Result message is not 200.", word_entry
+                )
         else:
             logger.error("Failed to fetch data for '%s' from the Twinword API.", word_entry)
 

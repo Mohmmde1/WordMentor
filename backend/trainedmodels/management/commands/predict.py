@@ -1,14 +1,17 @@
 import os
 import time
-import nltk
-import torch
-import pandas as pd
-from PyPDF2 import PdfReader
-from transformers import BertTokenizer, BertForSequenceClassification
-from django.core.management.base import BaseCommand
+
 from django.conf import settings
+from django.core.management.base import BaseCommand
+
+import nltk
+import pandas as pd
+import torch
 from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
+from PyPDF2 import PdfReader
+from transformers import BertForSequenceClassification, BertTokenizer
+
 
 class Command(BaseCommand):
     help = 'Process a PDF book and classify words using a BERT model'
@@ -41,8 +44,12 @@ class Command(BaseCommand):
         def extract_important_words(text):
             words = word_tokenize(text)
             filtered_words = [
-                word.lower() for word in words
-                if word.lower() not in stopwords.words('english') and word.isalpha() and len(word) > 1 and word.lower() in valid_words
+                word.lower()
+                for word in words
+                if word.lower() not in stopwords.words('english')
+                and word.isalpha()
+                and len(word) > 1
+                and word.lower() in valid_words
             ]
             return set(filtered_words)
 
@@ -76,17 +83,21 @@ class Command(BaseCommand):
             class_names = ['Not_Known', 'Known']
             predicted_classes = [class_names[label] for label in predicted_labels]
 
-            unknown_words = [word for word, predicted_class in zip(tokens, predicted_classes) if predicted_class == 'Not_Known']
+            unknown_words = [
+                word for word, predicted_class in zip(tokens, predicted_classes) if predicted_class == 'Not_Known'
+            ]
 
             # Save predictions and metadata to a CSV file
             results = {
                 'word': list(tokens),
                 'predicted_class': predicted_classes,
                 'probability_known': probs[:, 1].tolist(),
-                'probability_not_known': probs[:, 0].tolist()
+                'probability_not_known': probs[:, 0].tolist(),
             }
             df = pd.DataFrame(results)
-            csv_output_path = os.path.join(settings.BASE_DIR, 'data', 'results', options['model_path'], 'predictions.csv')
+            csv_output_path = os.path.join(
+                settings.BASE_DIR, 'data', 'results', options['model_path'], 'predictions.csv'
+            )
             os.makedirs(os.path.dirname(csv_output_path), exist_ok=True)
             df.to_csv(csv_output_path, index=False)
 
