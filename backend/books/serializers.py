@@ -1,6 +1,8 @@
 import logging
-from PyPDF2 import PdfReader
+
 from rest_framework import serializers
+
+from PyPDF2 import PdfReader
 
 from core.services import get_profile
 
@@ -8,6 +10,7 @@ from .models import UserBook
 
 
 logger = logging.getLogger(__name__)
+
 
 class UserBookSerializer(serializers.ModelSerializer):
     class Meta:
