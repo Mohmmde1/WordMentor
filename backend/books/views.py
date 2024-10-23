@@ -1,11 +1,8 @@
 import logging
 
-from rest_framework import mixins, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
-
-from settings.models import UserProfile
 
 from .models import UserBook
 from .permissions import IsOwner
@@ -15,31 +12,13 @@ from .serializers import UserBookSerializer
 logger = logging.getLogger(__name__)
 
 
-class BookViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class BookViewSet(viewsets.ModelViewSet):
     queryset = UserBook.objects.all()
     serializer_class = UserBookSerializer
     permission_classes = [IsOwner]
 
-    @action(detail=False, methods=['get'], url_path='by-profile/(?P<profile_id>[^/.]+)')
-    def get_books_by_profile(self, request, profile_id, *args, **kwargs):
-        try:
-            profile = UserProfile.objects.get(pk=profile_id)
-            self.check_object_permissions(request, profile)
-            books = UserBook.objects.filter(profile__id=profile_id)
-            serializer = UserBookSerializer(books, many=True)
-            logger.info(f"Books retrieved for profile ID {profile_id}")
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except UserProfile.DoesNotExist:
-            logger.warning(f"Profile not found for profile ID {profile_id}")
-            return Response({"error": "Profile not found for the given profile ID"}, status=status.HTTP_404_NOT_FOUND)
-        except PermissionDenied:
-            logger.warning(f"Permission denied for profile ID {profile_id}")
-            return Response(
-                {"error": "You do not have permission to access this profile"}, status=status.HTTP_403_FORBIDDEN
-            )
-        except Exception as e:
-            logger.error(f"Error while retrieving books for profile ID {profile_id}: {str(e)}", exc_info=True)
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def get_queryset(self):
+        return UserBook.objects.filter(profile__user=self.request.user)
 
     @action(detail=False, methods=['delete'])
     def bulk_delete(self, request):

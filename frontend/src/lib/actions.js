@@ -218,10 +218,9 @@ export async function getStatus () {
 }
 
 export async function fetchBooks () {
-  const profileId = getProfileId ();
-  if (!profileId) return [];
+
   try {
-    const response = await apiService.get (`books/by-profile/${profileId}`);
+    const response = await apiService.get (`books/`);
     console.log(`response: ${JSON.stringify(response)}`);
 
     response.forEach (item => {
