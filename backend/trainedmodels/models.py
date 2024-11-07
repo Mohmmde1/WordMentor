@@ -10,6 +10,7 @@ from core.models import BaseModel
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
 
+
 # Configure logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -28,9 +29,7 @@ class UserTrainedModel(BaseModel):
 
     def get_user_model_full_path(self):
         if self.file_path:
-            return os.path.join(
-                settings.BASE_DIR, "media", "fine_tuned_models", self.file_path
-            )
+            return os.path.join(settings.BASE_DIR, "media", "fine_tuned_models", self.file_path)
         return ""
 
     def delete_user_model(self):

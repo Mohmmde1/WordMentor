@@ -1,10 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 
-from assessment.models import UserAssessment
-from core.models import BaseModel
-from wordmentor_auth.models import User
-
 
 class UserProfile(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
@@ -32,7 +28,7 @@ class UserProfile(models.Model):
             from progress_tracking.models import UserAssessment
 
             return UserAssessment.objects.filter(profile=self).exists()
-        except Exception as e:
+        except Exception:
             # Log error if needed
             return False
 
@@ -42,12 +38,12 @@ class UserProfile(models.Model):
         """
         from progress_tracking.models import UserWordProgress
 
-        unknown_words = UserWordProgress.objects.filter(
-            profile=self, is_known=False
-        ).values_list("word_meaning__word__word", flat=True)
-        known_words = UserWordProgress.objects.filter(
-            profile=self, is_known=True
-        ).values_list("word_meaning__word__word", flat=True)
+        unknown_words = UserWordProgress.objects.filter(profile=self, is_known=False).values_list(
+            'word_meaning__word__word', flat=True
+        )
+        known_words = UserWordProgress.objects.filter(profile=self, is_known=True).values_list(
+            'word_meaning__word__word', flat=True
+        )
 
         # Create a dictionary with the words as keys and their labels as values
         labeled_data = {word: 1 for word in known_words}

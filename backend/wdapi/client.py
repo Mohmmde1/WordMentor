@@ -4,6 +4,7 @@ import requests
 
 from .models import WdDefinition, WdDifficulty
 
+
 logger = logging.getLogger(__name__)
 
 WD_API_URL = "https://twinword-word-graph-dictionary.p.rapidapi.com/"

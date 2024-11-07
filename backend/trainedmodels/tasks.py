@@ -1,20 +1,20 @@
 import logging
 import os
 
-import torch
 from django.conf import settings
+
+import torch
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, TensorDataset
 from transformers import BertForSequenceClassification, BertTokenizer
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-def fine_tune_bert(
-    labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5
-):
+def fine_tune_bert(labeled_data, user_trained_model, epochs=3, batch_size=8, learning_rate=1e-5):
     """
     Fine-tunes a BERT model for sequence classification on the provided labeled data.
 
@@ -28,15 +28,11 @@ def fine_tune_bert(
     try:
         # Load pre-trained BERT tokenizer
         logger.info("Loading pre-trained BERT tokenizer...")
-        tokenizer = BertTokenizer.from_pretrained(
-            "bert-base-uncased", cache_dir=settings.TOKENIZER_DIR
-        )
+        tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", cache_dir=settings.TOKENIZER_DIR)
 
         # Load pre-trained BERT model for sequence classification
         logger.info("Loading pre-trained BERT model for sequence classification...")
-        model = BertForSequenceClassification.from_pretrained(
-            "bert-base-uncased", cache_dir=settings.MODEL_DIR
-        )
+        model = BertForSequenceClassification.from_pretrained("bert-base-uncased", cache_dir=settings.MODEL_DIR)
 
         # Tokenize input texts
         logger.info("Tokenizing input texts...")
@@ -52,9 +48,7 @@ def fine_tune_bert(
 
         # Create TensorDataset
         logger.info("Creating TensorDataset...")
-        dataset = TensorDataset(
-            tokenized_texts["input_ids"], tokenized_texts["attention_mask"], labels
-        )
+        dataset = TensorDataset(tokenized_texts["input_ids"], tokenized_texts["attention_mask"], labels)
 
         # Create DataLoader
         logger.info("Creating DataLoader...")
@@ -105,7 +99,5 @@ def check_status(path):
     Returns:
         bool: True if the model exists, False otherwise.
     """
-    fine_tuned_model_path = os.path.join(
-        settings.BASE_DIR, "data", "fine_tuned_models", path
-    )
+    fine_tuned_model_path = os.path.join(settings.BASE_DIR, "data", "fine_tuned_models", path)
     return os.path.exists(fine_tuned_model_path)

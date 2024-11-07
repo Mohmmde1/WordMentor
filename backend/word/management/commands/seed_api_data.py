@@ -1,5 +1,6 @@
-import requests
 from django.core.management.base import BaseCommand
+
+import requests
 
 from word.models import Word
 
@@ -15,12 +16,10 @@ class Command(BaseCommand):
         # Authenticate and get the token
         token = self.login_and_get_token()
         if not token:
-            self.stdout.write(
-                self.style.ERROR("Failed to obtain authentication token.")
-            )
+            self.stdout.write(self.style.ERROR("Failed to obtain authentication token."))
             return
 
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = {'Authorization': f'Bearer {token}'}
 
         # Fetch words from the local database
         words = Word.objects.all()
@@ -32,9 +31,7 @@ class Command(BaseCommand):
                 # word.definition = word_data.get('definition', word.definition)
                 # # Update other fields as needed
                 # word.save()
-                self.stdout.write(
-                    self.style.SUCCESS(f"Updated word: with entry: {word.entry}")
-                )
+                self.stdout.write(self.style.SUCCESS(f"Updated word: with entry: {word.entry}"))
             else:
                 self.stdout.write(
                     self.style.ERROR(
@@ -43,14 +40,10 @@ class Command(BaseCommand):
                 )
 
     def login_and_get_token(self):
-        data = {"email": self.EMAIL, "password": self.PASSWORD}
+        data = {'email': self.EMAIL, 'password': self.PASSWORD}
         response = requests.post(self.LOGIN_URL, data=data)
         if response.status_code == 200:
-            return response.json().get(
-                "access"
-            )  # Assuming the JWT token is returned as 'access'
+            return response.json().get("access")  # Assuming the JWT token is returned as 'access'
         else:
-            self.stdout.write(
-                self.style.ERROR(f"Login failed. Status code: {response.status_code}")
-            )
+            self.stdout.write(self.style.ERROR(f"Login failed. Status code: {response.status_code}"))
             return None

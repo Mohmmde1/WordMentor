@@ -54,7 +54,7 @@ export async function login (formData) {
     throw error;
   }
 }
-export async function signup (formData) { 
+export async function signup (formData) {
   try {
     const data = {
       email: formData.email,
@@ -218,11 +218,10 @@ export async function getStatus () {
 }
 
 export async function fetchBooks () {
-  const profileId = getProfileId ();
-  if (!profileId) return [];
+
   try {
-    const response = await apiService.get (`books/by-profile/${profileId}`);
-    console.log (`response: ${response}`);
+    const response = await apiService.get (`books/`);
+    console.log(`response: ${JSON.stringify(response)}`);
 
     response.forEach (item => {
       item.created_at = parseDate (item.created_at);

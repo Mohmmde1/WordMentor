@@ -5,6 +5,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,9 +25,7 @@ load_dotenv(dotenv_path=DOTENV)
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-ba-$pse%or=e6*6t%t=8i=c&wc5o4!dt2*sh%j7gt3+xy-r441"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-ba-$pse%or=e6*6t%t=8i=c&wc5o4!dt2*sh%j7gt3+xy-r441")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "True"
@@ -222,9 +221,7 @@ CACHES = {
 
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
-    },
+    "SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}},
 }
 
 DATA_DIR = BASE_DIR / "data"

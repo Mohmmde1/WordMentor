@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from django.db.models import F
 from django.utils import timezone
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -40,9 +39,7 @@ class WordProgressViewSet(ModelViewSet):
             return Response({"error": "Word text is required"}, status=400)
 
         queryset = self.get_queryset()
-        updated_count = queryset.filter(word_meaning__word__word=word_text).update(
-            is_known=True
-        )
+        updated_count = queryset.filter(word_meaning__word__word=word_text).update(is_known=True)
         if updated_count == 0:
             return Response({"error": "No matching words found"}, status=404)
         return Response(
@@ -77,45 +74,27 @@ class WordProgressViewSet(ModelViewSet):
         # Current counts
         current_known_words_count = self.get_queryset().filter(is_known=True).count()
         current_unknown_words_count = self.get_queryset().filter(is_known=False).count()
-        current_predictions_counts = BookPrediction.objects.filter(
-            book__profile__user=user
-        ).count()
+        current_predictions_counts = BookPrediction.objects.filter(book__profile__user=user).count()
 
         # Previous counts (words updated before last week)
-        previous_known_words_count = (
-            self.get_queryset().filter(is_known=True, updated_at__lt=last_week).count()
-        )
-        previous_unknown_words_count = (
-            self.get_queryset().filter(is_known=False, updated_at__lt=last_week).count()
-        )
+        previous_known_words_count = self.get_queryset().filter(is_known=True, updated_at__lt=last_week).count()
+        previous_unknown_words_count = self.get_queryset().filter(is_known=False, updated_at__lt=last_week).count()
         previous_predictions_counts = BookPrediction.objects.filter(
             book__profile__user=user, updated_at__lt=last_week
         ).count()
 
         # Changes
         known_words_change = current_known_words_count - previous_known_words_count
-        unknown_words_change = (
-            current_unknown_words_count - previous_unknown_words_count
-        )
+        unknown_words_change = current_unknown_words_count - previous_unknown_words_count
         predictions_change = current_predictions_counts - previous_predictions_counts
         # Progress calculations
         current_progress = (
-            round(
-                current_known_words_count
-                / (current_known_words_count + current_unknown_words_count)
-                * 100,
-                2,
-            )
+            round(current_known_words_count / (current_known_words_count + current_unknown_words_count) * 100, 2)
             if (current_known_words_count + current_unknown_words_count) > 0
             else 0
         )
         previous_progress = (
-            round(
-                previous_known_words_count
-                / (previous_known_words_count + previous_unknown_words_count)
-                * 100,
-                2,
-            )
+            round(previous_known_words_count / (previous_known_words_count + previous_unknown_words_count) * 100, 2)
             if (previous_known_words_count + previous_unknown_words_count) > 0
             else 0
         )
@@ -123,14 +102,14 @@ class WordProgressViewSet(ModelViewSet):
 
         return Response(
             {
-                "known_words_count": current_known_words_count,
-                "known_words_change": known_words_change,
-                "unknown_words_count": current_unknown_words_count,
-                "unknown_words_change": unknown_words_change,
-                "progress": current_progress,
-                "progress_change": progress_change,
-                "predictions_count": current_predictions_counts,
-                "predictions_change": predictions_change,
+                'known_words_count': current_known_words_count,
+                'known_words_change': known_words_change,
+                'unknown_words_count': current_unknown_words_count,
+                'unknown_words_change': unknown_words_change,
+                'progress': current_progress,
+                'progress_change': progress_change,
+                'predictions_count': current_predictions_counts,
+                'predictions_change': predictions_change,
             },
             status=200,
         )
@@ -146,9 +125,7 @@ class WordProgressViewSet(ModelViewSet):
                 return Response({"error": "No data has been submitted"}, status=404)
 
             queryset = self.get_queryset()
-            updated_count = queryset.filter(word_meaning__word__word__in=data).update(
-                is_known=True
-            )
+            updated_count = queryset.filter(word_meaning__word__word__in=data).update(is_known=True)
 
             if updated_count == 0:
                 return Response({"error": "No matching words found"}, status=404)

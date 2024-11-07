@@ -10,7 +10,7 @@ class WordAssessmentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WordAssessment
-        fields = ["id", "word"]
+        fields = ['id', 'word']
 
     def get_word(self, obj):
         return obj.word.word

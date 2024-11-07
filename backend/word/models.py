@@ -10,7 +10,7 @@ class Word(BaseModel):
         return self.word
 
 
-from .managers import WordMeaningManager
+from .managers import WordMeaningManager  # noqa: E402 avoid circular error
 
 
 class WordMeaning(models.Model):

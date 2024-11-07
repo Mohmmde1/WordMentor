@@ -1,14 +1,14 @@
 import logging
 
 from django.db import IntegrityError, transaction
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from core.services import get_profile
 from progress_tracking.models import UserWordProgress
-from settings.models import UserProfile
 from word.models import Word, WordMeaning
 
 from .models import UserAssessment, UserWordAssessmentMapping, WordAssessment
+
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +20,7 @@ class UserAssessmentSerializer(serializers.Serializer):
     def validate(self, data):
         """Ensure both selected and unselected words are provided."""
         if not data.get("selected_words") or not data.get("unselected_words"):
-            raise serializers.ValidationError(
-                "Both selected_words and unselected_words are required."
-            )
+            raise serializers.ValidationError("Both selected_words and unselected_words are required.")
         return data
 
     def create_assessment(self, profile):
@@ -33,26 +31,16 @@ class UserAssessmentSerializer(serializers.Serializer):
         """Delete existing UserWordProgress for the given profile."""
         UserWordProgress.objects.filter(profile=profile).delete()
 
-    def create_word_progress(
-        self, profile, selected_word_meanings, unselected_word_meanings
-    ):
+    def create_word_progress(self, profile, selected_word_meanings, unselected_word_meanings):
         """Create UserWordProgress entries for known and unknown words."""
         UserWordProgress.objects.bulk_create(
-            [
-                UserWordProgress(word_meaning=wm, profile=profile, is_known=True)
-                for wm in selected_word_meanings
-            ]
+            [UserWordProgress(word_meaning=wm, profile=profile, is_known=True) for wm in selected_word_meanings]
         )
         UserWordProgress.objects.bulk_create(
-            [
-                UserWordProgress(word_meaning=wm, profile=profile, is_known=False)
-                for wm in unselected_word_meanings
-            ]
+            [UserWordProgress(word_meaning=wm, profile=profile, is_known=False) for wm in unselected_word_meanings]
         )
 
-    def create_word_assessment_mappings(
-        self, assessment, known_word_assessments, unknown_word_assessments
-    ):
+    def create_word_assessment_mappings(self, assessment, known_word_assessments, unknown_word_assessments):
         """Create UserWordAssessmentMapping for both known and unknown word assessments."""
         UserWordAssessmentMapping.objects.bulk_create(
             [
@@ -62,15 +50,12 @@ class UserAssessmentSerializer(serializers.Serializer):
         )
 
     def create(self, validated_data):
-        user = self.context["request"].user
-        profile = get_object_or_404(UserProfile, user=user)
+        profile = get_profile(self.context)
         selected_words = validated_data.get("selected_words", [])
         unselected_words = validated_data.get("unselected_words", [])
 
         logger.info(f"Creating assessment for profile ID {profile.id}")
-        logger.info(
-            f"Selected words: {selected_words}, Unselected words: {unselected_words}"
-        )
+        logger.info(f"Selected words: {selected_words}, Unselected words: {unselected_words}")
 
         try:
             with transaction.atomic():
@@ -82,40 +67,28 @@ class UserAssessmentSerializer(serializers.Serializer):
 
                 # Step 3: Fetch word objects and meanings
                 selected_word_meanings = [
-                    WordMeaning.objects.get_or_fetch(word.word)
-                    for word in Word.objects.filter(id__in=selected_words)
+                    WordMeaning.objects.get_or_fetch(word.word) for word in Word.objects.filter(id__in=selected_words)
                 ]
                 unselected_word_meanings = [
-                    WordMeaning.objects.get_or_fetch(word.word)
-                    for word in Word.objects.filter(id__in=unselected_words)
+                    WordMeaning.objects.get_or_fetch(word.word) for word in Word.objects.filter(id__in=unselected_words)
                 ]
 
                 # Step 4: Fetch word assessments
-                known_word_assessments = list(
-                    WordAssessment.objects.filter(word__id__in=selected_words)
-                )
-                unknown_word_assessments = list(
-                    WordAssessment.objects.filter(word__id__in=unselected_words)
-                )
+                known_word_assessments = list(WordAssessment.objects.filter(word__id__in=selected_words))
+                unknown_word_assessments = list(WordAssessment.objects.filter(word__id__in=unselected_words))
 
                 # Step 5: Create progress for known and unknown words
-                self.create_word_progress(
-                    profile, selected_word_meanings, unselected_word_meanings
-                )
+                self.create_word_progress(profile, selected_word_meanings, unselected_word_meanings)
 
                 # Step 6: Create assessment mappings for known and unknown words
-                self.create_word_assessment_mappings(
-                    assessment, known_word_assessments, unknown_word_assessments
-                )
+                self.create_word_assessment_mappings(assessment, known_word_assessments, unknown_word_assessments)
 
             logger.info(f"Assessment created successfully for profile ID {profile.id}")
             return assessment
 
         except IntegrityError:
             logger.error("IntegrityError occurred while creating assessment")
-            raise serializers.ValidationError(
-                "A database error occurred while creating the assessment."
-            )
+            raise serializers.ValidationError("A database error occurred while creating the assessment.")
         except Exception as e:
             logger.error(f"Unexpected error: {str(e)}")
             raise serializers.ValidationError(f"An error occurred: {str(e)}")

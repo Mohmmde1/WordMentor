@@ -2,9 +2,11 @@ import logging
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+
 from nltk.corpus import wordnet as wn
 
 from word.models import Word, WordNet
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,28 +28,20 @@ class Command(BaseCommand):
                     logger.info(f"definition of {word} is {definition}")
                     part_of_speech = synset.pos()
                     examples = synset.examples()
-                    example = (
-                        examples[0] if examples else ""
-                    )  # Handle empty examples list
+                    example = examples[0] if examples else ""  # Handle empty examples list
 
                     # Create WordNet instance within an atomic transaction
                     with transaction.atomic():
                         # Create a new WordNet entry
-                        wordnet_instance = WordNet.objects.create(
+                        WordNet.objects.create(
                             word=word,
                             definition=definition,
                             part_of_speech=part_of_speech,
                             example_sentence=example,
                         )
 
-                    self.stdout.write(
-                        self.style.SUCCESS(f"Created WordNet entry for '{word}'")
-                    )
+                    self.stdout.write(self.style.SUCCESS(f"Created WordNet entry for '{word}'"))
                 else:
-                    self.stdout.write(
-                        self.style.WARNING(f"No WordNet synsets found for '{word}'")
-                    )
+                    self.stdout.write(self.style.WARNING(f"No WordNet synsets found for '{word}'"))
             else:
-                self.stdout.write(
-                    self.style.WARNING(f"WordNet entry already exists for '{word}'")
-                )
+                self.stdout.write(self.style.WARNING(f"WordNet entry already exists for '{word}'"))

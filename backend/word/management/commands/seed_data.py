@@ -1,6 +1,7 @@
-import firebase_admin
 from django.conf import settings
 from django.core.management.base import BaseCommand
+
+import firebase_admin
 from firebase_admin import credentials, firestore
 
 from word.models import Word
@@ -24,17 +25,17 @@ def fetch_data_from_firestore():
             # Extract fields from document
             data = doc.to_dict()
             entry = data.get("entry", "")
-            ipa = data.get("ipa", "")
+            ipa = data.get("ipa", "")  # noqa: F841
             meaning = data.get("meaning", {})
-            noun = meaning.get("noun", "")
-            verb = meaning.get("verb", "")
-            tenDegree = data.get("tenDegree", "")
+            noun = meaning.get("noun", "")  # noqa: F841
+            verb = meaning.get("verb", "")  # noqa: F841
+            tenDegree = data.get("tenDegree", "")  # noqa: F841
             words.append(entry)
         print("Finished fetching data from firebase!")
         return words
 
     except Exception as e:
-        print(f"Error fetching data: {e}")
+        print(f'Error fetching data: {e}')
 
 
 class Command(BaseCommand):
@@ -48,8 +49,6 @@ class Command(BaseCommand):
             bulk_objects = [Word(**word_object) for word_object in word_objects]
             Word.objects.bulk_create(bulk_objects, ignore_conflicts=True)
 
-            self.stdout.write(
-                self.style.SUCCESS("Successfully seeded data for all entries")
-            )
+            self.stdout.write(self.style.SUCCESS("Successfully seeded data for all entries"))
         else:
             self.stdout.write(self.style.WARNING("Failed to seed data"))

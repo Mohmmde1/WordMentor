@@ -6,22 +6,20 @@ from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APIClient
 
-from assessment.serializers import UserAssessmentSerializer
 from progress_tracking.models import UserWordProgress
 from settings.models import UserProfile
 from word.models import Word
 from wordmentor_auth.models import User
 
+from assessment.serializers import UserAssessmentSerializer
+
 from .models import UserAssessment, UserWordAssessmentMapping, WordAssessment
 
 
 class AssessmentViewSetTest(TestCase):
-
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create(
-            username="testuser", email="testuser@gmail.com", password="testpassword"
-        )
+        self.user = User.objects.create(username="testuser", email="testuser@gmail.com", password="testpassword")
         self.user_profile = UserProfile.objects.create(user=self.user)
         self.client.force_authenticate(user=self.user)
         self.word1 = Word.objects.create(word="hate")
@@ -30,7 +28,7 @@ class AssessmentViewSetTest(TestCase):
         self.word4 = Word.objects.create(word="car")
         self.url = reverse("assessment-list")
 
-    @patch("django.shortcuts.get_object_or_404")
+    @patch('django.shortcuts.get_object_or_404')
     def test_create_assessment_success(self, mock_get_object_or_404):
         mock_get_object_or_404.return_value = self.user_profile
 
@@ -40,12 +38,8 @@ class AssessmentViewSetTest(TestCase):
         }
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(
-            UserAssessment.objects.filter(profile=self.user_profile).exists()
-        )
-        self.assertEqual(
-            UserWordProgress.objects.filter(profile=self.user_profile).count(), 4
-        )
+        self.assertTrue(UserAssessment.objects.filter(profile=self.user_profile).exists())
+        self.assertEqual(UserWordProgress.objects.filter(profile=self.user_profile).count(), 4)
 
     def test_assessment_status(self):
         self.client.force_authenticate(user=self.user_profile.user)
@@ -65,9 +59,7 @@ class AssessmentViewSetTest(TestCase):
 class AssessmentModelsTestCase(TestCase):
     def setUp(self):
         # Create a user
-        self.user = User.objects.create_user(
-            username="testuser", email="testuser@example.com", password="testpass"
-        )
+        self.user = User.objects.create_user(username="testuser", email="testuser@example.com", password="testpass")
         self.user_profile = UserProfile.objects.create(user=self.user)
 
         # Create words
@@ -75,12 +67,8 @@ class AssessmentModelsTestCase(TestCase):
         self.word2 = Word.objects.create(word="testword2")
 
         # Create WordAssessments
-        self.word_assessment1 = WordAssessment.objects.create(
-            difficulty_level=1, word=self.word1
-        )
-        self.word_assessment2 = WordAssessment.objects.create(
-            difficulty_level=10, word=self.word2
-        )
+        self.word_assessment1 = WordAssessment.objects.create(difficulty_level=1, word=self.word1)
+        self.word_assessment2 = WordAssessment.objects.create(difficulty_level=10, word=self.word2)
 
         # Create UserAssessment
         self.user_assessment = UserAssessment.objects.create(profile=self.user_profile)
@@ -89,12 +77,8 @@ class AssessmentModelsTestCase(TestCase):
         self.assertEqual(str(self.user_assessment), f"Assessment {self.user.username}")
 
     def test_word_assessment_creation(self):
-        self.assertEqual(
-            str(self.word_assessment1), f"WordAssessment {self.word1.word}"
-        )
-        self.assertEqual(
-            str(self.word_assessment2), f"WordAssessment {self.word2.word}"
-        )
+        self.assertEqual(str(self.word_assessment1), f"WordAssessment {self.word1.word}")
+        self.assertEqual(str(self.word_assessment2), f"WordAssessment {self.word2.word}")
 
     def test_user_word_assessment_mapping_creation(self):
         # Create UserWordAssessmentMapping
@@ -106,22 +90,17 @@ class AssessmentModelsTestCase(TestCase):
         )
 
         self.assertEqual(
-            str(mapping1),
-            f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word1.word}",
+            str(mapping1), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word1.word}"
         )
         self.assertEqual(
-            str(mapping2),
-            f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word2.word}",
+            str(mapping2), f"UserWordAssessment Assessment {self.user.username} WordAssessment {self.word2.word}"
         )
 
 
 class UserAssessmentSerializerTestCase(TestCase):
-
     def setUp(self):
         """Sets up the test data required for all tests."""
-        self.user = User.objects.create(
-            username="testuser", email="testuser@gmail.com", password="testpassword"
-        )
+        self.user = User.objects.create(username="testuser", email="testuser@gmail.com", password="testpassword")
         self.user_profile = UserProfile.objects.create(user=self.user)
         self.word1 = Word.objects.create(word="hate")
         self.word2 = Word.objects.create(word="love")
@@ -137,16 +116,10 @@ class UserAssessmentSerializerTestCase(TestCase):
         serializer = self.create_serializer(data={})
 
         self.assertFalse(serializer.is_valid())
+        self.assertEqual(set(serializer.errors.keys()), {'selected_words', 'unselected_words'})
+        self.assertEqual(serializer.errors['selected_words'][0], ErrorDetail('This field is required.', code='required'))
         self.assertEqual(
-            set(serializer.errors.keys()), {"selected_words", "unselected_words"}
-        )
-        self.assertEqual(
-            serializer.errors["selected_words"][0],
-            ErrorDetail("This field is required.", code="required"),
-        )
-        self.assertEqual(
-            serializer.errors["unselected_words"][0],
-            ErrorDetail("This field is required.", code="required"),
+            serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required')
         )
 
     def test_invalid_empty_selected_unselected_words(self):
@@ -155,12 +128,10 @@ class UserAssessmentSerializerTestCase(TestCase):
         serializer = self.create_serializer(data=data)
 
         self.assertFalse(serializer.is_valid())
-        self.assertEqual(set(serializer.errors.keys()), {"non_field_errors"})
+        self.assertEqual(set(serializer.errors.keys()), {'non_field_errors'})
         self.assertEqual(
-            serializer.errors["non_field_errors"][0],
-            ErrorDetail(
-                "Both selected_words and unselected_words are required.", code="invalid"
-            ),
+            serializer.errors['non_field_errors'][0],
+            ErrorDetail('Both selected_words and unselected_words are required.', code='invalid'),
         )
 
     def test_valid_data(self):
@@ -182,10 +153,9 @@ class UserAssessmentSerializerTestCase(TestCase):
         serializer = self.create_serializer(data=data)
 
         self.assertFalse(serializer.is_valid())
-        self.assertEqual(set(serializer.errors.keys()), {"unselected_words"})
+        self.assertEqual(set(serializer.errors.keys()), {'unselected_words'})
         self.assertEqual(
-            serializer.errors["unselected_words"][0],
-            ErrorDetail("This field is required.", code="required"),
+            serializer.errors['unselected_words'][0], ErrorDetail('This field is required.', code='required')
         )
 
     def test_partial_data_missing_selected_words(self):
