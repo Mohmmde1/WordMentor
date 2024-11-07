@@ -29,6 +29,7 @@ fastjsonschema==2.20.0
 filelock==3.15.4
 fonttools==4.53.1
 fsspec==2024.6.1
+gunicorn==23.0.0
 html5lib==1.1
 huggingface-hub==0.23.4
 identify==2.6.1
