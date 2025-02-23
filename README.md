@@ -1,5 +1,7 @@
 # Word Mentor Project Documentation
 
+![Word Mentor Demo](https://raw.githubusercontent.com/Mohmmde1/WordMentor/master/word_mentor.gif)
+
 ## Project Repository
 The code for the Word Mentor project can be found on GitHub at the following link:
 [WordMentor GitHub Repository](https://github.com/Mohmmde1/WordMentor)
